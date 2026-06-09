@@ -10,10 +10,14 @@
   const cleaned = nextPath + search + hash;
   const current = pathname + search + hash;
 
-  if (cleaned !== current) {
-    history.replaceState(null, "", cleaned);
-  } else if (hash === "" && window.location.href.endsWith("#")) {
-    history.replaceState(null, "", pathname + search);
+  try {
+    if (cleaned !== current) {
+      history.replaceState(null, "", cleaned);
+    } else if (hash === "" && window.location.href.endsWith("#")) {
+      history.replaceState(null, "", pathname + search);
+    }
+  } catch (_) {
+    /* replaceState can throw on file:// — safe to ignore */
   }
 })();
 

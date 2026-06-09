@@ -11,12 +11,6 @@
       "source": "/:path*/index.html",
       "destination": "/:path*",
       "permanent": true
-    },
-    {
-      "source": "/:path*",
-      "has": [{ "type": "host", "value": "www.eduvector.kz" }],
-      "destination": "https://eduvector.kz/:path*",
-      "permanent": true
     }
   ]
 }
