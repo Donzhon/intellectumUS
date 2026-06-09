@@ -1,0 +1,1473 @@
+const menuPill = document.querySelector(".menu-pill");
+const navMenu = document.getElementById("nav-menu");
+const siteActionsMenuHost = navMenu?.closest(".site-actions");
+
+const positionSiteActionsNavMenu = () => {
+  if (!menuPill || !navMenu || !siteActionsMenuHost) {
+    return;
+  }
+
+  const rect = menuPill.getBoundingClientRect();
+  navMenu.style.top = `${rect.bottom + 10}px`;
+  navMenu.style.right = `${Math.max(16, window.innerWidth - rect.right)}px`;
+  navMenu.style.left = "auto";
+};
+
+const setNavMenuOpen = (open) => {
+  if (!menuPill || !navMenu) {
+    return;
+  }
+
+  menuPill.setAttribute("aria-expanded", String(open));
+  menuPill.classList.toggle("is-open", open);
+  navMenu.hidden = !open;
+
+  if (open) {
+    positionSiteActionsNavMenu();
+  }
+};
+
+window.addEventListener("resize", () => {
+  if (menuPill?.getAttribute("aria-expanded") === "true") {
+    positionSiteActionsNavMenu();
+  }
+});
+
+menuPill?.addEventListener("click", (event) => {
+  event.stopPropagation();
+  const isOpen = menuPill.getAttribute("aria-expanded") === "true";
+  setNavMenuOpen(!isOpen);
+});
+
+document.addEventListener("click", (event) => {
+  if (!menuPill || !navMenu || navMenu.hidden) {
+    return;
+  }
+
+  const target = event.target;
+  if (!(target instanceof Node)) {
+    return;
+  }
+
+  if (menuPill.contains(target) || navMenu.contains(target)) {
+    return;
+  }
+
+  setNavMenuOpen(false);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    setNavMenuOpen(false);
+  }
+});
+
+/* ---------- Site nav Products: scroll to second page block ---------- */
+const productsNavToggle = document.querySelector(".site-nav__toggle");
+const productsScrollSection = document.getElementById(
+  productsNavToggle?.dataset.scrollTo || "learning-labs"
+);
+
+productsNavToggle?.addEventListener("click", (event) => {
+  if (!productsScrollSection) {
+    return;
+  }
+
+  event.preventDefault();
+  productsNavToggle.setAttribute("aria-expanded", "false");
+  productsScrollSection.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+const NODI_INTRO_VIDEO = "assets/nodi-1.mp4";
+const NODI_LOOP_VIDEO = "assets/nodi-2.mp4";
+const NODI_EXIT_VIDEO = "assets/nodi-3.mp4";
+const INTELLECTUM_MAIN_VIDEO = "assets/intellectum-1.mp4";
+
+const videoLayers = Array.from(document.querySelectorAll(".bg-video"));
+const bgCanvas = document.querySelector(".bg-canvas");
+const bgCtx = bgCanvas ? bgCanvas.getContext("2d") : null;
+const CROSSFADE_MS = 700;
+let currentVideoSrc = NODI_INTRO_VIDEO;
+let visibleLayerIndex = 0;
+let isTransitioning = false;
+let failedAttempts = 0;
+let videoDisabled = false;
+let galleryActiveIndex = 0;
+let videoAfterEndSrc = null;
+let intellectumIntroLayoutHook = null;
+let intellectumLayoutOffHook = null;
+
+const maybeStartIntellectumLayout = (src) => {
+  if (src === INTELLECTUM_MAIN_VIDEO) {
+    intellectumIntroLayoutHook?.();
+  }
+};
+
+// Canvas crossfade state.
+let fadeFrom = null;
+let fadeTo = null;
+let fadeStart = 0;
+
+const resizeCanvas = () => {
+  if (!bgCanvas) {
+    return;
+  }
+
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  bgCanvas.width = Math.max(1, Math.round(bgCanvas.clientWidth * dpr));
+  bgCanvas.height = Math.max(1, Math.round(bgCanvas.clientHeight * dpr));
+};
+
+// Draw a video frame with object-fit: cover behaviour.
+const drawCover = (video, alpha) => {
+  if (!bgCtx || !video || video.readyState < 2) {
+    return;
+  }
+
+  const vw = video.videoWidth;
+  const vh = video.videoHeight;
+
+  if (!vw || !vh) {
+    return;
+  }
+
+  const cw = bgCanvas.width;
+  const ch = bgCanvas.height;
+  const scale = Math.max(cw / vw, ch / vh);
+  const dw = vw * scale;
+  const dh = vh * scale;
+
+  bgCtx.globalAlpha = alpha;
+  bgCtx.drawImage(video, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+  bgCtx.globalAlpha = 1;
+};
+
+const renderFrame = () => {
+  if (bgCtx && !videoDisabled && videoLayers.length > 0) {
+    if (fadeTo) {
+      const t = Math.min(1, (performance.now() - fadeStart) / CROSSFADE_MS);
+      drawCover(fadeFrom, 1);
+      drawCover(fadeTo, t);
+    } else {
+      drawCover(videoLayers[visibleLayerIndex], 1);
+    }
+  }
+
+  requestAnimationFrame(renderFrame);
+};
+
+const tryPlay = (layer) => {
+  if (!layer) {
+    return;
+  }
+
+  const playPromise = layer.play();
+
+  if (playPromise !== undefined) {
+    playPromise.catch(() => {
+      // Autoplay may be blocked until user interaction; fallback gradient remains visible.
+    });
+  }
+};
+
+const layerSrcMatches = (layer, src) => {
+  if (!layer?.src) {
+    return false;
+  }
+
+  try {
+    return layer.src.endsWith(src) || new URL(layer.src).pathname.endsWith(src);
+  } catch {
+    return layer.src.endsWith(src);
+  }
+};
+
+// Always load the requested clip and rewind to the first frame before playback.
+const prepareLayerSrc = (layer, src) =>
+  new Promise((resolve, reject) => {
+    const needsSrcChange = !layerSrcMatches(layer, src);
+
+    const onReady = () => {
+      layer.pause();
+      layer.currentTime = 0;
+      resolve();
+    };
+
+    if (!needsSrcChange && layer.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      onReady();
+      return;
+    }
+
+    layer.addEventListener("loadeddata", onReady, { once: true });
+    layer.addEventListener(
+      "error",
+      () => reject(new Error(`Failed to load ${src}`)),
+      { once: true }
+    );
+
+    if (needsSrcChange) {
+      layer.src = src;
+    }
+
+    layer.load();
+  });
+
+const preloadBackgroundSrc = (src) => {
+  if (videoLayers.length < 2 || !src || isTransitioning) {
+    return;
+  }
+
+  const hiddenLayer = videoLayers[visibleLayerIndex ^ 1];
+  prepareLayerSrc(hiddenLayer, src).catch(() => {
+    // Preload errors are handled when the clip becomes active.
+  });
+};
+
+const schedulePreloadBackgroundSrc = (src) => {
+  if (!src) {
+    return;
+  }
+
+  const run = () => {
+    if (isTransitioning) {
+      window.setTimeout(run, 50);
+      return;
+    }
+
+    preloadBackgroundSrc(src);
+  };
+
+  run();
+};
+
+// Run the callback only once a real video frame is painted, so we never
+// fade a not-yet-decoded (black) frame over the current video.
+const whenFrameReady = (layer, callback) => {
+  let done = false;
+
+  const run = () => {
+    if (done) {
+      return;
+    }
+    done = true;
+    callback();
+  };
+
+  if (typeof layer.requestVideoFrameCallback === "function") {
+    layer.requestVideoFrameCallback(() => run());
+  } else {
+    layer.addEventListener("playing", run, { once: true });
+  }
+
+  window.setTimeout(run, 500);
+};
+
+const crossfadeToSrc = (nextSrc) => {
+  if (isTransitioning || videoLayers.length === 0 || !nextSrc) {
+    return;
+  }
+
+  if (videoLayers.length < 2) {
+    isTransitioning = true;
+    const onlyLayer = videoLayers[0];
+
+    prepareLayerSrc(onlyLayer, nextSrc)
+      .then(() => {
+        currentVideoSrc = nextSrc;
+        tryPlay(onlyLayer);
+        whenFrameReady(onlyLayer, () => maybeStartIntellectumLayout(nextSrc));
+      })
+      .catch(handleVideoError)
+      .finally(() => {
+        isTransitioning = false;
+      });
+    return;
+  }
+
+  isTransitioning = true;
+
+  const currentLayer = videoLayers[visibleLayerIndex];
+  const nextLayer = videoLayers[visibleLayerIndex ^ 1];
+
+  prepareLayerSrc(nextLayer, nextSrc)
+    .then(() => {
+      tryPlay(nextLayer);
+
+      whenFrameReady(nextLayer, () => {
+        maybeStartIntellectumLayout(nextSrc);
+        fadeFrom = currentLayer;
+        fadeTo = nextLayer;
+        fadeStart = performance.now();
+
+        window.setTimeout(() => {
+          visibleLayerIndex ^= 1;
+          currentVideoSrc = nextSrc;
+          fadeFrom = null;
+          fadeTo = null;
+          currentLayer.pause();
+          isTransitioning = false;
+          tryPlay(videoLayers[visibleLayerIndex]);
+        }, CROSSFADE_MS);
+      });
+    })
+    .catch(() => {
+      isTransitioning = false;
+      handleVideoError();
+    });
+};
+
+const playBackgroundSrc = (src) => {
+  if (videoDisabled || !src) {
+    return;
+  }
+
+  crossfadeToSrc(src);
+};
+
+const replayBackgroundSrc = (src) => {
+  if (videoDisabled || !src) {
+    return;
+  }
+
+  const layer = videoLayers[visibleLayerIndex];
+  if (!layer || !layerSrcMatches(layer, src)) {
+    playBackgroundSrc(src);
+    return;
+  }
+
+  currentVideoSrc = src;
+  layer.currentTime = 0;
+  tryPlay(layer);
+};
+
+const handleBackgroundEnded = () => {
+  if (videoAfterEndSrc) {
+    const nextSrc = videoAfterEndSrc;
+    videoAfterEndSrc = null;
+    playBackgroundSrc(nextSrc);
+    return;
+  }
+
+  if (galleryActiveIndex === 0) {
+    const visibleLayer = videoLayers[visibleLayerIndex];
+    const onIntro =
+      currentVideoSrc === NODI_INTRO_VIDEO || layerSrcMatches(visibleLayer, NODI_INTRO_VIDEO);
+
+    if (onIntro) {
+      playBackgroundSrc(NODI_LOOP_VIDEO);
+      return;
+    }
+
+    if (
+      currentVideoSrc === NODI_LOOP_VIDEO ||
+      layerSrcMatches(visibleLayer, NODI_LOOP_VIDEO)
+    ) {
+      replayBackgroundSrc(NODI_LOOP_VIDEO);
+    }
+
+    return;
+  }
+
+  if (galleryActiveIndex === 1) {
+    playBackgroundSrc(INTELLECTUM_MAIN_VIDEO);
+  }
+};
+
+const onGalleryProductChange = (prevIndex, nextIndex) => {
+  galleryActiveIndex = nextIndex;
+  videoAfterEndSrc = null;
+
+  if (prevIndex === 0 && nextIndex === 1) {
+    intellectumIntroLayoutHook?.();
+    videoAfterEndSrc = INTELLECTUM_MAIN_VIDEO;
+    playBackgroundSrc(NODI_EXIT_VIDEO);
+    schedulePreloadBackgroundSrc(INTELLECTUM_MAIN_VIDEO);
+    return;
+  }
+
+  if (nextIndex === 0) {
+    intellectumLayoutOffHook?.();
+    playBackgroundSrc(NODI_INTRO_VIDEO);
+    schedulePreloadBackgroundSrc(NODI_LOOP_VIDEO);
+    return;
+  }
+
+  if (nextIndex === 1 && prevIndex !== 0) {
+    intellectumIntroLayoutHook?.();
+    playBackgroundSrc(INTELLECTUM_MAIN_VIDEO);
+    schedulePreloadBackgroundSrc(INTELLECTUM_MAIN_VIDEO);
+  }
+};
+
+const handleVideoError = () => {
+  failedAttempts += 1;
+
+  if (failedAttempts >= 6) {
+    videoDisabled = true;
+    if (bgCtx) {
+      bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+    }
+    if (bgCanvas) {
+      bgCanvas.style.display = "none";
+    }
+    return;
+  }
+
+  if (galleryActiveIndex === 0) {
+    if (currentVideoSrc === NODI_INTRO_VIDEO) {
+      playBackgroundSrc(NODI_LOOP_VIDEO);
+    } else {
+      replayBackgroundSrc(NODI_LOOP_VIDEO);
+    }
+  } else if (galleryActiveIndex === 1) {
+    playBackgroundSrc(INTELLECTUM_MAIN_VIDEO);
+  }
+};
+
+if (videoLayers.length > 0 && bgCtx) {
+  resizeCanvas();
+  window.addEventListener("resize", resizeCanvas);
+
+  videoLayers.forEach((layer) => {
+    layer.disablePictureInPicture = true;
+
+    layer.addEventListener("ended", () => {
+      if (layer === videoLayers[visibleLayerIndex] && !isTransitioning) {
+        handleBackgroundEnded();
+      }
+    });
+
+    layer.addEventListener("error", () => {
+      if (layer === videoLayers[visibleLayerIndex] && !isTransitioning) {
+        handleVideoError();
+      }
+    });
+
+    layer.addEventListener("loadeddata", () => {
+      failedAttempts = 0;
+    });
+  });
+
+  const firstLayer = videoLayers[0];
+
+  prepareLayerSrc(firstLayer, NODI_INTRO_VIDEO)
+    .then(() => {
+      currentVideoSrc = NODI_INTRO_VIDEO;
+      tryPlay(firstLayer);
+      schedulePreloadBackgroundSrc(NODI_LOOP_VIDEO);
+    })
+    .catch(handleVideoError);
+
+  requestAnimationFrame(renderFrame);
+}
+
+const PRESETS_STORAGE_KEY = "intellectum-us-glass-presets";
+const ACTIVE_PRESET_KEY = "intellectum-us-active-preset";
+const LEFT_GLASS_SETTINGS_KEY = "intellectum-us-left-glass-settings";
+const LEFT_GLASS_BLUR_LEGACY_KEY = "intellectum-us-left-glass-blur";
+
+const BUILTIN_PRESETS = {
+  "user-1": {
+    id: "user-1",
+    label: "Пользовательские параметры №1",
+    blur: 10,
+    shadow: 20,
+    overlay: 100,
+    panelDim: 30,
+    panelColor: "#1a264c",
+    textColor: "#ffffff",
+    heroTextColor: "#ffffff",
+    leadFieldOpacity: 70,
+  },
+  "user-2": {
+    id: "user-2",
+    label: "Пользовательские параметры №2",
+    blur: 12,
+    shadow: 20,
+    overlay: 6,
+    panelDim: 16,
+    panelColor: "#cac6d2",
+    textColor: "#413546",
+    heroTextColor: "#0f1412",
+    leadFieldOpacity: 58,
+  },
+  "user-3": {
+    id: "user-3",
+    label: "Настройка №3",
+    blur: 10,
+    shadow: 20,
+    overlay: 4,
+    panelDim: 14,
+    panelColor: "#1a264c",
+    textColor: "#343232",
+    heroTextColor: "#3a3636",
+    leadFieldOpacity: 64,
+  },
+  "user-4": {
+    id: "user-4",
+    label: "Настройка №4",
+    blur: 5,
+    shadow: 15,
+    overlay: 0,
+    panelDim: 10,
+    panelColor: "#1a264c",
+    textColor: "#000000",
+    heroTextColor: "#000000",
+    leadFieldOpacity: 64,
+  },
+  "user-5": {
+    id: "user-5",
+    label: "Настройка №5",
+    blur: 50,
+    shadow: 15,
+    overlay: 0,
+    panelDim: 10,
+    panelColor: "#1a264c",
+    textColor: "#000000",
+    heroTextColor: "#000000",
+    leadFieldOpacity: 64,
+  },
+};
+
+const HEX_COLOR_RE = /^#[0-9A-Fa-f]{6}$/;
+
+const bloomPage = document.querySelector(".bloom-page");
+const heroStage = document.querySelector(".hero-stage");
+const splitHeadline = document.querySelector("#site-hero-headline");
+const splitHeadlineMirror = document.querySelector("#site-hero-headline-mirror");
+const leftContent = document.querySelector(".left-content");
+const leftContentGroup = document.querySelector(".left-content-group");
+const PANEL_LAYOUT_MS = 1100;
+let intellectumLayoutOn = false;
+
+const updateHeroPanelArrowMode = (intellectum) => {
+  const t = window.SiteI18n?.t;
+  document.querySelectorAll(".hero-panel-arrow").forEach((btn) => {
+    btn.dataset.dir = intellectum ? "-1" : "1";
+    const key = intellectum ? "gallery.prev" : "gallery.next";
+    btn.setAttribute("aria-label", t ? t(key) : intellectum ? "Previous product" : "Next product");
+  });
+};
+
+document.addEventListener("site-language-change", () => {
+  updateHeroPanelArrowMode(heroStage?.classList.contains("is-intellectum") ?? false);
+});
+
+const updateHeadlineMirrorVisibility = (intellectum) => {
+  splitHeadline?.setAttribute("aria-hidden", intellectum ? "true" : "false");
+  splitHeadlineMirror?.setAttribute("aria-hidden", intellectum ? "false" : "true");
+};
+
+const animatePanelMirror = (enableIntellectum) => {
+  if (!leftContentGroup || !heroStage) {
+    return;
+  }
+
+  const firstRect = leftContentGroup.getBoundingClientRect();
+  heroStage.classList.toggle("is-intellectum", enableIntellectum);
+  updateHeadlineMirrorVisibility(enableIntellectum);
+  updateHeroPanelArrowMode(enableIntellectum);
+  const lastRect = leftContentGroup.getBoundingClientRect();
+  const invertX = firstRect.left - lastRect.left;
+
+  leftContentGroup.style.transition = "none";
+  leftContentGroup.style.transform = `translateX(${invertX}px)`;
+  leftContentGroup.getBoundingClientRect();
+
+  requestAnimationFrame(() => {
+    leftContentGroup.style.transition = `transform ${PANEL_LAYOUT_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`;
+    leftContentGroup.style.transform = "";
+
+    const cleanup = (event) => {
+      if (event.propertyName !== "transform") {
+        return;
+      }
+
+      leftContentGroup.style.transition = "";
+      leftContentGroup.removeEventListener("transitionend", cleanup);
+    };
+
+    leftContentGroup.addEventListener("transitionend", cleanup);
+  });
+};
+
+const setIntellectumLayout = (active) => {
+  if (!heroStage || intellectumLayoutOn === active) {
+    return;
+  }
+
+  intellectumLayoutOn = active;
+  animatePanelMirror(active);
+};
+
+intellectumIntroLayoutHook = () => setIntellectumLayout(true);
+intellectumLayoutOffHook = () => setIntellectumLayout(false);
+const siteChrome = document.querySelector(".site-chrome");
+const siteBrand = document.querySelector(".site-brand");
+const siteNav = document.querySelector(".site-nav");
+const siteActions = document.querySelector(".site-actions");
+const productGallery = document.querySelector(".product-gallery");
+const presetSelect = document.getElementById("settings-preset");
+const blurRange = document.getElementById("left-glass-blur");
+const blurValue = document.getElementById("left-glass-blur-value");
+const shadowRange = document.getElementById("left-glass-shadow");
+const shadowValue = document.getElementById("left-glass-shadow-value");
+const overlayRange = document.getElementById("video-overlay-strength");
+const overlayValue = document.getElementById("video-overlay-strength-value");
+const panelDimRange = document.getElementById("panel-dim-strength");
+const panelDimValue = document.getElementById("panel-dim-strength-value");
+const leadFieldOpacityRange = document.getElementById("lead-field-opacity");
+const leadFieldOpacityValue = document.getElementById("lead-field-opacity-value");
+const panelColorInput = document.getElementById("panel-tint-color");
+const panelColorHex = document.getElementById("panel-tint-color-hex");
+const textColorInput = document.getElementById("panel-text-color");
+const textColorHex = document.getElementById("panel-text-color-hex");
+const heroColorInput = document.getElementById("hero-text-color");
+const heroColorHex = document.getElementById("hero-text-color-hex");
+const saveGlassDefault = document.getElementById("save-left-glass-default");
+
+const clamp = (value, min, max) => Math.min(max, Math.max(min, Math.round(value)));
+
+const normalizeRange = (value, min, max, fallback) => {
+  const num = Number(value);
+  if (!Number.isFinite(num)) {
+    return fallback;
+  }
+  return clamp(num, min, max);
+};
+
+const normalizeHexColor = (value, fallback) => {
+  if (typeof value !== "string") {
+    return fallback;
+  }
+
+  const trimmed = value.trim();
+  const withHash = trimmed.startsWith("#") ? trimmed : `#${trimmed}`;
+
+  if (!HEX_COLOR_RE.test(withHash)) {
+    return fallback;
+  }
+
+  return withHash.toLowerCase();
+};
+
+const normalizeSettings = (raw, fallback) => {
+  const leadFromOpacity = normalizeRange(raw?.leadFieldOpacity, 0, 100, null);
+  const leadFromIntensity = normalizeRange(raw?.leadFieldIntensity, 0, 100, null);
+
+  return {
+    blur: normalizeRange(raw?.blur, 0, 50, fallback.blur),
+    shadow: normalizeRange(raw?.shadow, 0, 60, fallback.shadow),
+    overlay: normalizeRange(raw?.overlay, 0, 100, fallback.overlay),
+    panelDim: normalizeRange(raw?.panelDim, 0, 100, fallback.panelDim),
+    leadFieldOpacity:
+      leadFromOpacity !== null
+        ? leadFromOpacity
+        : leadFromIntensity !== null
+          ? leadFromIntensity
+          : fallback.leadFieldOpacity,
+    panelColor: normalizeHexColor(raw?.panelColor, fallback.panelColor),
+    textColor: normalizeHexColor(raw?.textColor, fallback.textColor),
+    heroTextColor: normalizeHexColor(raw?.heroTextColor, fallback.heroTextColor),
+  };
+};
+
+const readPresetsFromStorage = () => {
+  const merged = {};
+
+  Object.keys(BUILTIN_PRESETS).forEach((id) => {
+    merged[id] = { ...BUILTIN_PRESETS[id] };
+  });
+
+  const savedJson = localStorage.getItem(PRESETS_STORAGE_KEY);
+
+  if (savedJson) {
+    try {
+      const parsed = JSON.parse(savedJson);
+      Object.keys(parsed).forEach((id) => {
+        if (merged[id]) {
+          merged[id] = {
+            ...merged[id],
+            ...parsed[id],
+            id,
+            label: parsed[id].label || merged[id].label,
+          };
+        } else if (parsed[id]?.label) {
+          merged[id] = {
+            ...normalizeSettings(parsed[id], BUILTIN_PRESETS["user-2"]),
+            id,
+            label: parsed[id].label,
+          };
+        }
+      });
+    } catch {
+      // Keep built-in presets.
+    }
+  }
+
+  return merged;
+};
+
+const writePresetsToStorage = (presets) => {
+  const payload = {};
+
+  Object.keys(presets).forEach((id) => {
+    const preset = presets[id];
+    payload[id] = {
+      label: preset.label,
+      blur: preset.blur,
+      shadow: preset.shadow,
+      overlay: preset.overlay,
+      panelDim: preset.panelDim,
+      leadFieldOpacity: preset.leadFieldOpacity,
+      panelColor: preset.panelColor,
+      textColor: preset.textColor,
+      heroTextColor: preset.heroTextColor,
+    };
+  });
+
+  localStorage.setItem(PRESETS_STORAGE_KEY, JSON.stringify(payload));
+};
+
+const migrateLegacySettings = (presets) => {
+  const legacyJson = localStorage.getItem(LEFT_GLASS_SETTINGS_KEY);
+
+  if (!legacyJson || localStorage.getItem(PRESETS_STORAGE_KEY)) {
+    return presets;
+  }
+
+  try {
+    const legacy = JSON.parse(legacyJson);
+    presets["user-2"] = {
+      ...presets["user-2"],
+      ...normalizeSettings(legacy, presets["user-2"]),
+      label: presets["user-2"].label,
+      id: "user-2",
+    };
+    writePresetsToStorage(presets);
+  } catch {
+    // Ignore invalid legacy data.
+  }
+
+  return presets;
+};
+
+const getActivePresetId = (presets) => {
+  const savedId = localStorage.getItem(ACTIVE_PRESET_KEY);
+
+  if (savedId && presets[savedId]) {
+    return savedId;
+  }
+
+  return "user-5";
+};
+
+const applyLeftGlassSettings = (settings) => {
+  const visualBlur = Math.round(settings.blur * 1.8);
+  const backdropFilter = `blur(${visualBlur}px) saturate(${112 + settings.blur * 2}%) contrast(${104 + Math.round(
+    settings.blur * 0.5
+  )}%)`;
+
+  [leftContent, siteChrome, siteBrand, siteNav, siteActions, productGallery].forEach((el) => {
+    if (!el) {
+      return;
+    }
+
+    el.style.setProperty("--left-glass-backdrop-filter", backdropFilter);
+    el.style.setProperty("--left-glass-shadow", String(settings.shadow));
+    el.style.setProperty("--panel-dim-strength", String(settings.panelDim));
+    el.style.setProperty("--panel-tint-color", settings.panelColor);
+    el.style.setProperty("--panel-text-color", settings.textColor);
+  });
+
+  if (leftContent) {
+    leftContent.style.setProperty("--left-glass-blur", `${settings.blur}px`);
+    leftContent.style.setProperty("--lead-field-opacity", String(settings.leadFieldOpacity));
+  }
+
+  if (leftContentGroup) {
+    leftContentGroup.style.setProperty("--panel-text-color", settings.textColor);
+  }
+
+  if (bloomPage) {
+    bloomPage.style.setProperty("--video-overlay-strength", String(settings.overlay));
+  }
+
+  if (splitHeadline) {
+    splitHeadline.style.setProperty("--hero-text-color", settings.heroTextColor);
+  }
+
+  if (splitHeadlineMirror) {
+    splitHeadlineMirror.style.setProperty("--hero-text-color", settings.heroTextColor);
+  }
+
+  if (blurRange) {
+    blurRange.value = String(settings.blur);
+  }
+
+  if (blurValue) {
+    blurValue.textContent = `${settings.blur} px`;
+  }
+
+  if (shadowRange) {
+    shadowRange.value = String(settings.shadow);
+  }
+
+  if (shadowValue) {
+    shadowValue.textContent = String(settings.shadow);
+  }
+
+  if (overlayRange) {
+    overlayRange.value = String(settings.overlay);
+  }
+
+  if (overlayValue) {
+    overlayValue.textContent = `${settings.overlay}%`;
+  }
+
+  if (panelDimRange) {
+    panelDimRange.value = String(settings.panelDim);
+  }
+
+  if (panelDimValue) {
+    panelDimValue.textContent = `${settings.panelDim}%`;
+  }
+
+  if (leadFieldOpacityRange) {
+    leadFieldOpacityRange.value = String(settings.leadFieldOpacity);
+  }
+
+  if (leadFieldOpacityValue) {
+    leadFieldOpacityValue.textContent = `${settings.leadFieldOpacity}%`;
+  }
+
+  if (panelColorInput) {
+    panelColorInput.value = settings.panelColor;
+  }
+
+  if (panelColorHex) {
+    panelColorHex.value = settings.panelColor;
+  }
+
+  if (textColorInput) {
+    textColorInput.value = settings.textColor;
+  }
+
+  if (textColorHex) {
+    textColorHex.value = settings.textColor;
+  }
+
+  if (heroColorInput) {
+    heroColorInput.value = settings.heroTextColor;
+  }
+
+  if (heroColorHex) {
+    heroColorHex.value = settings.heroTextColor;
+  }
+};
+
+const fillPresetSelect = (presets, activeId) => {
+  if (!presetSelect) {
+    return;
+  }
+
+  presetSelect.innerHTML = "";
+
+  Object.keys(presets).forEach((id) => {
+    const option = document.createElement("option");
+    option.value = id;
+    option.textContent = presets[id].label;
+    presetSelect.appendChild(option);
+  });
+
+  presetSelect.value = activeId;
+};
+
+const bindColorControl = (colorInput, hexInput, applyColor) => {
+  colorInput?.addEventListener("input", () => {
+    const color = normalizeHexColor(colorInput.value, null);
+    if (!color) {
+      return;
+    }
+    applyColor(color);
+  });
+
+  hexInput?.addEventListener("change", () => {
+    const color = normalizeHexColor(hexInput.value, null);
+    if (!color) {
+      hexInput.value = colorInput?.value ?? "";
+      return;
+    }
+    applyColor(color);
+  });
+
+  hexInput?.addEventListener("input", () => {
+    const color = normalizeHexColor(hexInput.value, null);
+    if (!color) {
+      return;
+    }
+    applyColor(color);
+  });
+};
+
+if (leftContent && blurRange && shadowRange && overlayRange && panelDimRange && leadFieldOpacityRange) {
+  let presets = migrateLegacySettings(readPresetsFromStorage());
+
+  if (!localStorage.getItem(PRESETS_STORAGE_KEY)) {
+    writePresetsToStorage(presets);
+  }
+
+  let activePresetId = getActivePresetId(presets);
+  let settings = normalizeSettings(presets[activePresetId], BUILTIN_PRESETS["user-5"]);
+
+  fillPresetSelect(presets, activePresetId);
+  applyLeftGlassSettings(settings);
+
+  presetSelect?.addEventListener("change", () => {
+    activePresetId = presetSelect.value;
+    settings = normalizeSettings(presets[activePresetId], BUILTIN_PRESETS["user-5"]);
+    localStorage.setItem(ACTIVE_PRESET_KEY, activePresetId);
+    applyLeftGlassSettings(settings);
+  });
+
+  blurRange.addEventListener("input", () => {
+    settings = { ...settings, blur: Number(blurRange.value) };
+    applyLeftGlassSettings(settings);
+  });
+
+  shadowRange.addEventListener("input", () => {
+    settings = { ...settings, shadow: Number(shadowRange.value) };
+    applyLeftGlassSettings(settings);
+  });
+
+  overlayRange.addEventListener("input", () => {
+    settings = { ...settings, overlay: Number(overlayRange.value) };
+    applyLeftGlassSettings(settings);
+  });
+
+  panelDimRange.addEventListener("input", () => {
+    settings = { ...settings, panelDim: Number(panelDimRange.value) };
+    applyLeftGlassSettings(settings);
+  });
+
+  leadFieldOpacityRange.addEventListener("input", () => {
+    settings = { ...settings, leadFieldOpacity: Number(leadFieldOpacityRange.value) };
+    applyLeftGlassSettings(settings);
+  });
+
+  bindColorControl(panelColorInput, panelColorHex, (panelColor) => {
+    settings = { ...settings, panelColor };
+    applyLeftGlassSettings(settings);
+  });
+
+  bindColorControl(textColorInput, textColorHex, (textColor) => {
+    settings = { ...settings, textColor };
+    applyLeftGlassSettings(settings);
+  });
+
+  bindColorControl(heroColorInput, heroColorHex, (heroTextColor) => {
+    settings = { ...settings, heroTextColor };
+    applyLeftGlassSettings(settings);
+  });
+
+  saveGlassDefault?.addEventListener("click", () => {
+    presets[activePresetId] = {
+      ...presets[activePresetId],
+      ...settings,
+      id: activePresetId,
+      label: presets[activePresetId].label,
+    };
+    writePresetsToStorage(presets);
+    localStorage.setItem(ACTIVE_PRESET_KEY, activePresetId);
+
+    saveGlassDefault.textContent = "Сохранено";
+    saveGlassDefault.classList.add("is-saved");
+
+    window.setTimeout(() => {
+      saveGlassDefault.textContent = "Сохранить в набор";
+      saveGlassDefault.classList.remove("is-saved");
+    }, 1600);
+  });
+}
+
+/* ---------- Lead form: focus email + shake submit when invalid ---------- */
+const leadForm = document.getElementById("lead-form-body");
+const leadEmailInput = leadForm?.querySelector('input[type="email"]');
+const leadSubmitBtn = document.querySelector(".lead-form__submit");
+
+const isLeadEmailValid = () =>
+  Boolean(leadEmailInput?.value.trim() && leadEmailInput.checkValidity());
+
+const playLeadSubmitError = () => {
+  if (!leadSubmitBtn) {
+    return;
+  }
+
+  leadSubmitBtn.classList.remove("is-error");
+  void leadSubmitBtn.offsetWidth;
+  leadSubmitBtn.classList.add("is-error");
+};
+
+leadSubmitBtn?.addEventListener("animationend", (event) => {
+  if (event.animationName === "lead-form-submit-shake") {
+    leadSubmitBtn.classList.remove("is-error");
+  }
+});
+
+/* ---------- Lead form: country list + custom location select ---------- */
+const LEAD_COUNTRY_DEFAULT = "US";
+
+const normalizeLeadCountryText = (value) =>
+  value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .trim();
+
+const LEAD_LOCATION_MENU_ID = "lead-location-menu";
+
+const populateLeadCountrySelect = (root) => {
+  const menu = document.getElementById(LEAD_LOCATION_MENU_ID);
+  const list = menu?.querySelector(".lead-form__select-list");
+  const nativeSelect = root.querySelector(".lead-form__select-native");
+  const valueEl = root.querySelector(".lead-form__select-value");
+  const getCountries = window.getLeadCountries;
+  const formatLabel = window.formatLeadCountryLabel;
+
+  if (!menu || !list || !nativeSelect || !valueEl || typeof getCountries !== "function") {
+    return false;
+  }
+
+  const countries = getCountries();
+  const defaultCode = LEAD_COUNTRY_DEFAULT.toLowerCase();
+  let defaultLabel = formatLabel?.(LEAD_COUNTRY_DEFAULT, "United States") || "US - United States";
+
+  list.replaceChildren();
+  nativeSelect.replaceChildren();
+
+  countries.forEach(({ code, name }) => {
+    const value = code.toLowerCase();
+    const label = formatLabel?.(code, name) || `${code} - ${name}`;
+    const isDefault = code === LEAD_COUNTRY_DEFAULT;
+
+    if (isDefault) {
+      defaultLabel = label;
+    }
+
+    const item = document.createElement("li");
+    item.setAttribute("role", "option");
+    item.dataset.value = value;
+    item.dataset.code = code;
+    item.dataset.name = name;
+    item.dataset.label = label;
+    item.tabIndex = -1;
+    item.textContent = label;
+    if (isDefault) {
+      item.setAttribute("aria-selected", "true");
+    }
+    list.appendChild(item);
+
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = label;
+    if (isDefault) {
+      option.selected = true;
+    }
+    nativeSelect.appendChild(option);
+  });
+
+  nativeSelect.value = defaultCode;
+  valueEl.textContent = defaultLabel;
+  return true;
+};
+
+const initLeadCountrySelect = (root) => {
+  const field = root.closest(".lead-form__field--select");
+  const trigger = root.querySelector(".lead-form__select-trigger");
+  const menu = document.getElementById(LEAD_LOCATION_MENU_ID);
+  const searchInput = menu?.querySelector(".lead-form__select-search");
+  const list = menu?.querySelector(".lead-form__select-list");
+  const emptyState = menu?.querySelector(".lead-form__select-empty");
+  const valueEl = root.querySelector(".lead-form__select-value");
+  const nativeSelect = root.querySelector(".lead-form__select-native");
+
+  if (!field || !trigger || !menu || !searchInput || !list || !valueEl || !nativeSelect) {
+    return;
+  }
+
+  if (menu.parentElement !== document.body) {
+    document.body.appendChild(menu);
+  }
+
+  const panel = root.closest(".left-content");
+  const leadFormBody = root.closest(".lead-form")?.querySelector(".lead-form__body");
+
+  let options = Array.from(list.querySelectorAll('[role="option"]'));
+  let isMenuOpen = false;
+  let anchorUpdateQueued = false;
+
+  const refreshOptions = () => {
+    options = Array.from(list.querySelectorAll('[role="option"]'));
+  };
+
+  const getVisibleOptions = () =>
+    options.filter((item) => !item.hidden);
+
+  const countryMatchesQuery = (item, query) => {
+    if (!query) {
+      return true;
+    }
+
+    const haystack = normalizeLeadCountryText(
+      `${item.dataset.label || ""} ${item.dataset.name || ""} ${item.dataset.code || ""}`
+    );
+    const tokens = normalizeLeadCountryText(query).split(/\s+/).filter(Boolean);
+
+    return tokens.every((token) => haystack.includes(token));
+  };
+
+  const filterCountries = (query) => {
+    let visibleCount = 0;
+
+    options.forEach((item) => {
+      const matches = countryMatchesQuery(item, query);
+      item.hidden = !matches;
+      if (matches) {
+        visibleCount += 1;
+      }
+    });
+
+    if (emptyState) {
+      emptyState.hidden = visibleCount > 0;
+    }
+  };
+
+  const resetCountryFilter = () => {
+    searchInput.value = "";
+    filterCountries("");
+  };
+
+  const syncMenuTheme = () => {
+    if (!panel) {
+      return;
+    }
+
+    const panelStyle = getComputedStyle(panel);
+    const panelText = panelStyle.getPropertyValue("--panel-text-color").trim();
+    const panelTint = panelStyle.getPropertyValue("--panel-tint-color").trim();
+
+    if (panelText) {
+      menu.style.setProperty("--lead-select-menu-text", panelText);
+    }
+    if (panelTint) {
+      menu.style.setProperty("--panel-tint-color", panelTint);
+      menu.style.setProperty(
+        "--lead-select-menu-bg",
+        `color-mix(in srgb, ${panelTint} 16%, rgba(255, 255, 255, 0.97))`
+      );
+    }
+  };
+
+  const scrollOptionInList = (option) => {
+    if (!option) {
+      return;
+    }
+
+    const optionTop = option.offsetTop;
+    const optionBottom = optionTop + option.offsetHeight;
+    const viewTop = list.scrollTop;
+    const viewBottom = viewTop + list.clientHeight;
+
+    if (optionTop < viewTop) {
+      list.scrollTop = optionTop;
+    } else if (optionBottom > viewBottom) {
+      list.scrollTop = optionBottom - list.clientHeight;
+    }
+  };
+
+  const positionCountryMenu = () => {
+    const rect = trigger.getBoundingClientRect();
+    const gap = 6;
+    const viewportPadding = 8;
+    const menuMaxHeight = Math.min(window.innerHeight * 0.44, 16 * 16);
+    let top = rect.bottom + gap;
+    let left = rect.left;
+    let width = rect.width;
+
+    if (top + menuMaxHeight > window.innerHeight - viewportPadding) {
+      const aboveTop = rect.top - gap - menuMaxHeight;
+      if (aboveTop >= viewportPadding) {
+        top = aboveTop;
+      } else {
+        top = Math.max(viewportPadding, window.innerHeight - menuMaxHeight - viewportPadding);
+      }
+    }
+
+    left = Math.max(
+      viewportPadding,
+      Math.min(left, window.innerWidth - width - viewportPadding)
+    );
+
+    menu.style.position = "fixed";
+    menu.style.right = "auto";
+    menu.style.bottom = "auto";
+    menu.style.top = `${top}px`;
+    menu.style.left = `${left}px`;
+    menu.style.width = `${width}px`;
+  };
+
+  const isTriggerOnScreen = () => {
+    const rect = trigger.getBoundingClientRect();
+    return rect.bottom > 0 && rect.top < window.innerHeight;
+  };
+
+  const scheduleMenuAnchorUpdate = () => {
+    if (!isMenuOpen || anchorUpdateQueued) {
+      return;
+    }
+
+    anchorUpdateQueued = true;
+    window.requestAnimationFrame(() => {
+      anchorUpdateQueued = false;
+      if (!isMenuOpen) {
+        return;
+      }
+
+      if (!isTriggerOnScreen()) {
+        setOpen(false);
+        return;
+      }
+
+      positionCountryMenu();
+    });
+  };
+
+  const clampLeadFormBodyScroll = () => {
+    const body = root.closest(".lead-form")?.querySelector(".lead-form__body");
+    if (!body) {
+      return;
+    }
+
+    const maxScroll = body.scrollHeight - body.clientHeight;
+    if (body.scrollTop > maxScroll) {
+      body.scrollTop = maxScroll;
+    }
+  };
+
+  const setOpen = (open) => {
+    isMenuOpen = open;
+    root.classList.toggle("is-open", open);
+    field.classList.toggle("is-select-open", open);
+    menu.classList.toggle("is-menu-open", open);
+    trigger.setAttribute("aria-expanded", String(open));
+    menu.hidden = !open;
+
+    if (open) {
+      syncMenuTheme();
+      resetCountryFilter();
+      positionCountryMenu();
+      window.requestAnimationFrame(() => {
+        positionCountryMenu();
+        searchInput.focus();
+        const selected = list.querySelector('[role="option"][aria-selected="true"]:not([hidden])');
+        scrollOptionInList(selected || getVisibleOptions()[0]);
+      });
+      return;
+    }
+
+    resetCountryFilter();
+    menu.style.removeProperty("position");
+    menu.style.removeProperty("top");
+    menu.style.removeProperty("left");
+    menu.style.removeProperty("width");
+    menu.style.removeProperty("right");
+    menu.style.removeProperty("bottom");
+    window.requestAnimationFrame(clampLeadFormBodyScroll);
+  };
+
+  window.addEventListener("scroll", scheduleMenuAnchorUpdate, { capture: true, passive: true });
+  window.addEventListener("resize", scheduleMenuAnchorUpdate, { passive: true });
+  leadFormBody?.addEventListener("scroll", scheduleMenuAnchorUpdate, { passive: true });
+
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", scheduleMenuAnchorUpdate);
+    window.visualViewport.addEventListener("scroll", scheduleMenuAnchorUpdate);
+  }
+
+  const selectOption = (option) => {
+    const value = option.dataset.value;
+    const label = option.dataset.label || option.textContent?.trim() || "";
+
+    options.forEach((item) => {
+      item.setAttribute("aria-selected", String(item === option));
+    });
+
+    nativeSelect.value = value || "";
+    valueEl.textContent = label;
+    setOpen(false);
+    trigger.focus();
+  };
+
+  trigger.addEventListener("click", (event) => {
+    event.stopPropagation();
+    setOpen(!isMenuOpen);
+  });
+
+  searchInput.addEventListener("input", () => {
+    filterCountries(searchInput.value);
+    scrollOptionInList(getVisibleOptions()[0]);
+  });
+
+  searchInput.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      setOpen(false);
+      trigger.focus();
+      return;
+    }
+
+    if (event.key === "Enter") {
+      const visible = getVisibleOptions();
+      if (visible.length === 1) {
+        event.preventDefault();
+        selectOption(visible[0]);
+      }
+    }
+  });
+
+  list.addEventListener("click", (event) => {
+    const option = event.target.closest('[role="option"]');
+    if (!option || option.hidden) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+    selectOption(option);
+  });
+
+  list.addEventListener("keydown", (event) => {
+    const option = event.target.closest('[role="option"]');
+    if (!option || option.hidden) {
+      return;
+    }
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      selectOption(option);
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!root.classList.contains("is-open")) {
+      return;
+    }
+    const target = event.target;
+    if (!(target instanceof Node) || field.contains(target) || menu.contains(target)) {
+      return;
+    }
+    setOpen(false);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && root.classList.contains("is-open")) {
+      setOpen(false);
+      trigger.focus();
+    }
+  });
+
+  refreshOptions();
+};
+
+document.querySelectorAll("[data-lead-select]").forEach((root) => {
+  populateLeadCountrySelect(root);
+  initLeadCountrySelect(root);
+});
+
+leadForm?.addEventListener("submit", (event) => {
+  if (!leadEmailInput || !leadSubmitBtn) {
+    return;
+  }
+
+  if (isLeadEmailValid()) {
+    return;
+  }
+
+  event.preventDefault();
+  leadEmailInput.focus({ preventScroll: false });
+  leadEmailInput.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  playLeadSubmitError();
+});
+
+/* ---------- Site chrome + gallery: sync on scroll (30vh threshold) ---------- */
+const NAV_MERGE_SCROLL_RATIO = 0.3;
+const navMergeMode = siteChrome?.dataset.navMerge || "auto";
+
+const updateSiteScrollUi = () => {
+  const pastThreshold = window.scrollY > window.innerHeight * NAV_MERGE_SCROLL_RATIO;
+
+  if (productGallery) {
+    productGallery.classList.toggle("is-hidden", pastThreshold);
+  }
+
+  if (siteChrome && navMergeMode !== "always") {
+    document.body.classList.toggle("is-nav-merged", pastThreshold);
+  }
+};
+
+let siteScrollTicking = false;
+
+if (siteChrome && navMergeMode !== "always") {
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!siteScrollTicking) {
+        siteScrollTicking = true;
+        window.requestAnimationFrame(() => {
+          siteScrollTicking = false;
+          updateSiteScrollUi();
+        });
+      }
+    },
+    { passive: true }
+  );
+  updateSiteScrollUi();
+}
+
+/* ---------- Product gallery: arrow selection + hide on scroll ---------- */
+if (productGallery) {
+  const cards = Array.from(productGallery.querySelectorAll(".product-gallery__card"));
+
+  if (cards.length) {
+    let activeIndex = 0;
+
+    const setActive = (index) => {
+      const total = cards.length;
+      const nextIndex = ((index % total) + total) % total;
+
+      if (nextIndex !== activeIndex) {
+        onGalleryProductChange(activeIndex, nextIndex);
+      }
+
+      activeIndex = nextIndex;
+      cards.forEach((card, i) => {
+        card.classList.toggle("is-active", i === activeIndex);
+      });
+    };
+
+    setActive(activeIndex);
+
+    const bindProductStep = (arrow) => {
+      arrow.addEventListener("click", () => {
+        const dir = Number(arrow.dataset.dir) || 1;
+        setActive(activeIndex + dir);
+      });
+    };
+
+    productGallery.querySelectorAll(".product-gallery__arrow").forEach(bindProductStep);
+    document.querySelectorAll(".hero-panel-arrow").forEach(bindProductStep);
+
+    cards.forEach((card, i) => {
+      card.addEventListener("click", () => setActive(i));
+    });
+  }
+}

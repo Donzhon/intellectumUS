@@ -1,0 +1,523 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IntellectumUS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;1,500&family=Rajdhani:wght@600;700&family=Source+Serif+4:ital,wght@1,400;1,500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="bloom-page">
+    <div class="site-chrome" data-nav-merge="auto">
+      <a class="site-brand liquid-glass brand" href="index.html" aria-label="EduVector — Home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2c1.66 0 3 1.79 3 4 0 .73-.15 1.41-.4 2 .59-.25 1.27-.4 2-.4 2.21 0 4 1.34 4 3s-1.79 3-4 3c-.73 0-1.41-.15-2-.4.25.59.4 1.27.4 2 0 2.21-1.34 4-3 4s-3-1.79-3-4c0-.73.15-1.41.4-2-.59.25-1.27.4-2 .4-2.21 0-4-1.34-4-3s1.79-3 4-3c.73 0 1.41.15 2 .4C9.15 7.41 9 6.73 9 6c0-2.21 1.34-4 3-4z" />
+            <circle cx="12" cy="12" r="2.4" fill="#0c1b16" />
+          </svg>
+        </span>
+        <span class="brand-text">EduVector</span>
+      </a>
+      <nav class="site-nav liquid-glass" aria-label="Site">
+        <ul class="site-nav__list">
+          <li class="site-nav__item site-nav__item--has-menu">
+            <button
+              class="site-nav__link site-nav__toggle"
+              type="button"
+              aria-expanded="false"
+              aria-haspopup="true"
+              data-scroll-to="product-categories"
+            >
+              <span data-i18n="nav.products">Products</span>
+              <svg class="site-nav__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+            <ul class="site-nav__dropdown liquid-glass">
+              <li><a href="#" data-i18n="nav.intellectum">Intellectum</a></li>
+              <li><a href="#" data-i18n="nav.nodi">Nodi</a></li>
+              <li><a href="#" data-i18n="nav.iot">IoT Board</a></li>
+              <li><a href="#" data-i18n="nav.equipment">School Equipments</a></li>
+            </ul>
+          </li>
+          <li><a class="site-nav__link" href="partners.html" data-i18n="nav.partners">For Partners</a></li>
+          <li><a class="site-nav__link" href="about.html" data-i18n="nav.about">About us</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="hero-stage">
+      <div class="bg-fallback" aria-hidden="true"></div>
+      <video
+        class="bg-video is-active"
+        autoplay
+        muted
+        playsinline
+        preload="auto"
+        disablepictureinpicture
+        disableremoteplayback
+        controlslist="nodownload nofullscreen noremoteplayback"
+        src="assets/nodi-1.mp4"
+        aria-hidden="true"
+      ></video>
+      <video
+        class="bg-video"
+        muted
+        playsinline
+        preload="auto"
+        disablepictureinpicture
+        disableremoteplayback
+        controlslist="nodownload nofullscreen noremoteplayback"
+        aria-hidden="true"
+      ></video>
+      <canvas class="bg-canvas" aria-hidden="true"></canvas>
+      <div class="hero-stage__overlay" aria-hidden="true"></div>
+
+      <div class="site-actions liquid-glass">
+        <div class="site-lang" role="group" data-i18n-aria-label="lang.group" aria-label="Language">
+          <button type="button" class="site-lang__btn" data-lang="kaz" aria-pressed="false">KAZ</button>
+          <button type="button" class="site-lang__btn" data-lang="eng" aria-pressed="false">ENG</button>
+        </div>
+        <a class="site-actions__btn" href="#" aria-label="Account">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        </a>
+        <div class="nav-menu-wrap">
+          <button
+            class="site-actions__btn menu-pill"
+            type="button"
+            aria-expanded="false"
+            aria-controls="nav-menu"
+            aria-label="Menu"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="4" x2="20" y1="6" y2="6" />
+              <line x1="4" x2="20" y1="12" y2="12" />
+              <line x1="4" x2="20" y1="18" y2="18" />
+            </svg>
+          </button>
+          <div class="nav-menu liquid-glass" id="nav-menu" hidden>
+            <button class="cta liquid-glass-strong nav-menu__cta" type="button">
+              <span data-i18n="menu.explore">Explore Now</span>
+              <span class="dl-circle" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" x2="12" y1="15" y2="3" />
+                </svg>
+              </span>
+            </button>
+            <div class="nav-menu__tuner" role="group" aria-label="Настройки панели в меню">
+              <div class="glass-tuner__control">
+                <label class="glass-tuner__label" for="settings-preset">Набор параметров</label>
+                <select class="glass-tuner__select" id="settings-preset" aria-label="Набор параметров"></select>
+              </div>
+              <div class="glass-tuner__control">
+                <label class="glass-tuner__label" for="left-glass-blur">Размытие стекла</label>
+                <div class="glass-tuner__row">
+                  <input
+                    class="glass-tuner__range"
+                    type="range"
+                    id="left-glass-blur"
+                    min="0"
+                    max="50"
+                    step="1"
+                    value="12"
+                  />
+                  <output class="glass-tuner__value" id="left-glass-blur-value" for="left-glass-blur">12 px</output>
+                </div>
+              </div>
+              <div class="glass-tuner__control">
+                <label class="glass-tuner__label" for="left-glass-shadow">Тень панели</label>
+                <div class="glass-tuner__row">
+                  <input
+                    class="glass-tuner__range"
+                    type="range"
+                    id="left-glass-shadow"
+                    min="0"
+                    max="60"
+                    step="1"
+                    value="20"
+                  />
+                  <output class="glass-tuner__value" id="left-glass-shadow-value" for="left-glass-shadow">20</output>
+                </div>
+              </div>
+            </div>
+            <div class="glass-tuner liquid-glass" role="group" aria-label="Настройка левой панели">
+              <div class="glass-tuner__control">
+                <label class="glass-tuner__label" for="video-overlay-strength">Затемнение видео</label>
+                <div class="glass-tuner__row">
+                  <input
+                    class="glass-tuner__range"
+                    type="range"
+                    id="video-overlay-strength"
+                    min="0"
+                    max="100"
+                    step="1"
+                    value="6"
+                  />
+                  <output class="glass-tuner__value" id="video-overlay-strength-value" for="video-overlay-strength">6%</output>
+                </div>
+              </div>
+              <div class="glass-tuner__control">
+                <label class="glass-tuner__label" for="panel-dim-strength">Затемнение блока</label>
+                <div class="glass-tuner__row">
+                  <input
+                    class="glass-tuner__range"
+                    type="range"
+                    id="panel-dim-strength"
+                    min="0"
+                    max="100"
+                    step="1"
+                    value="16"
+                  />
+                  <output class="glass-tuner__value" id="panel-dim-strength-value" for="panel-dim-strength">16%</output>
+                </div>
+              </div>
+              <div class="glass-tuner__control">
+                <label class="glass-tuner__label" for="lead-field-opacity">Прозрачность полей</label>
+                <div class="glass-tuner__row">
+                  <input
+                    class="glass-tuner__range"
+                    type="range"
+                    id="lead-field-opacity"
+                    min="0"
+                    max="100"
+                    step="1"
+                    value="65"
+                  />
+                  <output class="glass-tuner__value" id="lead-field-opacity-value" for="lead-field-opacity">65%</output>
+                </div>
+              </div>
+              <div class="glass-tuner__control">
+                <label class="glass-tuner__label" for="panel-tint-color">Цвет блока</label>
+                <div class="glass-tuner__row">
+                  <input
+                    class="glass-tuner__color-input"
+                    type="color"
+                    id="panel-tint-color"
+                    value="#cac6d2"
+                  />
+                  <input
+                    class="glass-tuner__hex"
+                    type="text"
+                    id="panel-tint-color-hex"
+                    value="#cac6d2"
+                    maxlength="7"
+                    spellcheck="false"
+                    aria-label="HEX-код цвета блока"
+                  />
+                </div>
+              </div>
+              <div class="glass-tuner__control">
+                <label class="glass-tuner__label" for="panel-text-color">Цвет текста блока</label>
+                <div class="glass-tuner__row">
+                  <input
+                    class="glass-tuner__color-input"
+                    type="color"
+                    id="panel-text-color"
+                    value="#413546"
+                  />
+                  <input
+                    class="glass-tuner__hex"
+                    type="text"
+                    id="panel-text-color-hex"
+                    value="#413546"
+                    maxlength="7"
+                    spellcheck="false"
+                    aria-label="HEX-код цвета текста блока"
+                  />
+                </div>
+              </div>
+              <div class="glass-tuner__control">
+                <label class="glass-tuner__label" for="hero-text-color">Цвет Hero-заголовка</label>
+                <div class="glass-tuner__row">
+                  <input
+                    class="glass-tuner__color-input"
+                    type="color"
+                    id="hero-text-color"
+                    value="#0f1412"
+                  />
+                  <input
+                    class="glass-tuner__hex"
+                    type="text"
+                    id="hero-text-color-hex"
+                    value="#0f1412"
+                    maxlength="7"
+                    spellcheck="false"
+                    aria-label="HEX-код цвета Hero-заголовка"
+                  />
+                </div>
+              </div>
+              <button class="glass-tuner__save" type="button" id="save-left-glass-default">Сохранить в набор</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="split">
+      <h1 class="split-headline" id="site-hero-headline">
+        <span class="split-headline__line" data-i18n="hero.nodi.1">Innovations in</span>
+        <span class="split-headline__line" data-i18n="hero.nodi.2">School Education</span>
+      </h1>
+      <h1
+        class="split-headline split-headline--mirror"
+        id="site-hero-headline-mirror"
+        aria-hidden="true"
+      >
+        <span class="split-headline__line" data-i18n="hero.intellectum.1">Develop your personal</span>
+        <span class="split-headline__line" data-i18n="hero.intellectum.2">intelligence</span>
+      </h1>
+      <div class="left-content-group">
+      <div class="left-content liquid-glass">
+          <header class="top-nav">
+            <a class="brand" href="index.html">
+              <span class="brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2c1.66 0 3 1.79 3 4 0 .73-.15 1.41-.4 2 .59-.25 1.27-.4 2-.4 2.21 0 4 1.34 4 3s-1.79 3-4 3c-.73 0-1.41-.15-2-.4.25.59.4 1.27.4 2 0 2.21-1.34 4-3 4s-3-1.79-3-4c0-.73.15-1.41.4-2-.59.25-1.27.4-2 .4-2.21 0-4-1.34-4-3s1.79-3 4-3c.73 0 1.41.15 2 .4C9.15 7.41 9 6.73 9 6c0-2.21 1.34-4 3-4z" />
+                  <circle cx="12" cy="12" r="2.4" fill="#0c1b16" />
+                </svg>
+              </span>
+              <span class="brand-text">EduVector</span>
+            </a>
+          </header>
+
+          <section class="lead-form" aria-labelledby="lead-form-title">
+            <h1 id="lead-form-title" class="lead-form__title" data-i18n="form.title">Nodi Ecosystem</h1>
+            <p class="lead-form__lead" data-i18n="form.lead">
+              Stepper is an educational IoT device that demonstrates how code transforms into motion using
+              magnetic force.
+            </p>
+            <form id="lead-form-body" class="lead-form__body" action="#" method="post">
+              <label class="lead-form__field">
+                <span class="lead-form__control liquid-glass">
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Your email"
+                    autocomplete="email"
+                    aria-label="Email"
+                    data-i18n-placeholder="form.email"
+                    data-i18n-aria-label="form.email"
+                  />
+                </span>
+              </label>
+              <div class="lead-form__field lead-form__field--select">
+                <label class="lead-form__select-label">
+                  <span class="lead-form__control liquid-glass">
+                    <span class="lead-form__select" data-lead-select>
+                      <button
+                        type="button"
+                        class="lead-form__select-trigger"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-controls="lead-location-listbox"
+                        id="lead-location-trigger"
+                      >
+                        <span class="lead-form__select-value">US - United States</span>
+                        <svg
+                          class="lead-form__select-caret"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                      </button>
+                      <select class="lead-form__select-native" name="location" aria-label="Location" tabindex="-1"></select>
+                    </span>
+                  </span>
+                </label>
+              </div>
+              <label class="lead-form__field">
+                <span class="lead-form__control lead-form__control--area liquid-glass">
+                  <textarea
+                    name="comment"
+                    rows="4"
+                    placeholder="Comments about product..."
+                    aria-label="Comment"
+                    data-i18n-placeholder="form.comment"
+                    data-i18n-aria-label="form.comment"
+                  ></textarea>
+                </span>
+              </label>
+              <fieldset class="lead-form__reason">
+                <legend data-i18n="form.reasonLegend">Why you need it?</legend>
+                <label><input type="radio" name="reason" value="personal" checked /> <span data-i18n="form.reasonPersonal">Personal use</span></label>
+                <label><input type="radio" name="reason" value="school" /> <span data-i18n="form.reasonSchool">For school</span></label>
+                <label><input type="radio" name="reason" value="reselling" /> <span data-i18n="form.reasonReselling">For reselling</span></label>
+                <label><input type="radio" name="reason" value="other" /> <span data-i18n="form.reasonOther">Other</span></label>
+              </fieldset>
+            </form>
+          </section>
+          <div class="lead-form__actions">
+            <button class="lead-form__submit" type="submit" form="lead-form-body" data-i18n="form.submit">Submit request</button>
+          </div>
+
+      </div>
+      <button class="hero-panel-arrow" type="button" data-dir="1" data-i18n-aria-label="gallery.next" aria-label="Next product">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </button>
+      </div>
+      </div>
+
+      <div class="product-gallery" data-i18n-aria-label="gallery.products" aria-label="Products">
+        <button class="product-gallery__arrow" type="button" data-dir="-1" data-i18n-aria-label="gallery.prev" aria-label="Previous product">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+        <ul class="product-gallery__track">
+          <li class="product-gallery__card liquid-glass is-active">
+            <img class="product-gallery__img" src="assets/nodi.png" alt="Nodi" />
+          </li>
+          <li class="product-gallery__card liquid-glass">
+            <img class="product-gallery__img" src="assets/intellectum.png" alt="Intellectum" />
+          </li>
+          <li class="product-gallery__card liquid-glass">
+            <img class="product-gallery__img" src="assets/neyri.png" alt="Neyri" />
+          </li>
+        </ul>
+        <button class="product-gallery__arrow" type="button" data-dir="1" data-i18n-aria-label="gallery.next" aria-label="Next product">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <section id="product-categories" class="product-categories" aria-labelledby="product-categories-title">
+      <h2 class="visually-hidden" id="product-categories-title" data-i18n="categories.title">Product categories</h2>
+      <div class="product-categories__inner">
+        <ul class="product-categories__grid">
+          <li class="product-categories__card">
+            <div class="product-categories__card-content">
+              <p class="product-categories__card-tag" data-i18n="categories.pasco.desc">Digital measuring instruments.</p>
+              <h3 class="product-categories__card-title" data-i18n="categories.pasco.title">Pasco</h3>
+              <a class="product-categories__card-link" href="#" data-i18n="categories.cta">Learn More &gt;</a>
+            </div>
+            <figure class="product-categories__card-media">
+              <img
+                src="assets/Pasco-home-page-science-stem.jpg"
+                alt=""
+                data-i18n-alt="categories.pasco.title"
+              />
+            </figure>
+          </li>
+          <li class="product-categories__card">
+            <div class="product-categories__card-content">
+              <p class="product-categories__card-tag" data-i18n="categories.intellectum.desc">
+                A developmental methodology for kindergartens.
+              </p>
+              <h3 class="product-categories__card-title" data-i18n="categories.intellectum.title">Intellectum</h3>
+              <a class="product-categories__card-link" href="#" data-i18n="categories.cta">Learn More &gt;</a>
+            </div>
+            <figure class="product-categories__card-media">
+              <img src="assets/intellectum.png" alt="" data-i18n-alt="categories.intellectum.title" />
+            </figure>
+          </li>
+          <li class="product-categories__card">
+            <div class="product-categories__card-content">
+              <p class="product-categories__card-tag" data-i18n="categories.nodi.desc">
+                Educational robotics and STEM learning.
+              </p>
+              <h3 class="product-categories__card-title" data-i18n="categories.nodi.title">Nodi Ecosystem</h3>
+              <a class="product-categories__card-link" href="#" data-i18n="categories.cta">Learn More &gt;</a>
+            </div>
+            <figure class="product-categories__card-media">
+              <img src="assets/nodi.png" alt="" data-i18n-alt="categories.nodi.title" />
+            </figure>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="learning-labs" class="land-section land-section--mist" aria-labelledby="learning-labs-title">
+      <div class="land-section__inner">
+        <p class="land-section__eyebrow" data-i18n="land.learning.eyebrow">01 · Learning</p>
+        <h2 class="land-section__title" id="learning-labs-title" data-i18n="land.learning.title">Learning Labs</h2>
+        <p class="land-section__lead" data-i18n="land.learning.lead">
+          Hands-on digital labs where students explore STEM, design, and AI through guided simulations
+          and real-time feedback.
+        </p>
+        <ul class="land-section__list">
+          <li data-i18n="land.learning.item1">Adaptive lesson paths for grades 6–12</li>
+          <li data-i18n="land.learning.item2">Collaborative whiteboards and group projects</li>
+          <li data-i18n="land.learning.item3">Progress dashboards for teachers and parents</li>
+        </ul>
+        <a class="land-section__cta" href="#teacher-toolkit" data-i18n="land.learning.cta">Explore labs</a>
+      </div>
+      <div class="land-section__visual land-section__visual--grid" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </section>
+
+    <section id="teacher-toolkit" class="land-section land-section--lavender" aria-labelledby="teacher-toolkit-title">
+      <div class="land-section__inner">
+        <p class="land-section__eyebrow" data-i18n="land.teacher.eyebrow">02 · Educators</p>
+        <h2 class="land-section__title" id="teacher-toolkit-title" data-i18n="land.teacher.title">Teacher Toolkit</h2>
+        <p class="land-section__lead" data-i18n="land.teacher.lead">
+          Everything educators need to plan lessons, assess outcomes, and connect with families — in one
+          calm, focused workspace.
+        </p>
+        <ul class="land-section__list">
+          <li data-i18n="land.teacher.item1">Curriculum templates aligned to national standards</li>
+          <li data-i18n="land.teacher.item2">AI-assisted rubrics and assignment builders</li>
+          <li data-i18n="land.teacher.item3">Secure messaging with students and guardians</li>
+        </ul>
+        <button class="land-section__cta land-section__cta--dark" type="button" data-i18n="land.teacher.cta">Request access</button>
+      </div>
+      <div class="land-section__stats">
+        <div class="land-stat">
+          <span class="land-stat__value">120+</span>
+          <span class="land-stat__label" data-i18n="land.teacher.stat1">Partner schools</span>
+        </div>
+        <div class="land-stat">
+          <span class="land-stat__value">48k</span>
+          <span class="land-stat__label" data-i18n="land.teacher.stat2">Active learners</span>
+        </div>
+        <div class="land-stat">
+          <span class="land-stat__value">98%</span>
+          <span class="land-stat__label" data-i18n="land.teacher.stat3">Satisfaction rate</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="lead-form__select-menu" id="lead-location-menu" hidden>
+      <input
+        type="search"
+        class="lead-form__select-search"
+        placeholder="Search country..."
+        autocomplete="off"
+        aria-label="Search country"
+        data-i18n-placeholder="search.country"
+        data-i18n-aria-label="search.country"
+        tabindex="-1"
+      />
+      <ul
+        class="lead-form__select-list"
+        id="lead-location-listbox"
+        role="listbox"
+        aria-labelledby="lead-location-trigger"
+      ></ul>
+      <p class="lead-form__select-empty" hidden data-i18n="search.empty">No countries found</p>
+    </div>
+
+    <script src="js/countries.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

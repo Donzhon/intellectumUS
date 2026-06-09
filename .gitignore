@@ -1,0 +1,24 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies (if added later)
+node_modules/
+
+# Logs & caches
+*.log
+.cache/
+
+# Editor / IDE (local only)
+.idea/
+*.swp
+*.swo
+
+# Cursor local workspace (not project source)
+.cursor/
