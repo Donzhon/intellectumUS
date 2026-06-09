@@ -1,3 +1,28 @@
+/* ---------- Keep the address bar clean (no index.html, no trailing #) ---------- */
+(() => {
+  const { pathname, search, hash } = window.location;
+  let nextPath = pathname;
+
+  if (nextPath.endsWith("/index.html")) {
+    nextPath = nextPath.slice(0, -"/index.html".length) || "/";
+  }
+
+  const cleaned = nextPath + search + hash;
+  const current = pathname + search + hash;
+
+  if (cleaned !== current) {
+    history.replaceState(null, "", cleaned);
+  } else if (hash === "" && window.location.href.endsWith("#")) {
+    history.replaceState(null, "", pathname + search);
+  }
+})();
+
+document.addEventListener("click", (event) => {
+  if (event.target.closest('a[href="#"]')) {
+    event.preventDefault();
+  }
+});
+
 const menuPill = document.querySelector(".menu-pill");
 const navMenu = document.getElementById("nav-menu");
 const siteActionsMenuHost = navMenu?.closest(".site-actions");
@@ -69,7 +94,7 @@ const productsScrollTargetId =
   productsNavToggle?.dataset.scrollTo || PRODUCTS_SCROLL_TARGET;
 const productsScrollSection = document.getElementById(productsScrollTargetId);
 const productsScrollHref =
-  productsNavToggle?.dataset.scrollHref || `index.html#${productsScrollTargetId}`;
+  productsNavToggle?.dataset.scrollHref || `/#${productsScrollTargetId}`;
 
 productsNavToggle?.addEventListener("click", (event) => {
   event.preventDefault();
