@@ -16,7 +16,32 @@
       content="Educational technology for schools, kindergartens, and STEM classrooms worldwide."
     />
     <meta property="og:url" content="https://www.eduvector.kz/" />
+    <meta property="og:site_name" content="EduVector Distribution" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content="https://eduvector.kz/assets/og/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="EduVector Distribution — Innovations in School Education" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="EduVector Distribution" />
+    <meta
+      name="twitter:description"
+      content="Educational technology for schools, kindergartens, and STEM classrooms worldwide."
+    />
+    <meta name="twitter:image" content="https://eduvector.kz/assets/og/og-image.png" />
     <link rel="icon" href="assets/icon/eduvector_favicon.svg" type="image/svg+xml" />
+    <script>
+      (function () {
+        try {
+          if (!localStorage.getItem("eduvector-index-boot-v1")) {
+            document.documentElement.classList.add("is-boot-loading");
+          }
+        } catch (_) {
+          /* localStorage may be blocked — skip the boot screen */
+        }
+      })();
+    </script>
+    <link rel="preload" as="video" href="assets/video/nodi-in.mp4" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -26,6 +51,10 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body class="bloom-page">
+    <div class="boot-screen" id="boot-screen" hidden aria-live="polite" aria-label="Loading">
+      <img class="boot-screen__logo" src="assets/icon/eduvector.svg" alt="" />
+      <div class="boot-screen__spinner" aria-hidden="true"></div>
+    </div>
     <div class="site-chrome" data-nav-merge="auto">
       <a class="site-brand liquid-glass brand" href="/" aria-label="EduVector — Home">
         <span class="brand-mark" aria-hidden="true">
@@ -576,6 +605,7 @@
       <p class="lead-form__select-empty" hidden data-i18n="search.empty">No countries found</p>
     </div>
 
+    <script src="js/boot-loader.js"></script>
     <script src="js/countries.js"></script>
     <script src="js/i18n.js"></script>
     <script src="js/app.js"></script>

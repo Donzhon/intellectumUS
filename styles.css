@@ -32,6 +32,73 @@
   box-sizing: border-box;
 }
 
+html.is-boot-loading .site-chrome,
+html.is-boot-loading .hero-stage,
+html.is-boot-loading .site-footer,
+html.is-boot-loading .lead-form__select-menu {
+  visibility: hidden;
+}
+
+.boot-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.75rem;
+  background: #000;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+.boot-screen.is-leaving {
+  opacity: 0;
+}
+
+.boot-screen__logo {
+  width: clamp(96px, 22vw, 168px);
+  height: auto;
+  animation: boot-logo-pulse 1.6s ease-in-out infinite;
+}
+
+.boot-screen__spinner {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.16);
+  border-top-color: var(--bloom-accent);
+  animation: boot-spin 0.9s linear infinite;
+}
+
+@keyframes boot-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes boot-logo-pulse {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boot-screen {
+    transition: none;
+  }
+
+  .boot-screen__logo,
+  .boot-screen__spinner {
+    animation: none;
+  }
+}
+
 .hero-stage {
   position: relative;
   min-height: 100dvh;
