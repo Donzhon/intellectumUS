@@ -35,6 +35,13 @@
         try {
           if (!localStorage.getItem("eduvector-index-boot-v1")) {
             document.documentElement.classList.add("is-boot-loading");
+            window.setTimeout(function () {
+              document.documentElement.classList.remove("is-boot-loading");
+              var bootScreen = document.getElementById("boot-screen");
+              if (bootScreen) {
+                bootScreen.hidden = true;
+              }
+            }, 3500);
           }
         } catch (_) {
           /* localStorage may be blocked — skip the boot screen */
@@ -97,6 +104,7 @@
         muted
         playsinline
         preload="auto"
+        poster="assets/video/intellectum.jpg"
         disablepictureinpicture
         disableremoteplayback
         controlslist="nodownload nofullscreen noremoteplayback"
@@ -108,6 +116,7 @@
         muted
         playsinline
         preload="auto"
+        poster="assets/video/intellectum.jpg"
         disablepictureinpicture
         disableremoteplayback
         controlslist="nodownload nofullscreen noremoteplayback"

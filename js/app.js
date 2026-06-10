@@ -118,9 +118,12 @@ const NODI_EXIT_VIDEO = "assets/video/nodi-intellectum.mp4";
 const INTELLECTUM_MAIN_IMAGE = "assets/video/intellectum.jpg";
 
 const videoLayers = Array.from(document.querySelectorAll(".bg-video"));
+const heroBackgroundStage = document.querySelector(".hero-stage");
 const bgCanvas = document.querySelector(".bg-canvas");
 const bgCtx = bgCanvas ? bgCanvas.getContext("2d") : null;
 const CROSSFADE_MS = 700;
+const useNativeTouchVideo =
+  window.matchMedia?.("(hover: none) and (pointer: coarse)").matches ?? false;
 let currentBackgroundSrc = NODI_INTRO_VIDEO;
 let visibleLayerIndex = 0;
 let isShowingImage = false;
@@ -139,6 +142,30 @@ const maybeStartIntellectumLayout = (src) => {
   if (src === INTELLECTUM_MAIN_IMAGE) {
     intellectumIntroLayoutHook?.();
   }
+};
+
+const setActiveVideoLayer = (activeLayer) => {
+  videoLayers.forEach((layer) => {
+    layer.classList.toggle("is-active", layer === activeLayer);
+  });
+};
+
+const setHeroImageBackground = (src) => {
+  if (!heroBackgroundStage) {
+    return;
+  }
+
+  heroBackgroundStage.style.backgroundImage = `url("${src}")`;
+  heroBackgroundStage.classList.add("is-image-background");
+};
+
+const clearHeroImageBackground = () => {
+  if (!heroBackgroundStage) {
+    return;
+  }
+
+  heroBackgroundStage.style.backgroundImage = "";
+  heroBackgroundStage.classList.remove("is-image-background");
 };
 
 // Canvas crossfade state.
@@ -208,7 +235,7 @@ const getVisibleBackgroundSource = () => {
 };
 
 const renderFrame = () => {
-  if (bgCtx && !videoDisabled && videoLayers.length > 0) {
+  if (!useNativeTouchVideo && bgCtx && !videoDisabled && videoLayers.length > 0) {
     if (fadeTo) {
       const t = Math.min(1, (performance.now() - fadeStart) / CROSSFADE_MS);
       drawCoverSource(fadeFrom, 1);
@@ -395,6 +422,28 @@ const whenImageReady = (image, callback) => {
 
 const beginCrossfade = (fromSource, toSource, nextSrc, onComplete) => {
   maybeStartIntellectumLayout(nextSrc);
+
+  if (useNativeTouchVideo) {
+    if (isImageSrc(nextSrc)) {
+      setHeroImageBackground(nextSrc);
+      setActiveVideoLayer(null);
+    } else if (toSource instanceof HTMLVideoElement) {
+      heroBackgroundStage?.classList.remove("is-image-background");
+      setActiveVideoLayer(toSource);
+    }
+
+    window.setTimeout(() => {
+      onComplete();
+
+      if (!isImageSrc(nextSrc)) {
+        clearHeroImageBackground();
+      }
+
+      isTransitioning = false;
+    }, CROSSFADE_MS);
+    return;
+  }
+
   fadeFrom = fromSource;
   fadeTo = toSource;
   fadeStart = performance.now();
@@ -493,6 +542,7 @@ const crossfadeToSrc = (nextSrc) => {
       .then(() => {
         isShowingImage = false;
         currentBackgroundSrc = nextSrc;
+        setActiveVideoLayer(onlyLayer);
         tryPlay(onlyLayer);
         whenFrameReady(onlyLayer, () => maybeStartIntellectumLayout(nextSrc));
       })
@@ -549,6 +599,7 @@ const replayBackgroundSrc = (src) => {
 
   currentBackgroundSrc = src;
   layer.currentTime = 0;
+  setActiveVideoLayer(layer);
   tryPlay(layer);
 };
 
@@ -641,9 +692,11 @@ const handleVideoError = () => {
   }
 };
 
-if (videoLayers.length > 0 && bgCtx) {
-  resizeCanvas();
-  window.addEventListener("resize", resizeCanvas);
+if (videoLayers.length > 0 && (bgCtx || useNativeTouchVideo)) {
+  if (!useNativeTouchVideo) {
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+  }
 
   videoLayers.forEach((layer) => {
     layer.disablePictureInPicture = true;
@@ -679,13 +732,16 @@ if (videoLayers.length > 0 && bgCtx) {
     .then(() => {
       isShowingImage = false;
       currentBackgroundSrc = NODI_INTRO_VIDEO;
+      setActiveVideoLayer(firstLayer);
       tryPlay(firstLayer);
       schedulePreloadBackgroundSrc(NODI_LOOP_VIDEO);
       schedulePreloadBackgroundSrc(INTELLECTUM_MAIN_IMAGE);
     })
     .catch(handleVideoError);
 
-  requestAnimationFrame(renderFrame);
+  if (!useNativeTouchVideo) {
+    requestAnimationFrame(renderFrame);
+  }
 }
 
 const PRESETS_STORAGE_KEY = "intellectum-us-glass-presets";

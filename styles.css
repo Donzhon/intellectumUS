@@ -103,6 +103,7 @@ html.is-boot-loading .lead-form__select-menu {
   position: relative;
   min-height: 100dvh;
   isolation: isolate;
+  background: #000 url("assets/video/intellectum.jpg") center / cover no-repeat;
 }
 
 /* Videos are kept off-screen and tiny so browsers (e.g. Yandex) do not
@@ -126,6 +127,30 @@ html.is-boot-loading .lead-form__select-menu {
   height: 100%;
   z-index: 1;
   pointer-events: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .hero-stage .bg-video {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    z-index: 1;
+    transition: opacity 0.7s ease;
+  }
+
+  .hero-stage .bg-video.is-active {
+    opacity: 1;
+  }
+
+  .hero-stage.is-image-background .bg-video {
+    opacity: 0;
+  }
+
+  .hero-stage .bg-canvas {
+    display: none;
+  }
 }
 
 .hero-stage__overlay {
