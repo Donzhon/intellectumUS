@@ -115,21 +115,31 @@ productsNavToggle?.addEventListener("click", (event) => {
 const DESKTOP_NODI_INTRO_VIDEO = "assets/video/nodi-in.mp4";
 const DESKTOP_NODI_LOOP_VIDEO = "assets/video/nodi-main.mp4";
 const DESKTOP_NODI_EXIT_VIDEO = "assets/video/nodi-intellectum.mp4";
-const MOBILE_NODI_INTRO_VIDEO = "assets/video/mobile/nodi-in.mp4";
-const MOBILE_NODI_LOOP_VIDEO = "assets/video/mobile/nodi-main.mp4";
-const MOBILE_NODI_EXIT_VIDEO = "assets/video/mobile/nodi-intellectum.mp4";
-const INTELLECTUM_MAIN_IMAGE = "assets/video/intellectum.jpg";
+const DESKTOP_INTELLECTUM_MAIN_IMAGE = "assets/video/intellectum.jpg";
+const MOBILE_NODI_INTRO_VIDEO = "assets/video/mobile-video/mob-nodi-input.mp4";
+const MOBILE_NODI_LOOP_VIDEO = "assets/video/mobile-video/mob-nodi-2.mp4";
+const MOBILE_NODI_EXIT_VIDEO = "assets/video/mobile-video/mob-nodi-change-intellectum.mp4";
+const MOBILE_INTELLECTUM_EXIT_VIDEO = "assets/video/mobile-video/intellecum-out.mp4";
+const MOBILE_INTELLECTUM_MAIN_IMAGE = "assets/video/mobile-video/intellectum-2.jpg";
 const mobileBackgroundQuery = window.matchMedia?.("(max-width: 720px)");
 const useMobileBackgroundSources = mobileBackgroundQuery?.matches ?? false;
 const pickBackgroundVideo = (desktopSrc, mobileSrc) =>
   useMobileBackgroundSources ? mobileSrc : desktopSrc;
+const pickBackgroundAsset = pickBackgroundVideo;
 const NODI_INTRO_VIDEO = pickBackgroundVideo(DESKTOP_NODI_INTRO_VIDEO, MOBILE_NODI_INTRO_VIDEO);
 const NODI_LOOP_VIDEO = pickBackgroundVideo(DESKTOP_NODI_LOOP_VIDEO, MOBILE_NODI_LOOP_VIDEO);
 const NODI_EXIT_VIDEO = pickBackgroundVideo(DESKTOP_NODI_EXIT_VIDEO, MOBILE_NODI_EXIT_VIDEO);
+const INTELLECTUM_MAIN_IMAGE = pickBackgroundAsset(
+  DESKTOP_INTELLECTUM_MAIN_IMAGE,
+  MOBILE_INTELLECTUM_MAIN_IMAGE
+);
+const INTELLECTUM_EXIT_VIDEO = useMobileBackgroundSources ? MOBILE_INTELLECTUM_EXIT_VIDEO : null;
 const responsiveBackgroundFallbacks = new Map([
   [MOBILE_NODI_INTRO_VIDEO, DESKTOP_NODI_INTRO_VIDEO],
   [MOBILE_NODI_LOOP_VIDEO, DESKTOP_NODI_LOOP_VIDEO],
   [MOBILE_NODI_EXIT_VIDEO, DESKTOP_NODI_EXIT_VIDEO],
+  [MOBILE_INTELLECTUM_EXIT_VIDEO, DESKTOP_NODI_INTRO_VIDEO],
+  [MOBILE_INTELLECTUM_MAIN_IMAGE, DESKTOP_INTELLECTUM_MAIN_IMAGE],
 ]);
 
 const videoLayers = Array.from(document.querySelectorAll(".bg-video"));
@@ -676,6 +686,14 @@ const onGalleryProductChange = (prevIndex, nextIndex) => {
   }
 
   if (nextIndex === 0) {
+    if (prevIndex === 1 && INTELLECTUM_EXIT_VIDEO) {
+      videoAfterEndSrc = NODI_INTRO_VIDEO;
+      playBackgroundSrc(INTELLECTUM_EXIT_VIDEO, { force: true });
+      schedulePreloadBackgroundSrc(NODI_LOOP_VIDEO);
+      intellectumLayoutOffHook?.();
+      return;
+    }
+
     playBackgroundSrc(NODI_INTRO_VIDEO, { force: true });
     schedulePreloadBackgroundSrc(NODI_LOOP_VIDEO);
     intellectumLayoutOffHook?.();
