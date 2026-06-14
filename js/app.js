@@ -48,6 +48,16 @@ const positionSiteActionsNavMenu = () => {
     return;
   }
 
+  if (MOBILE_NAV_MENU_MQ.matches) {
+    navMenu.style.top = "";
+    navMenu.style.right = "";
+    navMenu.style.left = "";
+    navMenu.style.width = "";
+    navMenu.style.bottom = "";
+    navMenu.style.maxHeight = "";
+    return;
+  }
+
   const rect = menuPill.getBoundingClientRect();
   const top = rect.bottom + 10;
   const bottomGap = getNavMenuBottomGap();
@@ -55,15 +65,10 @@ const positionSiteActionsNavMenu = () => {
 
   navMenu.style.top = `${top}px`;
   navMenu.style.maxHeight = `${maxHeight}px`;
-
-  if (MOBILE_NAV_MENU_MQ.matches) {
-    navMenu.style.right = "";
-    navMenu.style.left = "";
-    navMenu.style.width = "";
-  } else {
-    navMenu.style.right = `${Math.max(16, window.innerWidth - rect.right)}px`;
-    navMenu.style.left = "auto";
-  }
+  navMenu.style.right = `${Math.max(16, window.innerWidth - rect.right)}px`;
+  navMenu.style.left = "auto";
+  navMenu.style.bottom = "";
+  navMenu.style.width = "";
 };
 
 const setNavMenuOpen = (open) => {
@@ -74,6 +79,7 @@ const setNavMenuOpen = (open) => {
   menuPill.setAttribute("aria-expanded", String(open));
   menuPill.classList.toggle("is-open", open);
   navMenu.hidden = !open;
+  document.documentElement.classList.toggle("is-nav-menu-open", open);
 
   if (open) {
     positionSiteActionsNavMenu();

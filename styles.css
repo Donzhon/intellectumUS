@@ -2548,13 +2548,36 @@ html.is-boot-loading .lead-form__select-menu {
 
 
 @media (max-width: 960px) {
+  html.is-nav-menu-open .site-actions {
+    z-index: 522;
+  }
+
   .site-actions .nav-menu {
-    left: var(--panel-edge-gap) !important;
+    position: fixed;
+    z-index: 521;
+    top: max(0.65rem, env(safe-area-inset-top)) !important;
     right: var(--panel-edge-gap) !important;
+    bottom: max(0.65rem, env(safe-area-inset-bottom)) !important;
+    left: var(--panel-edge-gap) !important;
     width: calc(100vw - var(--panel-edge-gap) * 2) !important;
     min-width: 0;
     max-width: none;
+    max-height: none !important;
+    height: auto;
     box-sizing: border-box;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .site-actions .nav-menu.liquid-glass {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .site-actions .nav-menu .glass-tuner {
+    flex: 0 0 auto;
+    max-height: none;
+    overflow: visible;
   }
 
   .site-actions .nav-menu .glass-tuner__control,
