@@ -31,7 +31,7 @@ const menuPill = document.querySelector(".menu-pill");
 const navMenu = document.getElementById("nav-menu");
 const siteActionsMenuHost = navMenu?.closest(".site-actions");
 
-const MOBILE_NAV_MENU_MQ = window.matchMedia("(max-width: 720px)");
+const MOBILE_NAV_MENU_MQ = window.matchMedia("(max-width: 960px)");
 
 const getNavMenuBottomGap = () => {
   const probe = document.createElement("div");
@@ -59,6 +59,7 @@ const positionSiteActionsNavMenu = () => {
   if (MOBILE_NAV_MENU_MQ.matches) {
     navMenu.style.right = "";
     navMenu.style.left = "";
+    navMenu.style.width = "";
   } else {
     navMenu.style.right = `${Math.max(16, window.innerWidth - rect.right)}px`;
     navMenu.style.left = "auto";
