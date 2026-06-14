@@ -31,15 +31,38 @@ const menuPill = document.querySelector(".menu-pill");
 const navMenu = document.getElementById("nav-menu");
 const siteActionsMenuHost = navMenu?.closest(".site-actions");
 
+const MOBILE_NAV_MENU_MQ = window.matchMedia("(max-width: 720px)");
+
+const getNavMenuBottomGap = () => {
+  const probe = document.createElement("div");
+  probe.style.cssText =
+    "position:fixed;bottom:max(1rem, env(safe-area-inset-bottom));visibility:hidden;pointer-events:none;";
+  document.body.appendChild(probe);
+  const gap = window.innerHeight - probe.getBoundingClientRect().top;
+  probe.remove();
+  return Math.max(16, Math.round(gap));
+};
+
 const positionSiteActionsNavMenu = () => {
   if (!menuPill || !navMenu || !siteActionsMenuHost) {
     return;
   }
 
   const rect = menuPill.getBoundingClientRect();
-  navMenu.style.top = `${rect.bottom + 10}px`;
-  navMenu.style.right = `${Math.max(16, window.innerWidth - rect.right)}px`;
-  navMenu.style.left = "auto";
+  const top = rect.bottom + 10;
+  const bottomGap = getNavMenuBottomGap();
+  const maxHeight = Math.max(160, window.innerHeight - top - bottomGap);
+
+  navMenu.style.top = `${top}px`;
+  navMenu.style.maxHeight = `${maxHeight}px`;
+
+  if (MOBILE_NAV_MENU_MQ.matches) {
+    navMenu.style.right = "";
+    navMenu.style.left = "";
+  } else {
+    navMenu.style.right = `${Math.max(16, window.innerWidth - rect.right)}px`;
+    navMenu.style.left = "auto";
+  }
 };
 
 const setNavMenuOpen = (open) => {
@@ -1843,9 +1866,16 @@ leadForm?.addEventListener("submit", (event) => {
 /* ---------- Site chrome + gallery: sync on scroll (30vh threshold) ---------- */
 const NAV_MERGE_SCROLL_RATIO = 0.3;
 const navMergeMode = siteChrome?.dataset.navMerge || "auto";
+const heroStageForScroll = document.querySelector(".hero-stage");
+let navMergeScrollThreshold = window.innerHeight * NAV_MERGE_SCROLL_RATIO;
+
+const refreshNavMergeThreshold = () => {
+  navMergeScrollThreshold =
+    (heroStageForScroll?.offsetHeight || window.innerHeight) * NAV_MERGE_SCROLL_RATIO;
+};
 
 const updateSiteScrollUi = () => {
-  const pastThreshold = window.scrollY > window.innerHeight * NAV_MERGE_SCROLL_RATIO;
+  const pastThreshold = window.scrollY > navMergeScrollThreshold;
 
   if (productGallery) {
     productGallery.classList.toggle("is-hidden", pastThreshold);
@@ -1857,6 +1887,12 @@ const updateSiteScrollUi = () => {
 };
 
 let siteScrollTicking = false;
+
+refreshNavMergeThreshold();
+window.addEventListener("orientationchange", () => {
+  refreshNavMergeThreshold();
+  updateSiteScrollUi();
+});
 
 if (siteChrome && navMergeMode !== "always") {
   window.addEventListener(
