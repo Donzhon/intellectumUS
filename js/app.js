@@ -25,7 +25,7 @@ document.addEventListener("click", (event) => {
   if (event.target.closest('a[href="#"]')) {
     event.preventDefault();
   }
-});sdfgsdf
+});
 
 const menuPill = document.querySelector(".menu-pill");
 const navMenu = document.getElementById("nav-menu");
