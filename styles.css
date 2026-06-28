@@ -2468,22 +2468,8 @@ html.is-boot-loading .lead-form__select-menu {
   background: #fff;
 }
 
-.bento-showcase__media--telos {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem;
-  background: linear-gradient(150deg, #1a264c 0%, #2f3f74 55%, #4256a0 100%);
-}
-
-.bento-showcase__plate-name {
-  font-family: "Rajdhani", "Segoe UI", ui-sans-serif, sans-serif;
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #fff;
-  line-height: 1;
+.bento-showcase__cell--f .bento-showcase__img {
+  object-position: center top;
 }
 
 .bento-showcase__cell:has(.bento-showcase__img) {

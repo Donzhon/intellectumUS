@@ -24,9 +24,16 @@ create index if not exists lead_requests_created_at_idx
 create index if not exists lead_requests_status_idx
   on public.lead_requests (status);
 
-alter table public.lead_requests
-  add constraint lead_requests_status_check
-  check (status in ('new', 'in_progress', 'done', 'spam'));
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'lead_requests_status_check'
+  ) then
+    alter table public.lead_requests
+      add constraint lead_requests_status_check
+      check (status in ('new', 'in_progress', 'done', 'spam'));
+  end if;
+end $$;
 
 -- Lock the table down. Edge Functions use the service role key, which
 -- bypasses RLS, so no explicit policies are required for them.
