@@ -3845,6 +3845,66 @@ html.is-boot-loading .lead-form__select-menu {
   opacity: 0.82;
 }
 
+.feature-card--detail {
+  text-align: left;
+}
+
+.feature-card__eyebrow {
+  margin: 0 0 0.4rem;
+  font-family: "Rajdhani", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bloom-accent);
+}
+
+.feature-card__sub {
+  margin: 1.1rem 0 0.5rem;
+  font-family: "Rajdhani", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.65;
+}
+
+.feature-card__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.feature-card__list li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  opacity: 0.82;
+}
+
+.feature-card__list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--bloom-accent);
+}
+
+.inner-section__note {
+  max-width: 42rem;
+  margin: clamp(1.5rem, 3vw, 2rem) auto 0;
+  text-align: center;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  opacity: 0.82;
+}
+
 .about-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
