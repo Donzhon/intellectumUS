@@ -1961,12 +1961,12 @@ const updateSiteScrollUi = () => {
   if (usesMobileHeroBrandSync()) {
     document.body.classList.toggle("is-nav-merged", !heroBrandInView);
     document.body.classList.toggle("is-hero-brand-in-view", heroBrandInView);
-    window.requestAnimationFrame(syncMobileChromeAnchor);
+    syncMobileChromeAnchor();
     return;
   }
 
   document.body.classList.remove("is-hero-brand-in-view");
-  document.documentElement.style.removeProperty("--brand-half");
+  document.documentElement.style.removeProperty("--brand-width");
 
   if (siteChrome && navMergeMode === "always") {
     document.body.classList.add("is-nav-merged");
@@ -1978,26 +1978,51 @@ const updateSiteScrollUi = () => {
   }
 };
 
+let cachedMobileBrandWidth = 0;
+
+const measureMobileBrandWidth = () => {
+  if (!siteBrand) {
+    return 0;
+  }
+
+  const previous = {
+    display: siteBrand.style.display,
+    maxWidth: siteBrand.style.maxWidth,
+    opacity: siteBrand.style.opacity,
+    visibility: siteBrand.style.visibility,
+    pointerEvents: siteBrand.style.pointerEvents,
+  };
+
+  siteBrand.style.display = "inline-flex";
+  siteBrand.style.maxWidth = "none";
+  siteBrand.style.opacity = "1";
+  siteBrand.style.visibility = "hidden";
+  siteBrand.style.pointerEvents = "none";
+
+  const width = Math.ceil(siteBrand.getBoundingClientRect().width);
+
+  siteBrand.style.display = previous.display;
+  siteBrand.style.maxWidth = previous.maxWidth;
+  siteBrand.style.opacity = previous.opacity;
+  siteBrand.style.visibility = previous.visibility;
+  siteBrand.style.pointerEvents = previous.pointerEvents;
+
+  return width;
+};
+
 const syncMobileChromeAnchor = () => {
-  if (!usesMobileHeroBrandSync() || !siteNav) {
-    document.documentElement.style.removeProperty("--brand-half");
+  if (!usesMobileHeroBrandSync() || !siteBrand) {
+    document.documentElement.style.removeProperty("--brand-width");
+    cachedMobileBrandWidth = 0;
     return;
   }
 
-  const applyBrandHalf = () => {
-    if (document.body.classList.contains("is-nav-merged") && siteBrand) {
-      const brandWidth = siteBrand.getBoundingClientRect().width;
-      if (brandWidth > 0) {
-        document.documentElement.style.setProperty("--brand-half", `${brandWidth / 2}px`);
-        return;
-      }
-    }
-    document.documentElement.style.removeProperty("--brand-half");
-  };
+  if (!cachedMobileBrandWidth) {
+    cachedMobileBrandWidth = measureMobileBrandWidth();
+  }
 
-  applyBrandHalf();
-  if (document.body.classList.contains("is-nav-merged")) {
-    window.requestAnimationFrame(applyBrandHalf);
+  if (cachedMobileBrandWidth > 0) {
+    document.documentElement.style.setProperty("--brand-width", `${cachedMobileBrandWidth}px`);
   }
 };
 
@@ -2009,6 +2034,7 @@ window.addEventListener("orientationchange", () => {
   updateSiteScrollUi();
 });
 window.addEventListener("resize", () => {
+  cachedMobileBrandWidth = 0;
   syncMobileChromeAnchor();
 });
 

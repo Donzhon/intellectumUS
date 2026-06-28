@@ -3196,7 +3196,7 @@ html.is-boot-loading .lead-form__select-menu {
     box-shadow: none;
   }
 
-  /* Index hero: brand + nav in one centered pill cluster after scroll */
+  /* Index hero: nav anchored at viewport center; brand expands left into one pill */
   .bloom-page:has(.hero-brand__mark) .site-chrome {
     display: block;
     left: 0;
@@ -3224,22 +3224,38 @@ html.is-boot-loading .lead-form__select-menu {
     top: max(0.65rem, env(safe-area-inset-top));
     z-index: 101;
     display: inline-flex;
-    align-items: center;
+    align-items: stretch;
     max-width: calc(100vw - 1.25rem);
     transform: translateX(-50%);
-    pointer-events: auto;
+    pointer-events: none;
     border-radius: 999px;
     isolation: isolate;
-    transition:
-      transform 0.35s ease,
-      background 0.35s ease,
-      box-shadow 0.35s ease,
-      padding 0.35s ease;
   }
 
-  .bloom-page:has(.hero-brand__mark).is-nav-merged .site-chrome__cluster {
-    transform: translateX(calc(-50% - var(--brand-half, 0px)));
-    padding: 0.3rem 0.5rem 0.3rem 0.35rem;
+  .bloom-page:has(.hero-brand__mark) .site-chrome__cluster::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: inherit;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    opacity: 0;
+    transition:
+      left 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.35s ease,
+      background 0.35s ease,
+      box-shadow 0.35s ease;
+  }
+
+  .bloom-page:has(.hero-brand__mark).is-nav-merged .site-chrome__cluster::after {
+    left: calc(-1 * var(--brand-width, 0px));
+    opacity: 1;
     background: color-mix(
       in srgb,
       var(--panel-tint-color) calc(var(--panel-dim-strength) / 100 * 52%),
@@ -3255,13 +3271,18 @@ html.is-boot-loading .lead-form__select-menu {
       inset 0 1px 1px rgba(255, 255, 255, 0.1);
   }
 
-  .bloom-page:has(.hero-brand__mark).is-nav-merged .site-chrome__cluster::before {
+  .bloom-page:has(.hero-brand__mark) .site-chrome__cluster::before {
     content: "";
     position: absolute;
-    inset: 0;
+    z-index: -1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     border-radius: inherit;
     padding: 1.4px;
     pointer-events: none;
+    opacity: 0;
     background: linear-gradient(
       180deg,
       rgba(255, 255, 255, 0.45) 0%,
@@ -3275,9 +3296,16 @@ html.is-boot-loading .lead-form__select-menu {
     mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
+    transition:
+      left 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.35s ease;
   }
 
-  .bloom-page:has(.hero-brand__mark) .site-chrome__cluster .site-brand,
+  .bloom-page:has(.hero-brand__mark).is-nav-merged .site-chrome__cluster::before {
+    left: calc(-1 * var(--brand-width, 0px));
+    opacity: 1;
+  }
+
   .bloom-page:has(.hero-brand__mark) .site-chrome__cluster .site-nav {
     position: static;
     left: auto;
@@ -3287,25 +3315,48 @@ html.is-boot-loading .lead-form__select-menu {
     justify-self: auto;
     z-index: 1;
     margin: 0;
+    pointer-events: auto;
+    transition:
+      background 0.35s ease,
+      box-shadow 0.35s ease,
+      border-radius 0.35s ease,
+      padding 0.35s ease;
   }
 
-  .bloom-page:has(.hero-brand__mark):not(.is-nav-merged) .site-brand,
-  .bloom-page:has(.hero-brand__mark).is-hero-brand-in-view .site-brand {
-    display: none;
-  }
-
-  .bloom-page:has(.hero-brand__mark).is-nav-merged .site-brand {
+  .bloom-page:has(.hero-brand__mark) .site-chrome__cluster .site-brand {
+    position: absolute;
+    top: 0;
+    right: 100%;
+    bottom: 0;
+    left: auto;
+    z-index: 1;
     display: inline-flex;
-    flex: 0 0 auto;
-    min-height: 0;
-    padding: 0.1rem 0.55rem 0.1rem 0.2rem;
+    align-items: center;
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
     margin: 0;
+    padding: 0.1rem 0;
     border-radius: 0;
-    border-right: 1px solid color-mix(in srgb, var(--panel-text-color) 20%, rgba(255, 255, 255, 0.12));
+    border-right: 1px solid transparent;
     background: transparent;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     box-shadow: none;
+    pointer-events: none;
+    transition:
+      max-width 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.35s ease,
+      padding 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 0.35s ease;
+  }
+
+  .bloom-page:has(.hero-brand__mark).is-nav-merged .site-brand {
+    max-width: var(--brand-width, 3.5rem);
+    opacity: 1;
+    padding: 0.1rem 0.55rem 0.1rem 0.2rem;
+    border-right-color: color-mix(in srgb, var(--panel-text-color) 20%, rgba(255, 255, 255, 0.12));
+    pointer-events: auto;
   }
 
   .bloom-page:has(.hero-brand__mark).is-nav-merged .site-brand.liquid-glass::before,
@@ -3318,7 +3369,7 @@ html.is-boot-loading .lead-form__select-menu {
   .bloom-page:has(.hero-brand__mark).is-nav-merged .site-nav {
     flex: 0 0 auto;
     min-height: 0;
-    padding: 0.1rem 0.2rem 0.1rem 0.15rem;
+    padding: 0.3rem 0.5rem 0.3rem 0.15rem;
     border-radius: 0;
     background: transparent;
     backdrop-filter: none;
