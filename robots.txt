@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /adminintus.html
+
+Sitemap: https://www.intellectumus.com/sitemap.xml
