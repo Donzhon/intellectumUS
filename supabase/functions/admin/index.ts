@@ -4,7 +4,34 @@
 // this function uses the service role and returns only what it chooses.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { corsHeaders, jsonResponse } from "../_shared/cors.ts";
+
+const allowedOrigins = (Deno.env.get("ALLOWED_ORIGINS") ?? "*")
+  .split(",")
+  .map((value) => value.trim())
+  .filter(Boolean);
+
+function resolveOrigin(request: Request): string {
+  const origin = request.headers.get("Origin") ?? "";
+  if (allowedOrigins.includes("*") || allowedOrigins.length === 0) return "*";
+  return allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
+}
+
+function corsHeaders(request: Request): HeadersInit {
+  return {
+    "Access-Control-Allow-Origin": resolveOrigin(request),
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Vary": "Origin",
+  };
+}
+
+function jsonResponse(request: Request, body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...corsHeaders(request), "Content-Type": "application/json" },
+  });
+}
 
 const VALID_STATUSES = ["new", "in_progress", "done", "spam"];
 const PAGE_SIZE = 50;
