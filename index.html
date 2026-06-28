@@ -29,25 +29,19 @@
       content="Educational technology for schools, kindergartens, and STEM classrooms worldwide."
     />
     <meta name="twitter:image" content="https://intellectumus.com/assets/og/og-image.png" />
-    <link rel="icon" href="assets/icon/intellectum-favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="assets/icon/intellectum-128.png" type="image/png" />
     <script>
       (function () {
         try {
           if (!localStorage.getItem("intellectum-us-index-boot-v1")) {
             document.documentElement.classList.add("is-boot-loading");
-            window.setTimeout(function () {
-              document.documentElement.classList.remove("is-boot-loading");
-              var bootScreen = document.getElementById("boot-screen");
-              if (bootScreen) {
-                bootScreen.hidden = true;
-              }
-            }, 3500);
           }
         } catch (_) {
           /* localStorage may be blocked — skip the boot screen */
         }
       })();
     </script>
+    <link rel="preload" as="image" href="assets/icon/intellectum-256.webp" type="image/webp" />
     <link rel="preload" as="image" href="assets/hero-perple.png" media="(min-width: 721px)" />
     <link rel="preload" as="image" href="assets/hero/full-mob.png" media="(max-width: 720px)" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -60,17 +54,24 @@
   </head>
   <body class="bloom-page">
     <div class="boot-screen" id="boot-screen" hidden aria-live="polite" aria-label="Loading">
-      <img class="boot-screen__logo" src="assets/icon/intellectum.png" alt="" />
+      <picture>
+        <source srcset="assets/icon/intellectum-256.webp" type="image/webp" />
+        <img class="boot-screen__logo" src="assets/icon/intellectum-256.png" alt="" width="256" height="256" decoding="async" fetchpriority="high" />
+      </picture>
       <div class="boot-screen__spinner" aria-hidden="true"></div>
     </div>
     <div class="site-chrome" data-nav-merge="always">
-      <a class="site-brand liquid-glass brand" href="/" aria-label="intellectumUS — Home">
-        <span class="brand-mark" aria-hidden="true">
-          <img src="assets/icon/intellectum.png" alt="" />
-        </span>
-        <span class="brand-text">intellectumUS</span>
-      </a>
-      <nav class="site-nav liquid-glass" aria-label="Site">
+      <div class="site-chrome__cluster">
+        <a class="site-brand liquid-glass brand" href="/" aria-label="intellectumUS — Home">
+          <span class="brand-mark" aria-hidden="true">
+            <picture>
+              <source srcset="assets/icon/intellectum-128.webp" type="image/webp" />
+              <img src="assets/icon/intellectum-128.png" alt="" width="128" height="128" decoding="async" />
+            </picture>
+          </span>
+          <span class="brand-text">intellectumUS</span>
+        </a>
+        <nav class="site-nav liquid-glass" aria-label="Site">
         <ul class="site-nav__list">
           <li class="site-nav__item site-nav__item--has-menu">
             <button
@@ -121,7 +122,8 @@
             </a>
           </li>
         </ul>
-      </nav>
+        </nav>
+      </div>
     </div>
 
     <div class="hero-stage">
@@ -355,7 +357,10 @@
         <div class="split">
           <div class="hero-copy">
             <div class="hero-brand">
-              <img class="hero-brand__mark" src="assets/icon/intellectum.png" alt="" />
+              <picture>
+                <source srcset="assets/icon/intellectum-256.webp" type="image/webp" />
+                <img class="hero-brand__mark" src="assets/icon/intellectum-256.png" alt="" width="256" height="256" decoding="async" fetchpriority="high" />
+              </picture>
               <div class="hero-brand__text">
                 <h1 class="hero-brand__name" id="site-hero-headline">intellectumUS</h1>
                 <p class="hero-brand__tagline">
@@ -633,7 +638,10 @@
         <div class="site-footer__brand">
           <a class="site-footer__logo brand" href="/" aria-label="intellectumUS — Home">
             <span class="brand-mark" aria-hidden="true">
-              <img src="assets/icon/intellectum.png" alt="" />
+              <picture>
+                <source srcset="assets/icon/intellectum-128.webp" type="image/webp" />
+                <img src="assets/icon/intellectum-128.png" alt="" width="128" height="128" decoding="async" loading="lazy" />
+              </picture>
             </span>
             <span class="brand-text">intellectumUS</span>
           </a>

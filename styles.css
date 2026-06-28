@@ -936,6 +936,11 @@ html.is-boot-loading .lead-form__select-menu {
   display: block;
 }
 
+.brand-mark picture,
+.hero-brand picture {
+  display: contents;
+}
+
 .brand-text {
   display: inline-block;
   font-size: clamp(1.05rem, 5cqw, 1.35rem);
@@ -2468,6 +2473,11 @@ html.is-boot-loading .lead-form__select-menu {
     opacity 0.35s ease,
     padding 0.45s cubic-bezier(0.4, 0, 0.2, 1),
     border-color 0.35s ease;
+}
+
+.bloom-page:has(.hero-brand__mark):not(.is-nav-merged) .site-chrome__cluster .site-brand {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .bloom-page:has(.hero-brand__mark).is-nav-merged .site-brand.liquid-glass::before,

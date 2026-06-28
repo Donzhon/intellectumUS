@@ -45,7 +45,19 @@
     img.src = heroImageSrc;
   });
 
-  const assetsReady = Promise.all([fontsReady, heroImageReady]);
+  const bootLogoReady = new Promise((resolve) => {
+    const img = new Image();
+    img.addEventListener("load", () => resolve(), { once: true });
+    img.addEventListener("error", () => resolve(), { once: true });
+    if (img.srcset !== undefined) {
+      img.srcset = "assets/icon/intellectum-256.webp";
+      img.src = "assets/icon/intellectum-256.png";
+    } else {
+      img.src = "assets/icon/intellectum-256.png";
+    }
+  });
+
+  const assetsReady = Promise.all([fontsReady, bootLogoReady, heroImageReady]);
 
   let finished = false;
 
