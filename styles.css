@@ -3654,6 +3654,7 @@ html.is-boot-loading .lead-form__select-menu {
   .hero-brand {
     flex-wrap: wrap;
     gap: 0.85rem;
+    transform: translateY(100%);
   }
 
   .hero-brand__mark {
