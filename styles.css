@@ -169,10 +169,10 @@ html.is-boot-loading .lead-form__select-menu {
   }
 }
 
-/* Mobile: 3:2 art — products span the lower band; lockup sits above. */
+/* Mobile: portrait art — products in the lower band; lockup sits above. */
 @media (max-width: 720px) {
   .hero-art__img {
-    object-position: center 72%;
+    object-position: center bottom;
   }
 }
 
