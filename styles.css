@@ -2927,12 +2927,21 @@ html.is-boot-loading .lead-form__select-menu {
     aspect-ratio: auto;
     min-height: auto;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: repeat(4, minmax(8rem, 14vw));
-    grid-template-areas:
-      "a e"
-      "b f"
-      "c c"
-      "d d";
+    grid-template-rows: none;
+    grid-auto-rows: auto;
+    grid-template-areas: none;
+    gap: clamp(0.5rem, 1.5vw, 0.75rem);
+  }
+
+  .bento-showcase__cell {
+    grid-area: auto;
+    aspect-ratio: 1;
+  }
+
+  .bento-showcase__cell .bento-showcase__img {
+    object-fit: contain;
+    padding: 0.5rem;
+    background: #fff;
   }
 }
 
