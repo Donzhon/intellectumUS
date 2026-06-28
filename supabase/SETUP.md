@@ -1,4 +1,4 @@
-# Сбор заявок: настройка Supabase + уведомления + админка
+﻿# Сбор заявок: настройка Supabase + уведомления + админка
 
 Этот документ описывает ручные шаги, чтобы запустить сбор заявок с сайта,
 хранение в Supabase, уведомления на Email (и опционально в Telegram), и
@@ -50,7 +50,7 @@ supabase db push
 
 1. Зарегистрируйтесь на https://resend.com → API Keys → создайте **RESEND_API_KEY**.
 2. Подтвердите домен (Domains) или используйте тестовый отправитель Resend.
-3. Адрес отправителя — **NOTIFY_EMAIL_FROM** (напр. `IntellectumUS <noreply@ваш-домен>`).
+3. Адрес отправителя — **NOTIFY_EMAIL_FROM** (напр. `intellectumUS <noreply@ваш-домен>`).
 4. Кому слать — **NOTIFY_EMAIL_TO** (можно несколько через запятую).
 
 ## 5. Задать секреты функций
@@ -64,7 +64,7 @@ supabase secrets set \
   TELEGRAM_BOT_TOKEN="..." \
   TELEGRAM_CHAT_ID="..." \
   RESEND_API_KEY="..." \
-  NOTIFY_EMAIL_FROM="IntellectumUS <noreply@ваш-домен>" \
+  NOTIFY_EMAIL_FROM="intellectumUS <noreply@ваш-домен>" \
   NOTIFY_EMAIL_TO="admin@ваш-домен"
 ```
 

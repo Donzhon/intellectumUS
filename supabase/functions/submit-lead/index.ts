@@ -1,4 +1,4 @@
-// Public Edge Function: receives a lead request from the website form,
+﻿// Public Edge Function: receives a lead request from the website form,
 // stores it in the `lead_requests` table, then forwards it to Telegram
 // and Email (Resend). Notification failures are logged but never block
 // the response, because the lead is already saved.
@@ -177,7 +177,7 @@ Deno.serve(async (request) => {
   // Fire notifications in parallel; never fail the request on their account.
   await Promise.allSettled([
     notifyTelegram(telegramText),
-    notifyEmail("Новая заявка с сайта IntellectumUS", emailHtml),
+    notifyEmail("Новая заявка с сайта intellectumUS", emailHtml),
   ]);
 
   return jsonResponse(request, { ok: true, id: data.id });

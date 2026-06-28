@@ -1,4 +1,4 @@
-const LANG_STORAGE_KEY = "intellectum-us-lang";
+﻿const LANG_STORAGE_KEY = "intellectum-us-lang";
 
 const SITE_I18N = {
   eng: {
@@ -17,7 +17,7 @@ const SITE_I18N = {
     "hero.nodi.2": "School Education",
     "hero.cta.partner": "Partner With Us",
     "hero.cta.explore": "Explore Solutions",
-    "cta.email.title": "Bring IntellectumUS to your school",
+    "cta.email.title": "Bring intellectumUS to your school",
     "cta.email.lead": "Leave your email and our team will reach out with a tailored proposal.",
     "hero.intellectum.1": "Develop your personal",
     "hero.intellectum.2": "intelligence",
@@ -64,7 +64,7 @@ const SITE_I18N = {
     "land.teacher.stat2": "Active learners",
     "land.teacher.stat3": "Satisfaction rate",
     "lang.group": "Language",
-    "page.title": "IntellectumUS",
+    "page.title": "intellectumUS",
     "categories.eyebrow": "Products",
     "categories.title": "Product categories",
     "categories.lead": "Three product lines for schools, kindergartens, and STEM classrooms.",
@@ -88,15 +88,15 @@ const SITE_I18N = {
     "footer.contact": "Contact",
     "footer.categories": "Product categories",
     "footer.location": "San Francisco, CA, United States",
-    "footer.copyright": "© 2026 IntellectumUS. All rights reserved.",
+    "footer.copyright": "© 2026 intellectumUS. All rights reserved.",
     "footer.privacy": "Privacy Policy",
     "footer.terms": "Terms of Use",
-    "page.title.about": "About us - IntellectumUS",
-    "page.title.partners": "For Partners - IntellectumUS",
+    "page.title.about": "About us - intellectumUS",
+    "page.title.partners": "For Partners - intellectumUS",
     "about.hero.eyebrow": "Company",
     "about.hero.title": "About us",
     "about.hero.lead":
-      "IntellectumUS brings modern educational technology to schools, kindergartens, and STEM classrooms across the United States.",
+      "intellectumUS brings modern educational technology to schools, kindergartens, and STEM classrooms across the United States.",
     "about.mission.eyebrow": "Mission",
     "about.mission.title": "Why we exist",
     "about.mission.lead":
@@ -159,7 +159,7 @@ const SITE_I18N = {
     "hero.nodi.2": "инновациялар",
     "hero.cta.partner": "Бізбен серіктес болыңыз",
     "hero.cta.explore": "Шешімдерді көру",
-    "cta.email.title": "IntellectumUS-ті мектебіңізге әкеліңіз",
+    "cta.email.title": "intellectumUS-ті мектебіңізге әкеліңіз",
     "cta.email.lead": "Электрондық поштаңызды қалдырыңыз — біз жеке ұсыныспен хабарласамыз.",
     "hero.intellectum.1": "Жеке",
     "hero.intellectum.2": "интеллекті дамытыңыз",
@@ -206,7 +206,7 @@ const SITE_I18N = {
     "land.teacher.stat2": "Белсенді оқушылар",
     "land.teacher.stat3": "Қанағаттану деңгейі",
     "lang.group": "Тіл",
-    "page.title": "IntellectumUS",
+    "page.title": "intellectumUS",
     "categories.eyebrow": "Өнімдер",
     "categories.title": "Өнім категориялары",
     "categories.lead": "Мектептерге, балабақшаларға және STEM сыныптарына арналған үш өнім желісі.",
@@ -230,15 +230,15 @@ const SITE_I18N = {
     "footer.contact": "Байланыс",
     "footer.categories": "Өнім категориялары",
     "footer.location": "АҚШ, Сан-Франциско, CA",
-    "footer.copyright": "© 2026 IntellectumUS. Барлық құқықтар қорғалған.",
+    "footer.copyright": "© 2026 intellectumUS. Барлық құқықтар қорғалған.",
     "footer.privacy": "Құпиялылық саясаты",
     "footer.terms": "Пайдалану шарттары",
-    "page.title.about": "Біз туралы - IntellectumUS",
-    "page.title.partners": "Серіктестерге - IntellectumUS",
+    "page.title.about": "Біз туралы - intellectumUS",
+    "page.title.partners": "Серіктестерге - intellectumUS",
     "about.hero.eyebrow": "Компания",
     "about.hero.title": "Біз туралы",
     "about.hero.lead":
-      "IntellectumUS АҚШ-тағы мектептерге, балабақшаларға және STEM сыныптарына заманауи білім беру технологияларын жеткізеді.",
+      "intellectumUS АҚШ-тағы мектептерге, балабақшаларға және STEM сыныптарына заманауи білім беру технологияларын жеткізеді.",
     "about.mission.eyebrow": "Миссия",
     "about.mission.title": "Біз не үшін жұмыс істейміз",
     "about.mission.lead":
