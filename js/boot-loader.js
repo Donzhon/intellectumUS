@@ -35,9 +35,7 @@
     ? document.fonts.ready.catch(() => {})
     : Promise.resolve();
 
-  const heroImageSrc = window.matchMedia("(max-width: 720px)").matches
-    ? "assets/intellectumus-mob.jpg"
-    : "assets/intellectumuc-pc.jpg";
+  const heroImageSrc = "assets/hero-perple.png";
   const heroImageReady = new Promise((resolve) => {
     const img = new Image();
     img.addEventListener("load", () => resolve(), { once: true });

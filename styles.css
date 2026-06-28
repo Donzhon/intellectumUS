@@ -158,22 +158,21 @@ html.is-boot-loading .lead-form__select-menu {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Bias the cluster to the right so the left zone stays clear for text. */
-  object-position: right center;
+  /* Keep the product cluster in the lower band; upper-left stays clear for brand lockup. */
+  object-position: center bottom;
 }
 
-/* Tablet: bias the product cluster hard to the right so the headline keeps a
-   clean, low-contrast zone on the left and never sits over busy product art. */
+/* Tablet: keep the product cluster in the lower band. */
 @media (min-width: 721px) and (max-width: 1023px) {
   .hero-art__img {
-    object-position: 88% center;
+    object-position: center 85%;
   }
 }
 
-/* Mobile: portrait crop, product cluster anchored to the top. */
+/* Mobile: same framing — products stay in the lower band, lockup in the upper zone. */
 @media (max-width: 720px) {
   .hero-art__img {
-    object-position: center top;
+    object-position: center bottom;
   }
 }
 
@@ -339,9 +338,9 @@ html.is-boot-loading .lead-form__select-menu {
   pointer-events: none;
   background: linear-gradient(
     108deg,
-    rgba(244, 244, 246, 0.72) 0%,
-    rgba(244, 244, 246, 0.28) 24%,
-    rgba(244, 244, 246, 0) 46%
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.06) 24%,
+    rgba(255, 255, 255, 0) 46%
   );
 }
 
@@ -355,6 +354,63 @@ html.is-boot-loading .lead-form__select-menu {
   gap: clamp(1.25rem, 3vh, 2.25rem);
   max-width: 44rem;
   min-width: 0;
+}
+
+.hero-brand {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.85rem, 2vw, 1.5rem);
+}
+
+.hero-brand__mark {
+  flex: 0 0 auto;
+  width: clamp(3.5rem, 7vw, 6.5rem);
+  height: clamp(3.5rem, 7vw, 6.5rem);
+  object-fit: contain;
+}
+
+.hero-brand__text {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.35rem, 1vh, 0.65rem);
+  min-width: 0;
+}
+
+.hero-brand__name {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5.5vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: var(--hero-text-color, var(--brand-primary));
+  text-wrap: balance;
+  overflow-wrap: break-word;
+  user-select: text;
+}
+
+.hero-brand__tagline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35em;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 1.6vw, 1.35rem);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  color: color-mix(in srgb, var(--hero-text-color, var(--brand-primary)) 72%, #ffffff);
+}
+
+.hero-brand__rule {
+  flex: 0 0 auto;
+  width: clamp(1.25rem, 2.5vw, 1.75rem);
+  height: 2px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--hero-text-color, var(--brand-primary)) 55%, transparent);
 }
 
 .split-headline {
@@ -589,7 +645,7 @@ html.is-boot-loading .lead-form__select-menu {
     max-width: min(32rem, 64%);
   }
 
-  .split-headline {
+  .hero-brand__name {
     font-size: clamp(2rem, 4.6vw, 3.25rem);
   }
 }
@@ -3203,23 +3259,21 @@ html.is-boot-loading .lead-form__select-menu {
   .split {
     min-height: 100svh;
     grid-template-columns: 1fr;
-    align-content: end;
+    align-content: start;
     justify-items: stretch;
     gap: 1.1rem;
     padding:
-      clamp(13rem, 40svh, 20rem)
+      clamp(5.5rem, 14svh, 8rem)
       var(--panel-edge-gap)
       calc(1.5rem + env(safe-area-inset-bottom));
   }
 
-  /* On mobile the product render sits in the upper area, so fade to opaque
-     toward the bottom where the headline, CTAs and form live. */
   .split::before {
     background: linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0) 28%,
-      rgba(255, 255, 255, 0.68) 52%,
-      rgba(255, 255, 255, 0.88) 100%
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(255, 255, 255, 0.04) 32%,
+      rgba(255, 255, 255, 0) 52%
     );
   }
 
@@ -3230,21 +3284,23 @@ html.is-boot-loading .lead-form__select-menu {
     text-align: left;
   }
 
-  .split-headline {
+  .hero-brand {
+    flex-wrap: wrap;
+    gap: 0.85rem;
+  }
+
+  .hero-brand__mark {
+    width: clamp(3rem, 14vw, 4.25rem);
+    height: clamp(3rem, 14vw, 4.25rem);
+  }
+
+  .hero-brand__name {
     font-size: clamp(1.85rem, 8.5vw, 2.75rem);
     line-height: 1.05;
   }
 
-  .hero-cta {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.6rem;
-  }
-
-  .hero-btn {
-    width: 100%;
-    min-height: 2.85rem;
-    padding: 0.82rem 1.1rem;
+  .hero-brand__tagline {
+    font-size: clamp(0.85rem, 3.8vw, 1.05rem);
   }
 
   .hero-panel {

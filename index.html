@@ -48,8 +48,7 @@
         }
       })();
     </script>
-    <link rel="preload" as="image" href="assets/intellectumuc-pc.jpg" media="(min-width: 721px)" />
-    <link rel="preload" as="image" href="assets/intellectumus-mob.jpg" media="(max-width: 720px)" />
+    <link rel="preload" as="image" href="assets/hero-perple.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -165,7 +164,7 @@
         muted
         playsinline
         preload="none"
-        poster="assets/intellectumuc-pc.jpg"
+        poster="assets/hero-perple.png"
         disablepictureinpicture
         disableremoteplayback
         controlslist="nodownload nofullscreen noremoteplayback"
@@ -176,7 +175,7 @@
         muted
         playsinline
         preload="none"
-        poster="assets/intellectumuc-pc.jpg"
+        poster="assets/hero-perple.png"
         disablepictureinpicture
         disableremoteplayback
         controlslist="nodownload nofullscreen noremoteplayback"
@@ -184,8 +183,8 @@
       ></video>
       <canvas class="bg-canvas" aria-hidden="true"></canvas>
       <picture class="hero-art" aria-hidden="true">
-        <source media="(max-width: 720px)" srcset="assets/intellectumus-mob.jpg" />
-        <img class="hero-art__img" src="assets/intellectumuc-pc.jpg" alt="" fetchpriority="high" />
+        <source media="(max-width: 720px)" srcset="assets/hero-perple.png" />
+        <img class="hero-art__img" src="assets/hero-perple.png" alt="" fetchpriority="high" />
       </picture>
       <div class="hero-stage__overlay" aria-hidden="true"></div>
 
@@ -388,13 +387,16 @@
 
       <div class="split">
         <div class="hero-copy">
-          <h1 class="split-headline" id="site-hero-headline">
-            <span class="split-headline__line" data-i18n="hero.nodi.1">Innovations in</span>
-            <span class="split-headline__line" data-i18n="hero.nodi.2">School Education</span>
-          </h1>
-          <div class="hero-cta">
-            <a class="hero-btn hero-btn--ghost" href="/partners" data-i18n="hero.cta.partner">Partner With Us</a>
-            <a class="hero-btn hero-btn--solid" href="#bento-showcase" data-i18n="hero.cta.explore">Explore Solutions</a>
+          <div class="hero-brand">
+            <img class="hero-brand__mark" src="assets/icon/intellectum.png" alt="" />
+            <div class="hero-brand__text">
+              <h1 class="hero-brand__name" id="site-hero-headline">IntellectumUS</h1>
+              <p class="hero-brand__tagline">
+                <span class="hero-brand__rule" aria-hidden="true"></span>
+                <span data-i18n="hero.nodi.1">Innovations in</span>
+                <span data-i18n="hero.nodi.2">School Education</span>
+              </p>
+            </div>
           </div>
         </div>
       </div>
