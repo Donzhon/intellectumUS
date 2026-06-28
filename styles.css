@@ -1533,6 +1533,12 @@ html.is-boot-loading .lead-form__select-menu {
   transform: translateY(0);
 }
 
+.lead-form__toast--error {
+  --panel-tint-color: #f3c9c9;
+  --panel-text-color: #6a1f1f;
+  color: var(--panel-text-color, #6a1f1f);
+}
+
 @keyframes lead-form-submit-shake {
   0%,
   100% {

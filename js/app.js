@@ -1403,8 +1403,11 @@ const onLeadFormToastReposition = () => {
 window.addEventListener("resize", onLeadFormToastReposition, { passive: true });
 window.addEventListener("scroll", onLeadFormToastReposition, { passive: true });
 
-const showLeadFormSuccess = () => {
+let leadFormToastKey = "form.success";
+
+const showLeadFormToast = (type = "success") => {
   const translate = window.SiteI18n?.t ?? ((key) => key);
+  leadFormToastKey = type === "error" ? "form.error" : "form.success";
 
   if (!leadFormToast) {
     leadFormToast = document.createElement("div");
@@ -1414,7 +1417,10 @@ const showLeadFormSuccess = () => {
     document.body.appendChild(leadFormToast);
   }
 
-  leadFormToast.textContent = translate("form.success");
+  leadFormToast.classList.toggle("lead-form__toast--error", type === "error");
+  leadFormToast.setAttribute("role", type === "error" ? "alert" : "status");
+  leadFormToast.setAttribute("aria-live", type === "error" ? "assertive" : "polite");
+  leadFormToast.textContent = translate(leadFormToastKey);
   positionLeadFormToast();
   leadFormToast.hidden = false;
   leadFormToast.classList.remove("is-visible");
@@ -1432,10 +1438,12 @@ const showLeadFormSuccess = () => {
   }, 4200);
 };
 
+const showLeadFormSuccess = () => showLeadFormToast("success");
+
 document.addEventListener("site-language-change", () => {
   if (leadFormToast?.classList.contains("is-visible")) {
     const translate = window.SiteI18n?.t ?? ((key) => key);
-    leadFormToast.textContent = translate("form.success");
+    leadFormToast.textContent = translate(leadFormToastKey);
   }
 });
 
@@ -1890,6 +1898,7 @@ leadForm?.addEventListener("submit", async (event) => {
     showLeadFormSuccess();
   } catch (error) {
     console.error(error);
+    showLeadFormToast("error");
     playLeadSubmitError();
   } finally {
     leadSubmitInFlight = false;
