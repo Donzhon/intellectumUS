@@ -35,6 +35,7 @@ function jsonResponse(request: Request, body: unknown, status = 200): Response {
 
 const VALID_STATUSES = ["new", "in_progress", "done", "spam"];
 const PAGE_SIZE = 50;
+const STATS_LIMIT = 10000;
 
 interface AdminPayload {
   password?: string;
@@ -92,18 +93,9 @@ Deno.serve(async (request) => {
 
   const action = payload.action ?? "list";
 
-  if (action === "list") {
-    const filters = payload.filters ?? {};
-    const page = Math.max(0, Number(filters.page) || 0);
-    const fromIdx = page * PAGE_SIZE;
-    const toIdx = fromIdx + PAGE_SIZE - 1;
-
-    let query = supabase
-      .from("lead_requests")
-      .select("*", { count: "exact" })
-      .order("created_at", { ascending: false })
-      .range(fromIdx, toIdx);
-
+  // Applies the shared list/stats filters (status/search/date range) to a query.
+  // deno-lint-ignore no-explicit-any
+  function applyFilters(query: any, filters: NonNullable<AdminPayload["filters"]>) {
     if (filters.status && VALID_STATUSES.includes(filters.status)) {
       query = query.eq("status", filters.status);
     }
@@ -117,6 +109,22 @@ Deno.serve(async (request) => {
     if (filters.to) {
       query = query.lte("created_at", filters.to);
     }
+    return query;
+  }
+
+  if (action === "list") {
+    const filters = payload.filters ?? {};
+    const page = Math.max(0, Number(filters.page) || 0);
+    const fromIdx = page * PAGE_SIZE;
+    const toIdx = fromIdx + PAGE_SIZE - 1;
+
+    let query = supabase
+      .from("lead_requests")
+      .select("*", { count: "exact" })
+      .order("created_at", { ascending: false })
+      .range(fromIdx, toIdx);
+
+    query = applyFilters(query, filters);
 
     const { data, count, error } = await query;
     if (error) {
@@ -149,6 +157,113 @@ Deno.serve(async (request) => {
     }
 
     return jsonResponse(request, { ok: true });
+  }
+
+  if (action === "delete") {
+    if (!payload.id) {
+      return jsonResponse(request, { ok: false, error: "Invalid arguments" }, 422);
+    }
+
+    const { error } = await supabase
+      .from("lead_requests")
+      .delete()
+      .eq("id", payload.id);
+
+    if (error) {
+      console.error("Delete error:", error);
+      return jsonResponse(request, { ok: false, error: "Delete error" }, 500);
+    }
+
+    return jsonResponse(request, { ok: true });
+  }
+
+  if (action === "stats") {
+    const filters = payload.filters ?? {};
+
+    let query = supabase
+      .from("lead_requests")
+      .select("created_at, status, product, reason, location")
+      .order("created_at", { ascending: false })
+      .limit(STATS_LIMIT);
+
+    query = applyFilters(query, filters);
+
+    const { data, error } = await query;
+    if (error) {
+      console.error("Stats error:", error);
+      return jsonResponse(request, { ok: false, error: "Query error" }, 500);
+    }
+
+    const rows = (data ?? []) as Array<{
+      created_at: string;
+      status: string | null;
+      product: string | null;
+      reason: string | null;
+      location: string | null;
+    }>;
+
+    const byStatus: Record<string, number> = {
+      new: 0,
+      in_progress: 0,
+      done: 0,
+      spam: 0,
+    };
+    const byProduct: Record<string, number> = {};
+    const byReason: Record<string, number> = {};
+    const byLocation: Record<string, number> = {};
+    const daily: Record<string, number> = {};
+
+    const now = Date.now();
+    const dayMs = 24 * 60 * 60 * 1000;
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+    const todayTs = startOfToday.getTime();
+    const weekTs = now - 7 * dayMs;
+    const monthTs = now - 30 * dayMs;
+
+    let today = 0;
+    let week = 0;
+    let month = 0;
+
+    for (const row of rows) {
+      const status = row.status ?? "new";
+      byStatus[status] = (byStatus[status] ?? 0) + 1;
+
+      const product = row.product ?? "unknown";
+      byProduct[product] = (byProduct[product] ?? 0) + 1;
+
+      if (row.reason) byReason[row.reason] = (byReason[row.reason] ?? 0) + 1;
+      if (row.location) byLocation[row.location] = (byLocation[row.location] ?? 0) + 1;
+
+      const ts = new Date(row.created_at).getTime();
+      if (!Number.isNaN(ts)) {
+        if (ts >= todayTs) today += 1;
+        if (ts >= weekTs) week += 1;
+        if (ts >= monthTs) month += 1;
+        const dayKey = new Date(row.created_at).toISOString().slice(0, 10);
+        daily[dayKey] = (daily[dayKey] ?? 0) + 1;
+      }
+    }
+
+    const topLocations = Object.entries(byLocation)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8)
+      .map(([name, count]) => ({ name, count }));
+
+    const total = rows.length;
+    const doneShare = total > 0 ? Math.round((byStatus.done / total) * 100) : 0;
+
+    return jsonResponse(request, {
+      ok: true,
+      total,
+      capped: total >= STATS_LIMIT,
+      byStatus,
+      byProduct,
+      byReason,
+      topLocations,
+      daily,
+      kpi: { today, week, month, doneShare },
+    });
   }
 
   return jsonResponse(request, { ok: false, error: "Unknown action" }, 400);

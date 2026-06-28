@@ -1379,19 +1379,49 @@ const LEAD_TOAST_GLASS_VARS = [
 ];
 
 const positionLeadFormToast = () => {
-  if (!leadFormToast || !siteActions) {
+  if (!leadFormToast) {
     return;
   }
 
-  const rect = siteActions.getBoundingClientRect();
-  const gap = 9;
-  leadFormToast.style.top = `${rect.bottom + gap}px`;
-  leadFormToast.style.right = `${Math.max(0, window.innerWidth - rect.right)}px`;
+  const glassHost = siteActions || leadSubmitBtn;
+  if (glassHost) {
+    const hostStyle = getComputedStyle(glassHost);
+    LEAD_TOAST_GLASS_VARS.forEach((prop) => {
+      const value = hostStyle.getPropertyValue(prop);
+      if (value) {
+        leadFormToast.style.setProperty(prop, value);
+      }
+    });
+  }
 
-  const hostStyle = getComputedStyle(siteActions);
-  LEAD_TOAST_GLASS_VARS.forEach((prop) => {
-    leadFormToast.style.setProperty(prop, hostStyle.getPropertyValue(prop));
-  });
+  const gap = 12;
+  const anchor = leadSubmitBtn?.getBoundingClientRect();
+
+  if (anchor && anchor.width && anchor.bottom > 0 && anchor.top < window.innerHeight) {
+    const toastWidth = leadFormToast.offsetWidth || 0;
+    const toastHeight = leadFormToast.offsetHeight || 0;
+    let left = anchor.left + anchor.width / 2 - toastWidth / 2;
+    left = Math.max(12, Math.min(left, window.innerWidth - toastWidth - 12));
+
+    let top = anchor.bottom + gap;
+    if (top + toastHeight > window.innerHeight - 12) {
+      top = anchor.top - toastHeight - gap;
+    }
+    top = Math.max(12, top);
+
+    leadFormToast.style.left = `${left}px`;
+    leadFormToast.style.top = `${top}px`;
+    leadFormToast.style.right = "auto";
+    leadFormToast.style.bottom = "auto";
+    leadFormToast.style.transform = "";
+    return;
+  }
+
+  const fallbackWidth = leadFormToast.offsetWidth || 0;
+  leadFormToast.style.left = `${Math.max(12, (window.innerWidth - fallbackWidth) / 2)}px`;
+  leadFormToast.style.right = "auto";
+  leadFormToast.style.top = "auto";
+  leadFormToast.style.bottom = "1.5rem";
 };
 
 const onLeadFormToastReposition = () => {
@@ -1421,9 +1451,9 @@ const showLeadFormToast = (type = "success") => {
   leadFormToast.setAttribute("role", type === "error" ? "alert" : "status");
   leadFormToast.setAttribute("aria-live", type === "error" ? "assertive" : "polite");
   leadFormToast.textContent = translate(leadFormToastKey);
-  positionLeadFormToast();
   leadFormToast.hidden = false;
   leadFormToast.classList.remove("is-visible");
+  positionLeadFormToast();
   void leadFormToast.offsetWidth;
   leadFormToast.classList.add("is-visible");
 
