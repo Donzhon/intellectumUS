@@ -3123,6 +3123,34 @@ html.is-boot-loading .lead-form__select-menu {
     border-radius: 999px;
   }
 
+  /* Index hero: hide chrome logo while hero mark is still in view */
+  .bloom-page:has(.hero-brand__mark):not(.is-nav-merged) .site-brand {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    width: 0;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    margin: 0;
+    border: none;
+    overflow: hidden;
+  }
+
+  .bloom-page.is-hero-brand-in-view .site-brand {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    width: 0;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    margin: 0;
+    border: none;
+    overflow: hidden;
+    transition: opacity 0.35s ease, width 0.35s ease;
+  }
+
   .bloom-page.is-nav-merged .site-brand {
     min-height: 0;
     padding: 0.1rem 0.55rem 0.1rem 0.2rem;

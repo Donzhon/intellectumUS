@@ -1935,9 +1935,15 @@ leadForm?.addEventListener("submit", async (event) => {
 
 /* ---------- Site chrome + gallery: sync on scroll (30vh threshold) ---------- */
 const NAV_MERGE_SCROLL_RATIO = 0.3;
+const MOBILE_NAV_MAX_WIDTH = 720;
 const navMergeMode = siteChrome?.dataset.navMerge || "auto";
 const heroStageForScroll = document.querySelector(".hero-stage");
+const heroBrandMark = document.querySelector(".hero-brand__mark");
+const mobileNavQuery = window.matchMedia(`(max-width: ${MOBILE_NAV_MAX_WIDTH}px)`);
 let navMergeScrollThreshold = window.innerHeight * NAV_MERGE_SCROLL_RATIO;
+let heroBrandInView = true;
+
+const usesMobileHeroBrandSync = () => Boolean(heroBrandMark && mobileNavQuery.matches);
 
 const refreshNavMergeThreshold = () => {
   navMergeScrollThreshold =
@@ -1945,18 +1951,23 @@ const refreshNavMergeThreshold = () => {
 };
 
 const updateSiteScrollUi = () => {
-  const pastThreshold = window.scrollY > navMergeScrollThreshold;
+  if (usesMobileHeroBrandSync()) {
+    document.body.classList.toggle("is-nav-merged", !heroBrandInView);
+    document.body.classList.toggle("is-hero-brand-in-view", heroBrandInView);
+    return;
+  }
 
-  if (siteChrome && navMergeMode === "auto") {
+  document.body.classList.remove("is-hero-brand-in-view");
+
+  if (siteChrome && navMergeMode === "always") {
+    document.body.classList.add("is-nav-merged");
+  } else if (siteChrome && navMergeMode === "never") {
+    document.body.classList.remove("is-nav-merged");
+  } else if (siteChrome && navMergeMode === "auto") {
+    const pastThreshold = window.scrollY > navMergeScrollThreshold;
     document.body.classList.toggle("is-nav-merged", pastThreshold);
   }
 };
-
-if (siteChrome && navMergeMode === "always") {
-  document.body.classList.add("is-nav-merged");
-} else if (siteChrome && navMergeMode === "never") {
-  document.body.classList.remove("is-nav-merged");
-}
 
 let siteScrollTicking = false;
 
@@ -1965,6 +1976,18 @@ window.addEventListener("orientationchange", () => {
   refreshNavMergeThreshold();
   updateSiteScrollUi();
 });
+
+if (heroBrandMark) {
+  const heroBrandObserver = new IntersectionObserver(
+    (entries) => {
+      heroBrandInView = entries[0]?.isIntersecting ?? false;
+      updateSiteScrollUi();
+    },
+    { rootMargin: "-72px 0px 0px 0px", threshold: 0 }
+  );
+  heroBrandObserver.observe(heroBrandMark);
+  mobileNavQuery.addEventListener("change", updateSiteScrollUi);
+}
 
 const enableScrollSync = siteChrome && navMergeMode === "auto";
 if (enableScrollSync) {
@@ -1981,8 +2004,9 @@ if (enableScrollSync) {
     },
     { passive: true }
   );
-  updateSiteScrollUi();
 }
+
+updateSiteScrollUi();
 
 /* ---------- Bento showcase: mobile layout mode toggle ---------- */
 const bentoShowcase = document.getElementById("bento-showcase");
