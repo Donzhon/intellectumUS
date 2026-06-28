@@ -79,8 +79,9 @@ Deno.serve(async (request) => {
     return jsonResponse(request, { ok: false, error: "Invalid JSON" }, 400);
   }
 
-  const expected = Deno.env.get("ADMIN_PASSWORD") ?? "";
-  if (!expected || !payload.password || !timingSafeEqual(payload.password, expected)) {
+  const expected = (Deno.env.get("ADMIN_PASSWORD") ?? "").trim();
+  const gotPw = (payload.password ?? "").trim();
+  if (!expected || !gotPw || !timingSafeEqual(gotPw, expected)) {
     return jsonResponse(request, { ok: false, error: "Unauthorized" }, 401);
   }
 
