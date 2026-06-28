@@ -1510,46 +1510,49 @@ html.is-boot-loading .lead-form__select-menu {
   z-index: 10000;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.72rem 1.15rem;
-  border-radius: 999px;
+  gap: 0.65rem;
+  padding: 0.7rem 1rem 0.7rem 0.72rem;
+  border-radius: 14px;
   font-family: inherit;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  line-height: 1.2;
-  white-space: nowrap;
-  background: #1f7a4d;
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  line-height: 1.3;
+  color: #20243a;
+  background: rgba(255, 255, 255, 0.82);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
   box-shadow:
-    0 12px 30px -10px rgba(0, 0, 0, 0.45),
-    0 4px 12px -6px rgba(0, 0, 0, 0.3),
-    inset 0 1px 1px rgba(255, 255, 255, 0.22);
+    0 22px 48px -18px rgba(31, 38, 73, 0.4),
+    0 8px 18px -10px rgba(31, 38, 73, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
   opacity: 0;
   pointer-events: none;
-  transform: translateY(-0.65rem);
-  transition: opacity 0.32s ease, transform 0.32s ease;
-  max-width: min(90vw, 24rem);
-  text-align: center;
+  transform: translateY(-8px) scale(0.97);
+  transform-origin: top center;
+  transition:
+    opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  max-width: min(92vw, 23rem);
 }
 
 .lead-form__toast.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 .lead-form__toast-icon {
   flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.05rem;
-  height: 1.05rem;
-  font-size: 0.78rem;
-  font-weight: 700;
+  display: inline-grid;
+  place-items: center;
+  width: 1.55rem;
+  height: 1.55rem;
+  font-size: 0.82rem;
+  font-weight: 800;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.22);
   color: #ffffff;
+  background: linear-gradient(135deg, #34d399, #059669);
+  box-shadow: 0 3px 10px -2px rgba(5, 150, 105, 0.55);
 }
 
 .lead-form__toast-text {
@@ -1557,9 +1560,28 @@ html.is-boot-loading .lead-form__select-menu {
 }
 
 .lead-form__toast--error {
-  background: #c0392b;
-  border-color: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  color: #20243a;
+}
+
+.lead-form__toast--error .lead-form__toast-icon {
+  background: linear-gradient(135deg, #fb7185, #e11d48);
+  box-shadow: 0 3px 10px -2px rgba(225, 29, 72, 0.55);
+}
+
+@media (prefers-color-scheme: dark) {
+  .lead-form__toast {
+    color: #f3f4f8;
+    background: rgba(28, 30, 44, 0.82);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow:
+      0 22px 48px -18px rgba(0, 0, 0, 0.6),
+      0 8px 18px -10px rgba(0, 0, 0, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .lead-form__toast--error {
+    color: #f3f4f8;
+  }
 }
 
 @keyframes lead-form-submit-shake {
@@ -1842,6 +1864,76 @@ html.is-boot-loading .lead-form__select-menu {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   box-shadow: none;
+}
+
+/* ---------- COMPARE VARIANT: компактная копия меню под основным ----------
+   Можно удалить вместе с разметкой .site-chrome--alt после выбора макета. */
+.site-chrome--alt {
+  top: 5.25rem;
+  pointer-events: none;
+}
+
+.site-chrome--alt > * {
+  pointer-events: auto;
+}
+
+/* Лого: только иконка (без текстового логотипа) */
+.site-chrome--alt .brand-text {
+  display: none !important;
+}
+
+.nav-variant-tag {
+  position: absolute;
+  right: calc(100% + 0.75rem);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(20, 28, 48, 0.55);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  pointer-events: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* На мобильных компактный вариант показывает текст вместо иконок */
+@media (max-width: 900px) {
+  .site-chrome--alt {
+    top: 4rem;
+  }
+
+  .site-chrome--alt .site-nav__link {
+    width: auto;
+    height: auto;
+    padding: 0.4rem 0.7rem;
+  }
+
+  .site-chrome--alt .site-nav__link > span {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    clip: auto;
+    clip-path: none;
+  }
+
+  .site-chrome--alt .site-nav__icon {
+    display: none;
+  }
+
+  .nav-variant-tag {
+    right: auto;
+    left: 50%;
+    top: auto;
+    bottom: calc(100% + 0.35rem);
+    transform: translateX(-50%);
+  }
 }
 
 .site-brand {

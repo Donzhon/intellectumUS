@@ -159,6 +159,79 @@
       </nav>
     </div>
 
+    <!-- COMPARE VARIANT: компактная копия меню под основным (для сравнения).
+         Убраны Solutions / About us / Resources, лого только иконкой,
+         на мобильных — текст вместо иконок. Можно удалить после выбора. -->
+    <div class="site-chrome site-chrome--alt" data-nav-merge="always" aria-hidden="true">
+      <span class="nav-variant-tag">Компактный вариант</span>
+      <a class="site-brand liquid-glass brand" href="/" aria-label="IntellectumUS — Home" tabindex="-1">
+        <span class="brand-mark" aria-hidden="true">
+          <img src="assets/icon/intellectum.svg" alt="" />
+        </span>
+        <span class="brand-text">IntellectumUS</span>
+      </a>
+      <nav class="site-nav liquid-glass" aria-label="Site (compact preview)">
+        <ul class="site-nav__list">
+          <li class="site-nav__item site-nav__item--has-menu">
+            <button
+              class="site-nav__link site-nav__toggle"
+              type="button"
+              aria-expanded="false"
+              aria-haspopup="true"
+              tabindex="-1"
+            >
+              <svg class="site-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="3" width="7" height="7" rx="1.5" />
+                <rect x="14" y="3" width="7" height="7" rx="1.5" />
+                <rect x="3" y="14" width="7" height="7" rx="1.5" />
+                <rect x="14" y="14" width="7" height="7" rx="1.5" />
+              </svg>
+              <span data-i18n="nav.products">Products</span>
+              <svg class="site-nav__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+            <ul class="site-nav__dropdown liquid-glass">
+              <li><a href="/intellectum" data-i18n="nav.intellectum" tabindex="-1">Intellectum</a></li>
+              <li><a href="/nodi" data-i18n="nav.nodi" tabindex="-1">Nodi</a></li>
+              <li><a href="/telos" tabindex="-1">TELOS</a></li>
+              <li><a href="#" data-i18n="nav.iot" tabindex="-1">IoT Board</a></li>
+              <li><a href="#" data-i18n="nav.equipment" tabindex="-1">School Equipments</a></li>
+            </ul>
+          </li>
+          <li>
+            <a class="site-nav__link" href="/#learning-labs" data-i18n-aria-label="nav.schools" aria-label="For Schools" tabindex="-1">
+              <svg class="site-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 10 12 5 2 10l10 5 10-5Z" />
+                <path d="M6 12v5c0 1 2.5 3 6 3s6-2 6-3v-5" />
+              </svg>
+              <span data-i18n="nav.schools">For Schools</span>
+            </a>
+          </li>
+          <li>
+            <a class="site-nav__link" href="/partners" data-i18n-aria-label="nav.partners" aria-label="For Partners" tabindex="-1">
+              <svg class="site-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M16 21v-2a4 4 0 0 0-8 0v2" />
+                <circle cx="12" cy="7" r="4" />
+                <path d="M3 21v-2a4 4 0 0 1 3-3.87" />
+                <path d="M21 21v-2a4 4 0 0 0-3-3.87" />
+              </svg>
+              <span data-i18n="nav.partners">For Partners</span>
+            </a>
+          </li>
+          <li>
+            <a class="site-nav__link" href="/#site-footer" data-i18n-aria-label="nav.contact" aria-label="Contact" tabindex="-1">
+              <svg class="site-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2Z" />
+                <path d="m22 6-10 7L2 6" />
+              </svg>
+              <span data-i18n="nav.contact">Contact</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
     <div class="hero-stage">
       <video
         class="bg-video is-active"
