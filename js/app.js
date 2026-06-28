@@ -1964,7 +1964,7 @@ if (heroBrandMark && siteChrome && siteBrand && siteNav && !siteChrome.querySele
   siteChromeCluster.append(siteBrand, siteNav);
 }
 
-const usesMobileHeroBrandSync = () => Boolean(heroBrandMark && mobileNavQuery.matches);
+const usesHeroBrandSync = () => Boolean(heroBrandMark);
 
 const refreshNavMergeThreshold = () => {
   navMergeScrollThreshold =
@@ -1972,7 +1972,7 @@ const refreshNavMergeThreshold = () => {
 };
 
 const updateSiteScrollUi = () => {
-  if (usesMobileHeroBrandSync()) {
+  if (usesHeroBrandSync()) {
     document.body.classList.toggle("is-nav-merged", !heroBrandInView);
     document.body.classList.toggle("is-hero-brand-in-view", heroBrandInView);
     syncMobileChromeAnchor();
@@ -2025,7 +2025,7 @@ const measureMobileBrandWidth = () => {
 };
 
 const syncMobileChromeAnchor = () => {
-  if (!usesMobileHeroBrandSync() || !siteBrand) {
+  if (!usesHeroBrandSync() || !siteBrand) {
     document.documentElement.style.removeProperty("--brand-width");
     cachedMobileBrandWidth = 0;
     return;

@@ -2337,6 +2337,220 @@ html.is-boot-loading .lead-form__select-menu {
   }
 }
 
+/* ---------- Index hero: centered nav cluster + brand reveal (all breakpoints) ---------- */
+.bloom-page:has(.hero-brand__mark) .site-chrome {
+  display: block;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: none;
+  transform: none;
+  gap: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.bloom-page:has(.hero-brand__mark) .site-chrome::before,
+.bloom-page:has(.hero-brand__mark) .site-chrome::after {
+  display: none;
+}
+
+.bloom-page:has(.hero-brand__mark) .site-chrome__cluster {
+  position: fixed;
+  left: 50%;
+  top: max(1rem, env(safe-area-inset-top));
+  z-index: 101;
+  display: inline-flex;
+  align-items: stretch;
+  max-width: calc(100vw - 2rem);
+  transform: translateX(-50%);
+  pointer-events: none;
+  border-radius: 999px;
+  isolation: isolate;
+}
+
+.bloom-page:has(.hero-brand__mark) .site-chrome__cluster::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: inherit;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  opacity: 0;
+  transition:
+    left 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.35s ease,
+    background 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.bloom-page:has(.hero-brand__mark).is-nav-merged .site-chrome__cluster::after {
+  left: calc(-1 * var(--brand-width, 0px));
+  opacity: 1;
+  background: color-mix(
+    in srgb,
+    var(--panel-tint-color) calc(var(--panel-dim-strength) / 100 * 52%),
+    transparent
+  );
+  backdrop-filter: var(--left-glass-backdrop-filter);
+  -webkit-backdrop-filter: var(--left-glass-backdrop-filter);
+  box-shadow:
+    0 calc(var(--left-glass-shadow) * 0.4px) calc(var(--left-glass-shadow) * 1.25px)
+      rgba(0, 0, 0, calc(0.12 + var(--left-glass-shadow) * 0.006)),
+    0 calc(var(--left-glass-shadow) * 0.12px) calc(var(--left-glass-shadow) * 0.45px)
+      rgba(0, 0, 0, calc(0.08 + var(--left-glass-shadow) * 0.004)),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.bloom-page:has(.hero-brand__mark) .site-chrome__cluster::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.15) 20%,
+    transparent 40%,
+    transparent 60%,
+    rgba(255, 255, 255, 0.15) 80%,
+    rgba(255, 255, 255, 0.45) 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  transition:
+    left 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.35s ease;
+}
+
+.bloom-page:has(.hero-brand__mark).is-nav-merged .site-chrome__cluster::before {
+  left: calc(-1 * var(--brand-width, 0px));
+  opacity: 1;
+}
+
+.bloom-page:has(.hero-brand__mark) .site-chrome__cluster .site-nav {
+  position: static;
+  left: auto;
+  top: auto;
+  transform: none;
+  grid-column: auto;
+  justify-self: auto;
+  z-index: 1;
+  margin: 0;
+  pointer-events: auto;
+  transition:
+    background 0.35s ease,
+    box-shadow 0.35s ease,
+    border-radius 0.35s ease,
+    padding 0.35s ease;
+}
+
+.bloom-page:has(.hero-brand__mark) .site-chrome__cluster .site-brand {
+  position: absolute;
+  top: 0;
+  right: 100%;
+  bottom: 0;
+  left: auto;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0.1rem 0;
+  border-radius: 0;
+  border-right: 1px solid transparent;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+  pointer-events: none;
+  transition:
+    max-width 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.35s ease,
+    padding 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.35s ease;
+}
+
+.bloom-page:has(.hero-brand__mark).is-nav-merged .site-brand {
+  max-width: var(--brand-width, 3.5rem);
+  opacity: 1;
+  padding: 0.1rem 0.55rem 0.1rem 0.2rem;
+  border-right-color: color-mix(in srgb, var(--panel-text-color) 20%, rgba(255, 255, 255, 0.12));
+  pointer-events: auto;
+}
+
+.bloom-page:has(.hero-brand__mark).is-nav-merged .site-brand.liquid-glass::before,
+.bloom-page:has(.hero-brand__mark).is-nav-merged .site-brand.liquid-glass::after,
+.bloom-page:has(.hero-brand__mark).is-nav-merged .site-nav.liquid-glass::before,
+.bloom-page:has(.hero-brand__mark).is-nav-merged .site-nav.liquid-glass::after {
+  display: none;
+}
+
+.bloom-page:has(.hero-brand__mark).is-nav-merged .site-nav {
+  flex: 0 0 auto;
+  min-height: 0;
+  padding: 0.1rem 0.2rem 0.1rem 0.15rem;
+  border-radius: 0;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+
+/* Tablet: compact cluster pill so logo + nav fit */
+@media (min-width: 721px) and (max-width: 1023px) {
+  .bloom-page:has(.hero-brand__mark) .site-chrome__cluster {
+    max-width: calc(100vw - 1rem);
+  }
+
+  .bloom-page:has(.hero-brand__mark) .site-brand .brand-text {
+    display: none;
+  }
+
+  .bloom-page:has(.hero-brand__mark) .site-chrome__cluster .site-nav {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .bloom-page:has(.hero-brand__mark) .site-nav__list {
+    gap: 0.05rem;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .bloom-page:has(.hero-brand__mark) .site-nav__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .bloom-page:has(.hero-brand__mark) .site-nav__link {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+}
+
 /* Dev-only glass tuner: kept in the DOM so the saved preset still themes the
    panels, but hidden from the production menu UI. */
 .nav-menu__tuner,
@@ -3200,188 +3414,23 @@ html.is-boot-loading .lead-form__select-menu {
     box-shadow: none;
   }
 
-  /* Index hero: nav anchored at viewport center; brand expands left into one pill */
-  .bloom-page:has(.hero-brand__mark) .site-chrome {
-    display: block;
-    left: 0;
-    right: 0;
-    width: 100%;
-    max-width: none;
-    transform: none;
-    gap: 0;
-    padding: 0;
-    background: transparent;
-    box-shadow: none;
-    border-radius: 0;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-
-  .bloom-page:has(.hero-brand__mark) .site-chrome::before,
-  .bloom-page:has(.hero-brand__mark) .site-chrome::after {
-    display: none;
-  }
-
+  /* Index hero cluster: mobile-only overrides (structure lives in base scope) */
   .bloom-page:has(.hero-brand__mark) .site-chrome__cluster {
-    position: fixed;
-    left: 50%;
     top: max(0.65rem, env(safe-area-inset-top));
-    z-index: 101;
-    display: inline-flex;
-    align-items: stretch;
     max-width: calc(100vw - 1.25rem);
-    transform: translateX(-50%);
-    pointer-events: none;
-    border-radius: 999px;
-    isolation: isolate;
   }
 
-  .bloom-page:has(.hero-brand__mark) .site-chrome__cluster::after {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    border-radius: inherit;
-    background: transparent;
-    box-shadow: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    opacity: 0;
-    transition:
-      left 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-      opacity 0.35s ease,
-      background 0.35s ease,
-      box-shadow 0.35s ease;
-  }
-
-  .bloom-page:has(.hero-brand__mark).is-nav-merged .site-chrome__cluster::after {
-    left: calc(-1 * var(--brand-width, 0px));
-    opacity: 1;
-    background: color-mix(
-      in srgb,
-      var(--panel-tint-color) calc(var(--panel-dim-strength) / 100 * 52%),
-      transparent
-    );
-    backdrop-filter: var(--left-glass-backdrop-filter);
-    -webkit-backdrop-filter: var(--left-glass-backdrop-filter);
-    box-shadow:
-      0 calc(var(--left-glass-shadow) * 0.4px) calc(var(--left-glass-shadow) * 1.25px)
-        rgba(0, 0, 0, calc(0.12 + var(--left-glass-shadow) * 0.006)),
-      0 calc(var(--left-glass-shadow) * 0.12px) calc(var(--left-glass-shadow) * 0.45px)
-        rgba(0, 0, 0, calc(0.08 + var(--left-glass-shadow) * 0.004)),
-      inset 0 1px 1px rgba(255, 255, 255, 0.1);
-  }
-
-  .bloom-page:has(.hero-brand__mark) .site-chrome__cluster::before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    border-radius: inherit;
-    padding: 1.4px;
-    pointer-events: none;
-    opacity: 0;
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.45) 0%,
-      rgba(255, 255, 255, 0.15) 20%,
-      transparent 40%,
-      transparent 60%,
-      rgba(255, 255, 255, 0.15) 80%,
-      rgba(255, 255, 255, 0.45) 100%
-    );
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    transition:
-      left 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-      opacity 0.35s ease;
-  }
-
-  .bloom-page:has(.hero-brand__mark).is-nav-merged .site-chrome__cluster::before {
-    left: calc(-1 * var(--brand-width, 0px));
-    opacity: 1;
-  }
-
-  .bloom-page:has(.hero-brand__mark) .site-chrome__cluster .site-nav {
-    position: static;
-    left: auto;
-    top: auto;
-    transform: none;
-    grid-column: auto;
-    justify-self: auto;
-    z-index: 1;
-    margin: 0;
-    pointer-events: auto;
-    transition:
-      background 0.35s ease,
-      box-shadow 0.35s ease,
-      border-radius 0.35s ease,
-      padding 0.35s ease;
-  }
-
-  .bloom-page:has(.hero-brand__mark) .site-chrome__cluster .site-brand {
-    position: absolute;
-    top: 0;
-    right: 100%;
-    bottom: 0;
-    left: auto;
-    z-index: 1;
-    display: inline-flex;
-    align-items: center;
-    max-width: 0;
-    opacity: 0;
-    overflow: hidden;
-    margin: 0;
-    padding: 0.1rem 0;
-    border-radius: 0;
-    border-right: 1px solid transparent;
-    background: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    box-shadow: none;
-    pointer-events: none;
-    transition:
-      max-width 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-      opacity 0.35s ease,
-      padding 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-      border-color 0.35s ease;
-  }
-
-  .bloom-page:has(.hero-brand__mark).is-nav-merged .site-brand {
-    max-width: var(--brand-width, 3.5rem);
-    opacity: 1;
-    padding: 0.1rem 0.55rem 0.1rem 0.2rem;
-    border-right-color: color-mix(in srgb, var(--panel-text-color) 20%, rgba(255, 255, 255, 0.12));
-    pointer-events: auto;
-  }
-
-  .bloom-page:has(.hero-brand__mark).is-nav-merged .site-brand.liquid-glass::before,
-  .bloom-page:has(.hero-brand__mark).is-nav-merged .site-brand.liquid-glass::after,
-  .bloom-page:has(.hero-brand__mark).is-nav-merged .site-nav.liquid-glass::before,
-  .bloom-page:has(.hero-brand__mark).is-nav-merged .site-nav.liquid-glass::after {
+  .bloom-page:has(.hero-brand__mark) .site-brand .brand-text,
+  .bloom-page:has(.hero-brand__mark).is-nav-merged .site-brand .brand-text,
+  .bloom-page:has(.hero-brand__mark):not(.is-nav-merged) .site-brand .brand-text {
     display: none;
   }
 
   .bloom-page:has(.hero-brand__mark).is-nav-merged .site-nav {
-    flex: 0 0 auto;
-    min-height: 0;
     padding: 0.3rem 0.5rem 0.3rem 0.15rem;
-    border-radius: 0;
-    background: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    box-shadow: none;
   }
 
-  .site-nav__list {
+  .bloom-page:has(.hero-brand__mark) .site-nav__list {
     gap: 0.1rem;
   }
 
