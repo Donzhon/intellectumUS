@@ -2,7 +2,7 @@
    Shows a short loading screen (1–2.5s) while the intro video and fonts
    warm up, so the hero never appears with a black canvas or unstyled text. */
 (() => {
-  const STORAGE_KEY = "eduvector-index-boot-v1";
+  const STORAGE_KEY = "intellectum-us-index-boot-v1";
   const MIN_VISIBLE_MS = 1000;
   const MAX_VISIBLE_MS = 2500;
   const FADE_MS = 400;
