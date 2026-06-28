@@ -1954,10 +1954,12 @@ const updateSiteScrollUi = () => {
   if (usesMobileHeroBrandSync()) {
     document.body.classList.toggle("is-nav-merged", !heroBrandInView);
     document.body.classList.toggle("is-hero-brand-in-view", heroBrandInView);
+    window.requestAnimationFrame(syncMobileChromeAnchor);
     return;
   }
 
   document.body.classList.remove("is-hero-brand-in-view");
+  document.documentElement.style.removeProperty("--site-nav-half");
 
   if (siteChrome && navMergeMode === "always") {
     document.body.classList.add("is-nav-merged");
@@ -1969,12 +1971,27 @@ const updateSiteScrollUi = () => {
   }
 };
 
+const syncMobileChromeAnchor = () => {
+  if (!usesMobileHeroBrandSync() || !siteNav) {
+    document.documentElement.style.removeProperty("--site-nav-half");
+    return;
+  }
+
+  document.documentElement.style.setProperty(
+    "--site-nav-half",
+    `${siteNav.getBoundingClientRect().width / 2}px`
+  );
+};
+
 let siteScrollTicking = false;
 
 refreshNavMergeThreshold();
 window.addEventListener("orientationchange", () => {
   refreshNavMergeThreshold();
   updateSiteScrollUi();
+});
+window.addEventListener("resize", () => {
+  syncMobileChromeAnchor();
 });
 
 if (heroBrandMark) {

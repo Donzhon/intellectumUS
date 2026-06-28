@@ -3196,18 +3196,16 @@ html.is-boot-loading .lead-form__select-menu {
     box-shadow: none;
   }
 
-  /* Index hero: nav stays viewport-centered; brand slot removed until scroll expands the pill */
+  /* Index hero: nav pinned to viewport center; brand docks to its left after scroll */
   .bloom-page:has(.hero-brand__mark) .site-chrome {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    display: block;
     left: 0;
     right: 0;
     width: 100%;
     max-width: none;
     transform: none;
     gap: 0;
-    padding-left: var(--panel-edge-gap);
-    padding-right: calc(var(--chrome-actions-reserve) + var(--panel-edge-gap));
+    padding: 0;
     background: transparent;
     box-shadow: none;
     border-radius: 0;
@@ -3221,9 +3219,14 @@ html.is-boot-loading .lead-form__select-menu {
   }
 
   .bloom-page:has(.hero-brand__mark) .site-nav {
-    grid-column: 2;
-    grid-row: 1;
-    justify-self: center;
+    position: fixed;
+    left: 50%;
+    top: max(0.65rem, env(safe-area-inset-top));
+    grid-column: auto;
+    justify-self: auto;
+    transform: translateX(-50%);
+    z-index: 101;
+    margin: 0;
     transition:
       border-radius 0.35s ease,
       padding 0.35s ease,
@@ -3232,11 +3235,17 @@ html.is-boot-loading .lead-form__select-menu {
   }
 
   .bloom-page:has(.hero-brand__mark) .site-brand {
-    grid-column: 1;
-    grid-row: 1;
-    justify-self: end;
-    align-self: center;
-    z-index: 2;
+    position: fixed;
+    top: max(0.65rem, env(safe-area-inset-top));
+    left: calc(50% - var(--site-nav-half, 0px));
+    transform: translateX(-100%);
+    grid-column: auto;
+    justify-self: auto;
+    z-index: 101;
+    margin: 0;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
     transition: opacity 0.35s ease;
   }
 
@@ -3249,7 +3258,6 @@ html.is-boot-loading .lead-form__select-menu {
     display: inline-flex;
     min-height: var(--mobile-tap-size);
     padding: 0.1rem 0.45rem 0.1rem 0.2rem;
-    margin: 0;
     border-radius: 999px 0 0 999px;
     border-right: 1px solid color-mix(in srgb, var(--panel-text-color) 20%, rgba(255, 255, 255, 0.12));
     background: color-mix(
@@ -3266,8 +3274,6 @@ html.is-boot-loading .lead-form__select-menu {
   }
 
   .bloom-page:has(.hero-brand__mark).is-nav-merged .site-nav {
-    grid-column: 2;
-    justify-self: center;
     border-radius: 0 999px 999px 0;
     padding-left: 0.15rem;
     background: color-mix(
