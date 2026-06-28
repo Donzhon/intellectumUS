@@ -1824,21 +1824,77 @@ document.querySelectorAll("[data-lead-select]").forEach((root) => {
   initLeadCountrySelect(root);
 });
 
-leadForm?.addEventListener("submit", (event) => {
+const submitLeadRequest = async () => {
+  const endpoint = window.SiteConfig?.SUBMIT_LEAD_URL;
+  if (!endpoint) {
+    console.error("SUBMIT_LEAD_URL is not configured (js/config.js).");
+    return false;
+  }
+
+  const formData = new FormData(leadForm);
+  const heroStage = document.querySelector(".hero-stage");
+  const payload = {
+    email: (formData.get("email") || "").toString().trim(),
+    location: (formData.get("location") || "").toString().trim() || null,
+    comment: (formData.get("comment") || "").toString().trim() || null,
+    reason: (formData.get("reason") || "").toString().trim() || null,
+    company: (formData.get("company") || "").toString().trim() || null,
+    product: heroStage?.classList.contains("is-intellectum") ? "intellectum" : "nodi",
+    source_url: window.location.href,
+  };
+
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Submit failed: ${response.status}`);
+  }
+
+  const result = await response.json().catch(() => ({}));
+  if (result && result.ok === false) {
+    throw new Error(result.error || "Submit rejected");
+  }
+
+  return true;
+};
+
+let leadSubmitInFlight = false;
+
+leadForm?.addEventListener("submit", async (event) => {
   if (!leadEmailInput || !leadSubmitBtn) {
     return;
   }
 
   event.preventDefault();
 
-  if (isLeadEmailValid()) {
-    showLeadFormSuccess();
+  if (!isLeadEmailValid()) {
+    leadEmailInput.focus({ preventScroll: false });
+    leadEmailInput.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    playLeadSubmitError();
     return;
   }
 
-  leadEmailInput.focus({ preventScroll: false });
-  leadEmailInput.scrollIntoView({ block: "nearest", behavior: "smooth" });
-  playLeadSubmitError();
+  if (leadSubmitInFlight) {
+    return;
+  }
+
+  leadSubmitInFlight = true;
+  leadSubmitBtn.disabled = true;
+
+  try {
+    await submitLeadRequest();
+    leadForm.reset();
+    showLeadFormSuccess();
+  } catch (error) {
+    console.error(error);
+    playLeadSubmitError();
+  } finally {
+    leadSubmitInFlight = false;
+    leadSubmitBtn.disabled = false;
+  }
 });
 
 /* ---------- Site chrome + gallery: sync on scroll (30vh threshold) ---------- */

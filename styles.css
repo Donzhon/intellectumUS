@@ -508,6 +508,16 @@ html.is-boot-loading .lead-form__select-menu {
   gap: 0.6rem;
 }
 
+/* Honeypot field: hidden from users, used to catch bots. */
+.lead-form__hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .email-cta__field {
   flex: 1 1 auto;
   min-width: 0;

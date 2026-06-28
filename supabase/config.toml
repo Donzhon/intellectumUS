@@ -1,0 +1,12 @@
+# Minimal Supabase CLI config. Replace project_id with your project ref
+# (Dashboard -> Project Settings -> General -> Reference ID) before running
+# `supabase link --project-ref <ref>`.
+project_id = "your-project-ref"
+
+[functions.submit-lead]
+# Public endpoint called by the website form.
+verify_jwt = false
+
+[functions.admin]
+# Protected by ADMIN_PASSWORD inside the function, not by JWT.
+verify_jwt = false

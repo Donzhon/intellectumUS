@@ -410,6 +410,14 @@
           </p>
         </div>
         <form id="lead-form-body" class="email-cta__form" method="post">
+          <input
+            type="text"
+            name="company"
+            class="lead-form__hp"
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+          />
           <label class="email-cta__field lead-form__field">
             <span class="visually-hidden" data-i18n="form.email">Your email</span>
             <span class="lead-form__control">
@@ -720,6 +728,7 @@
     </div>
 
     <script defer src="js/boot-loader.js"></script>
+    <script defer src="js/config.js"></script>
     <script defer src="js/countries.js"></script>
     <script defer src="js/i18n.js"></script>
     <script defer src="js/app.js"></script>

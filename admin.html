@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Заявки — IntellectumUS Admin</title>
+    <link rel="icon" href="assets/icon/intellectum-favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="css/admin.css" />
+  </head>
+  <body class="admin">
+    <main class="admin__shell">
+      <!-- Login screen -->
+      <section class="admin__login" id="admin-login">
+        <form class="admin__login-card" id="admin-login-form">
+          <h1 class="admin__title">Панель заявок</h1>
+          <p class="admin__subtitle">Введите пароль доступа</p>
+          <input
+            class="admin__input"
+            type="password"
+            id="admin-password"
+            placeholder="Пароль"
+            autocomplete="current-password"
+            required
+          />
+          <button class="admin__btn admin__btn--primary" type="submit">Войти</button>
+          <p class="admin__error" id="admin-login-error" hidden></p>
+        </form>
+      </section>
+
+      <!-- Dashboard -->
+      <section class="admin__panel" id="admin-panel" hidden>
+        <header class="admin__header">
+          <h1 class="admin__title">Заявки с сайта</h1>
+          <button class="admin__btn admin__btn--ghost" id="admin-logout" type="button">Выйти</button>
+        </header>
+
+        <form class="admin__filters" id="admin-filters">
+          <input class="admin__input" type="search" id="filter-search" placeholder="Поиск: email, комментарий, локация" />
+          <select class="admin__input" id="filter-status">
+            <option value="">Все статусы</option>
+            <option value="new">Новые</option>
+            <option value="in_progress">В работе</option>
+            <option value="done">Завершённые</option>
+            <option value="spam">Спам</option>
+          </select>
+          <label class="admin__date">От<input class="admin__input" type="date" id="filter-from" /></label>
+          <label class="admin__date">До<input class="admin__input" type="date" id="filter-to" /></label>
+          <button class="admin__btn admin__btn--primary" type="submit">Применить</button>
+          <button class="admin__btn admin__btn--ghost" type="button" id="filter-reset">Сбросить</button>
+        </form>
+
+        <div class="admin__meta" id="admin-meta"></div>
+
+        <div class="admin__table-wrap">
+          <table class="admin__table">
+            <thead>
+              <tr>
+                <th>Дата</th>
+                <th>Email</th>
+                <th>Продукт</th>
+                <th>Причина</th>
+                <th>Локация</th>
+                <th>Комментарий</th>
+                <th>Статус</th>
+              </tr>
+            </thead>
+            <tbody id="admin-rows"></tbody>
+          </table>
+          <p class="admin__empty" id="admin-empty" hidden>Заявок не найдено.</p>
+        </div>
+
+        <div class="admin__pager">
+          <button class="admin__btn admin__btn--ghost" id="page-prev" type="button" disabled>Назад</button>
+          <span id="page-info">1</span>
+          <button class="admin__btn admin__btn--ghost" id="page-next" type="button" disabled>Вперёд</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/admin.js"></script>
+  </body>
+</html>
