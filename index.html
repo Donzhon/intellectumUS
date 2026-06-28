@@ -397,30 +397,39 @@
             <a class="hero-btn hero-btn--solid" href="#bento-showcase" data-i18n="hero.cta.explore">Explore Solutions</a>
           </div>
         </div>
-
-        <aside class="hero-panel left-content liquid-glass">
-          <section class="lead-form">
-            <form id="lead-form-body" class="lead-form__body" method="post">
-              <label class="lead-form__field">
-                <span class="lead-form__control liquid-glass">
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Your email"
-                    autocomplete="email"
-                    aria-label="Email"
-                    data-i18n-placeholder="form.email"
-                    data-i18n-aria-label="form.email"
-                  />
-                </span>
-              </label>
-              <div class="lead-form__actions">
-                <button class="lead-form__submit" type="submit" form="lead-form-body" data-i18n="form.submit">Submit request</button>
-              </div>
-            </form>
-          </section>
-        </aside>
       </div>
+
+    <section class="email-cta" aria-labelledby="email-cta-title">
+      <div class="email-cta__inner">
+        <div class="email-cta__copy">
+          <h2 class="email-cta__title" id="email-cta-title" data-i18n="cta.email.title">
+            Bring IntellectumUS to your school
+          </h2>
+          <p class="email-cta__lead" data-i18n="cta.email.lead">
+            Leave your email and our team will reach out with a tailored proposal.
+          </p>
+        </div>
+        <form id="lead-form-body" class="email-cta__form" method="post">
+          <label class="email-cta__field lead-form__field">
+            <span class="visually-hidden" data-i18n="form.email">Your email</span>
+            <span class="lead-form__control">
+              <input
+                type="email"
+                name="email"
+                placeholder="Your email"
+                autocomplete="email"
+                aria-label="Email"
+                data-i18n-placeholder="form.email"
+                data-i18n-aria-label="form.email"
+              />
+            </span>
+          </label>
+          <button class="lead-form__submit" type="submit" form="lead-form-body" data-i18n="form.submit">
+            Submit request
+          </button>
+        </form>
+      </div>
+    </section>
 
     <section
       id="bento-showcase"
@@ -529,6 +538,16 @@
           <div class="bento-showcase__body">
             <span class="bento-showcase__name" data-i18n="categories.pasco.title">Pasco</span>
             <span class="bento-showcase__desc" data-i18n="categories.pasco.desc">Digital measuring instruments.</span>
+            <span class="bento-showcase__cta" data-i18n="categories.cta">Learn More ></span>
+          </div>
+        </a>
+        <a class="bento-showcase__cell bento-showcase__cell--f" href="#" aria-label="TELOS — Learn More">
+          <div class="bento-showcase__media bento-showcase__media--telos">
+            <span class="bento-showcase__plate-name">TELOS</span>
+          </div>
+          <div class="bento-showcase__body">
+            <span class="bento-showcase__name">TELOS</span>
+            <span class="bento-showcase__desc">Turn observation into growth.</span>
             <span class="bento-showcase__cta" data-i18n="categories.cta">Learn More ></span>
           </div>
         </a>

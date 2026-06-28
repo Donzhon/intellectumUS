@@ -320,9 +320,9 @@ html.is-boot-loading .lead-form__select-menu {
   min-height: 100dvh;
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) min(38vw, 30rem);
+  grid-template-columns: minmax(0, 1fr);
   /* Anchor copy to the upper band: the product render fills the lower 2/3 of
-     the art, so keeping text/CTAs and the panel up top avoids overlap. */
+     the art, so keeping text/CTAs up top in the empty left zone avoids overlap. */
   align-items: start;
   gap: clamp(1rem, 4vw, 3rem);
   padding: clamp(5rem, 12vh, 8rem) var(--panel-edge-gap) calc(var(--panel-edge-gap) + 1rem);
@@ -349,6 +349,7 @@ html.is-boot-loading .lead-form__select-menu {
   grid-column: 1;
   align-self: start;
   min-width: 0;
+  max-width: min(46rem, 56%);
   display: flex;
   flex-direction: column;
   gap: clamp(1.25rem, 3vh, 2.25rem);
@@ -428,6 +429,132 @@ html.is-boot-loading .lead-form__select-menu {
   transform: translateY(-1px);
 }
 
+/* ---------- Email CTA strip (below hero) ----------
+   The lead form was lifted out of the hero into a full-width band so the hero
+   text zone is no longer shared with the product render. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.email-cta {
+  position: relative;
+  z-index: 5;
+  padding: clamp(1.75rem, 4.5vw, 3rem) var(--panel-edge-gap);
+  background: linear-gradient(
+    118deg,
+    var(--brand-primary) 0%,
+    var(--brand-primary-600, #2f3270) 58%,
+    color-mix(in srgb, var(--brand-primary) 70%, #6f72d6) 100%
+  );
+}
+
+.email-cta__inner {
+  /* field tokens normally provided by .lead-form — set them directly so the
+     band keeps a clean horizontal layout (the .lead-form class forces a column
+     flow and clipping). */
+  --lead-field-text: #16183c;
+  --lead-field-placeholder: #707689;
+  --lead-field-focus: var(--brand-yellow);
+  color-scheme: light;
+  accent-color: var(--brand-primary);
+  max-width: 74rem;
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(1.1rem, 3.5vw, 2.75rem);
+  overflow: visible;
+}
+
+.email-cta__copy {
+  flex: 1 1 20rem;
+  min-width: 0;
+  color: #fff;
+}
+
+.email-cta__title {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.6vw, 2rem);
+  font-weight: 700;
+  line-height: 1.12;
+  color: #fff;
+}
+
+.email-cta__lead {
+  margin: 0;
+  max-width: 42rem;
+  font-size: clamp(0.92rem, 1.4vw, 1.05rem);
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.email-cta__form {
+  flex: 0 1 30rem;
+  min-width: min(100%, 17rem);
+  display: flex;
+  align-items: stretch;
+  gap: 0.6rem;
+}
+
+.email-cta__field {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.email-cta .lead-form__control {
+  background: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.email-cta .lead-form__control:focus-within {
+  border-color: var(--brand-yellow);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-yellow) 45%, transparent);
+}
+
+.email-cta .lead-form__field input {
+  padding: 0.82rem 1.1rem;
+}
+
+.email-cta .lead-form__submit {
+  width: auto;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  padding: 0.82rem 1.6rem;
+  background: var(--brand-yellow);
+  border-color: var(--brand-yellow);
+  color: #16183c;
+}
+
+.email-cta .lead-form__submit:hover {
+  background: #ffca3f;
+  border-color: #ffca3f;
+}
+
+@media (max-width: 560px) {
+  .email-cta__form {
+    flex-direction: column;
+    flex-basis: 100%;
+    width: 100%;
+  }
+
+  .email-cta .lead-form__submit {
+    width: 100%;
+  }
+}
+
 .hero-panel {
   grid-column: 2;
   justify-self: end;
@@ -443,13 +570,13 @@ html.is-boot-loading .lead-form__select-menu {
    with the centered product render. */
 @media (min-width: 721px) and (max-width: 1023px) {
   .split {
-    grid-template-columns: minmax(0, 1fr) min(46vw, 22rem);
+    grid-template-columns: minmax(0, 1fr);
     gap: clamp(1rem, 3vw, 2rem);
     padding-top: clamp(5.5rem, 12vh, 7.5rem);
   }
 
   .hero-copy {
-    max-width: 32rem;
+    max-width: min(32rem, 64%);
   }
 
   .split-headline {
@@ -2250,7 +2377,7 @@ html.is-boot-loading .lead-form__select-menu {
   grid-template-rows: minmax(0, 3fr) minmax(0, 2fr);
   grid-template-areas:
     "a e c"
-    "b e d";
+    "b f d";
   gap: var(--bento-gap);
 }
 
@@ -2326,6 +2453,29 @@ html.is-boot-loading .lead-form__select-menu {
   background: #fff;
 }
 
+.bento-showcase__cell--f {
+  grid-area: f;
+  background: #fff;
+}
+
+.bento-showcase__media--telos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background: linear-gradient(150deg, #1a264c 0%, #2f3f74 55%, #4256a0 100%);
+}
+
+.bento-showcase__plate-name {
+  font-family: "Rajdhani", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 1;
+}
+
 .bento-showcase__cell:has(.bento-showcase__img) {
   background: #fff;
 }
@@ -2359,13 +2509,9 @@ html.is-boot-loading .lead-form__select-menu {
     grid-template-rows: repeat(4, minmax(8rem, 14vw));
     grid-template-areas:
       "a e"
-      "b e"
+      "b f"
       "c c"
       "d d";
-  }
-
-  .bento-showcase__cell--e {
-    min-height: calc(((100vw - var(--bento-gap)) / 2) * 8 / 5);
   }
 }
 
@@ -2386,7 +2532,8 @@ html.is-boot-loading .lead-form__select-menu {
   .bento-showcase__cell--b,
   .bento-showcase__cell--c,
   .bento-showcase__cell--d,
-  .bento-showcase__cell--e {
+  .bento-showcase__cell--e,
+  .bento-showcase__cell--f {
     grid-area: auto;
   }
 
@@ -3217,7 +3364,8 @@ html.is-boot-loading .lead-form__select-menu {
   .bento-showcase--app-grid .bento-showcase__cell--b,
   .bento-showcase--app-grid .bento-showcase__cell--c,
   .bento-showcase--app-grid .bento-showcase__cell--d,
-  .bento-showcase--app-grid .bento-showcase__cell--e {
+  .bento-showcase--app-grid .bento-showcase__cell--e,
+  .bento-showcase--app-grid .bento-showcase__cell--f {
     grid-area: auto;
   }
 
