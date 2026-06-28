@@ -35,7 +35,9 @@
     ? document.fonts.ready.catch(() => {})
     : Promise.resolve();
 
-  const heroImageSrc = "assets/hero-perple.png";
+  const heroImageSrc = window.matchMedia("(max-width: 720px)").matches
+    ? "assets/hero/hero-1080×720.png"
+    : "assets/hero-perple.png";
   const heroImageReady = new Promise((resolve) => {
     const img = new Image();
     img.addEventListener("load", () => resolve(), { once: true });
