@@ -1506,25 +1506,30 @@ html.is-boot-loading .lead-form__select-menu {
 }
 
 .lead-form__toast {
-  --panel-tint-color: #cac6d2;
-  --panel-dim-strength: 16;
-  --panel-text-color: #413546;
-  --left-glass-shadow: 20;
-  --left-glass-backdrop-filter: blur(18px) saturate(132%) contrast(109%);
   position: fixed;
   z-index: 10000;
-  padding: 0.7rem 1.1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.72rem 1.15rem;
   border-radius: 999px;
   font-family: inherit;
-  font-size: 0.82rem;
-  font-weight: 500;
-  color: var(--panel-text-color, #413546);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.2;
   white-space: nowrap;
+  background: #1f7a4d;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 12px 30px -10px rgba(0, 0, 0, 0.45),
+    0 4px 12px -6px rgba(0, 0, 0, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.22);
   opacity: 0;
   pointer-events: none;
   transform: translateY(-0.65rem);
   transition: opacity 0.32s ease, transform 0.32s ease;
-  max-width: min(90vw, 20rem);
+  max-width: min(90vw, 24rem);
   text-align: center;
 }
 
@@ -1533,10 +1538,28 @@ html.is-boot-loading .lead-form__select-menu {
   transform: translateY(0);
 }
 
+.lead-form__toast-icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.05rem;
+  height: 1.05rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+}
+
+.lead-form__toast-text {
+  white-space: normal;
+}
+
 .lead-form__toast--error {
-  --panel-tint-color: #f3c9c9;
-  --panel-text-color: #6a1f1f;
-  color: var(--panel-text-color, #6a1f1f);
+  background: #c0392b;
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
 }
 
 @keyframes lead-form-submit-shake {

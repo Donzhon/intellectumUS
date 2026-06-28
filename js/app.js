@@ -1368,30 +1368,13 @@ const isLeadEmailValid = () =>
   Boolean(leadEmailInput?.value.trim() && leadEmailInput.checkValidity());
 
 let leadFormToast = null;
+let leadFormToastText = null;
+let leadFormToastIcon = null;
 let leadFormToastTimer = null;
-
-const LEAD_TOAST_GLASS_VARS = [
-  "--panel-tint-color",
-  "--panel-dim-strength",
-  "--panel-text-color",
-  "--left-glass-shadow",
-  "--left-glass-backdrop-filter",
-];
 
 const positionLeadFormToast = () => {
   if (!leadFormToast) {
     return;
-  }
-
-  const glassHost = siteActions || leadSubmitBtn;
-  if (glassHost) {
-    const hostStyle = getComputedStyle(glassHost);
-    LEAD_TOAST_GLASS_VARS.forEach((prop) => {
-      const value = hostStyle.getPropertyValue(prop);
-      if (value) {
-        leadFormToast.style.setProperty(prop, value);
-      }
-    });
   }
 
   const gap = 12;
@@ -1441,16 +1424,30 @@ const showLeadFormToast = (type = "success") => {
 
   if (!leadFormToast) {
     leadFormToast = document.createElement("div");
-    leadFormToast.className = "lead-form__toast liquid-glass";
+    leadFormToast.className = "lead-form__toast";
     leadFormToast.setAttribute("role", "status");
     leadFormToast.setAttribute("aria-live", "polite");
+
+    leadFormToastIcon = document.createElement("span");
+    leadFormToastIcon.className = "lead-form__toast-icon";
+    leadFormToastIcon.setAttribute("aria-hidden", "true");
+
+    leadFormToastText = document.createElement("span");
+    leadFormToastText.className = "lead-form__toast-text";
+
+    leadFormToast.append(leadFormToastIcon, leadFormToastText);
     document.body.appendChild(leadFormToast);
   }
 
   leadFormToast.classList.toggle("lead-form__toast--error", type === "error");
   leadFormToast.setAttribute("role", type === "error" ? "alert" : "status");
   leadFormToast.setAttribute("aria-live", type === "error" ? "assertive" : "polite");
-  leadFormToast.textContent = translate(leadFormToastKey);
+  if (leadFormToastIcon) {
+    leadFormToastIcon.textContent = type === "error" ? "!" : "\u2713";
+  }
+  if (leadFormToastText) {
+    leadFormToastText.textContent = translate(leadFormToastKey);
+  }
   leadFormToast.hidden = false;
   leadFormToast.classList.remove("is-visible");
   positionLeadFormToast();
@@ -1471,9 +1468,9 @@ const showLeadFormToast = (type = "success") => {
 const showLeadFormSuccess = () => showLeadFormToast("success");
 
 document.addEventListener("site-language-change", () => {
-  if (leadFormToast?.classList.contains("is-visible")) {
+  if (leadFormToast?.classList.contains("is-visible") && leadFormToastText) {
     const translate = window.SiteI18n?.t ?? ((key) => key);
-    leadFormToast.textContent = translate(leadFormToastKey);
+    leadFormToastText.textContent = translate(leadFormToastKey);
   }
 });
 
