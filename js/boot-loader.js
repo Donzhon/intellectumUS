@@ -1,5 +1,5 @@
 /* First-visit boot screen for the home page.
-   Shows a short loading screen (1–2.5s) while the intro video and fonts
+   Shows a short loading screen (1–2.5s) while the hero image and fonts
    warm up, so the hero never appears with a black canvas or unstyled text. */
 (() => {
   const STORAGE_KEY = "intellectum-us-index-boot-v1";
@@ -35,24 +35,17 @@
     ? document.fonts.ready.catch(() => {})
     : Promise.resolve();
 
-  const introVideo = document.querySelector(".bg-video");
-  const videoReady = new Promise((resolve) => {
-    if (!introVideo) {
-      resolve();
-      return;
-    }
-
-    if (introVideo.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-      resolve();
-      return;
-    }
-
-    const done = () => resolve();
-    introVideo.addEventListener("loadeddata", done, { once: true });
-    introVideo.addEventListener("error", done, { once: true });
+  const heroImageSrc = window.matchMedia("(max-width: 720px)").matches
+    ? "assets/intellectumus-mob.jpg"
+    : "assets/intellectumuc-pc.jpg";
+  const heroImageReady = new Promise((resolve) => {
+    const img = new Image();
+    img.addEventListener("load", () => resolve(), { once: true });
+    img.addEventListener("error", () => resolve(), { once: true });
+    img.src = heroImageSrc;
   });
 
-  const assetsReady = Promise.all([fontsReady, videoReady]);
+  const assetsReady = Promise.all([fontsReady, heroImageReady]);
 
   let finished = false;
 

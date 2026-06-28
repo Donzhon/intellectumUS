@@ -48,21 +48,22 @@
         }
       })();
     </script>
-    <link rel="preload" as="video" href="assets/video/nodi-in.mp4" media="(min-width: 721px)" />
+    <link rel="preload" as="image" href="assets/intellectumuc-pc.jpg" media="(min-width: 721px)" />
+    <link rel="preload" as="image" href="assets/intellectumus-mob.jpg" media="(max-width: 720px)" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;1,500&family=Rajdhani:wght@600;700&family=Source+Serif+4:ital,wght@1,400;1,500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Nunito:wght@400;500;600;700&family=Source+Serif+4:ital,wght@1,400;1,500&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body class="bloom-page">
+  <body class="bloom-page is-nav-merged">
     <div class="boot-screen" id="boot-screen" hidden aria-live="polite" aria-label="Loading">
       <img class="boot-screen__logo" src="assets/icon/intellectum.svg" alt="" />
       <div class="boot-screen__spinner" aria-hidden="true"></div>
     </div>
-    <div class="site-chrome" data-nav-merge="auto">
+    <div class="site-chrome" data-nav-merge="always">
       <a class="site-brand liquid-glass brand" href="/" aria-label="IntellectumUS — Home">
         <span class="brand-mark" aria-hidden="true">
           <img src="assets/icon/intellectum.svg" alt="" />
@@ -91,11 +92,29 @@
               </svg>
             </button>
             <ul class="site-nav__dropdown liquid-glass">
-              <li><a href="#" data-i18n="nav.intellectum">Intellectum</a></li>
-              <li><a href="#" data-i18n="nav.nodi">Nodi</a></li>
+              <li><a href="/intellectum" data-i18n="nav.intellectum">Intellectum</a></li>
+              <li><a href="/nodi" data-i18n="nav.nodi">Nodi</a></li>
+              <li><a href="/telos">TELOS</a></li>
               <li><a href="#" data-i18n="nav.iot">IoT Board</a></li>
               <li><a href="#" data-i18n="nav.equipment">School Equipments</a></li>
             </ul>
+          </li>
+          <li>
+            <a class="site-nav__link" href="/#bento-showcase" data-i18n-aria-label="nav.solutions" aria-label="Solutions">
+              <svg class="site-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m12 2 3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z" />
+              </svg>
+              <span data-i18n="nav.solutions">Solutions</span>
+            </a>
+          </li>
+          <li>
+            <a class="site-nav__link" href="/#learning-labs" data-i18n-aria-label="nav.schools" aria-label="For Schools">
+              <svg class="site-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M22 10 12 5 2 10l10 5 10-5Z" />
+                <path d="M6 12v5c0 1 2.5 3 6 3s6-2 6-3v-5" />
+              </svg>
+              <span data-i18n="nav.schools">For Schools</span>
+            </a>
           </li>
           <li>
             <a class="site-nav__link" href="/partners" data-i18n-aria-label="nav.partners" aria-label="For Partners">
@@ -118,6 +137,24 @@
               <span data-i18n="nav.about">About us</span>
             </a>
           </li>
+          <li>
+            <a class="site-nav__link" href="/#teacher-toolkit" data-i18n-aria-label="nav.resources" aria-label="Resources">
+              <svg class="site-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" />
+              </svg>
+              <span data-i18n="nav.resources">Resources</span>
+            </a>
+          </li>
+          <li>
+            <a class="site-nav__link" href="/#site-footer" data-i18n-aria-label="nav.contact" aria-label="Contact">
+              <svg class="site-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2Z" />
+                <path d="m22 6-10 7L2 6" />
+              </svg>
+              <span data-i18n="nav.contact">Contact</span>
+            </a>
+          </li>
         </ul>
       </nav>
     </div>
@@ -125,29 +162,31 @@
     <div class="hero-stage">
       <video
         class="bg-video is-active"
-        autoplay
         muted
         playsinline
-        preload="auto"
-        poster="assets/video/intellectum.jpg"
+        preload="none"
+        poster="assets/intellectumuc-pc.jpg"
         disablepictureinpicture
         disableremoteplayback
         controlslist="nodownload nofullscreen noremoteplayback"
-        src="assets/video/nodi-in.mp4"
         aria-hidden="true"
       ></video>
       <video
         class="bg-video"
         muted
         playsinline
-        preload="auto"
-        poster="assets/video/intellectum.jpg"
+        preload="none"
+        poster="assets/intellectumuc-pc.jpg"
         disablepictureinpicture
         disableremoteplayback
         controlslist="nodownload nofullscreen noremoteplayback"
         aria-hidden="true"
       ></video>
       <canvas class="bg-canvas" aria-hidden="true"></canvas>
+      <picture class="hero-art" aria-hidden="true">
+        <source media="(max-width: 720px)" srcset="assets/intellectumus-mob.jpg" />
+        <img class="hero-art__img" src="assets/intellectumuc-pc.jpg" alt="" fetchpriority="high" />
+      </picture>
       <div class="hero-stage__overlay" aria-hidden="true"></div>
 
       <div class="site-actions liquid-glass">
@@ -348,35 +387,19 @@
       </div>
 
       <div class="split">
-      <h1 class="split-headline" id="site-hero-headline">
-        <span class="split-headline__line" data-i18n="hero.nodi.1">Innovations in</span>
-        <span class="split-headline__line" data-i18n="hero.nodi.2">School Education</span>
-      </h1>
-      <h1
-        class="split-headline split-headline--mirror"
-        id="site-hero-headline-mirror"
-        aria-hidden="true"
-      >
-        <span class="split-headline__line" data-i18n="hero.intellectum.1">Develop your personal</span>
-        <span class="split-headline__line" data-i18n="hero.intellectum.2">intelligence</span>
-      </h1>
-      <div class="left-content-group">
-      <div class="left-content liquid-glass">
-          <header class="top-nav">
-            <a class="brand" href="/">
-              <span class="brand-mark" aria-hidden="true">
-                <img src="assets/icon/intellectum.svg" alt="" />
-              </span>
-              <span class="brand-text">IntellectumUS</span>
-            </a>
-          </header>
+        <div class="hero-copy">
+          <h1 class="split-headline" id="site-hero-headline">
+            <span class="split-headline__line" data-i18n="hero.nodi.1">Innovations in</span>
+            <span class="split-headline__line" data-i18n="hero.nodi.2">School Education</span>
+          </h1>
+          <div class="hero-cta">
+            <a class="hero-btn hero-btn--ghost" href="/partners" data-i18n="hero.cta.partner">Partner With Us</a>
+            <a class="hero-btn hero-btn--solid" href="#bento-showcase" data-i18n="hero.cta.explore">Explore Solutions</a>
+          </div>
+        </div>
 
-          <section class="lead-form" aria-labelledby="lead-form-title">
-            <h1 id="lead-form-title" class="lead-form__title" data-i18n="form.nodi.title">Nodi Ecosystem</h1>
-            <p class="lead-form__lead" data-i18n="form.nodi.lead">
-              Stepper is an educational IoT device that demonstrates how code transforms into motion using
-              magnetic force.
-            </p>
+        <aside class="hero-panel left-content liquid-glass">
+          <section class="lead-form">
             <form id="lead-form-body" class="lead-form__body" method="post">
               <label class="lead-form__field">
                 <span class="lead-form__control liquid-glass">
@@ -391,95 +414,13 @@
                   />
                 </span>
               </label>
-              <div class="lead-form__field lead-form__field--select">
-                <label class="lead-form__select-label">
-                  <span class="lead-form__control liquid-glass">
-                    <span class="lead-form__select" data-lead-select>
-                      <button
-                        type="button"
-                        class="lead-form__select-trigger"
-                        aria-haspopup="listbox"
-                        aria-expanded="false"
-                        aria-controls="lead-location-listbox"
-                        id="lead-location-trigger"
-                      >
-                        <span class="lead-form__select-value">US - United States</span>
-                        <svg
-                          class="lead-form__select-caret"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          aria-hidden="true"
-                        >
-                          <polyline points="6 9 12 15 18 9" />
-                        </svg>
-                      </button>
-                      <select class="lead-form__select-native" name="location" aria-label="Location" tabindex="-1"></select>
-                    </span>
-                  </span>
-                </label>
+              <div class="lead-form__actions">
+                <button class="lead-form__submit" type="submit" form="lead-form-body" data-i18n="form.submit">Submit request</button>
               </div>
-              <label class="lead-form__field lead-form__field--comment">
-                <span class="lead-form__control lead-form__control--area liquid-glass">
-                  <textarea
-                    name="comment"
-                    rows="4"
-                    placeholder="Comments about product..."
-                    aria-label="Comment"
-                    data-i18n-placeholder="form.comment"
-                    data-i18n-aria-label="form.comment"
-                  ></textarea>
-                </span>
-              </label>
-              <fieldset class="lead-form__reason">
-                <legend data-i18n="form.reasonLegend">Why you need it?</legend>
-                <label><input type="radio" name="reason" value="personal" checked /> <span data-i18n="form.reasonPersonal">Personal use</span></label>
-                <label><input type="radio" name="reason" value="school" /> <span data-i18n="form.reasonSchool">For school</span></label>
-                <label><input type="radio" name="reason" value="reselling" /> <span data-i18n="form.reasonReselling">For reselling</span></label>
-                <label><input type="radio" name="reason" value="other" /> <span data-i18n="form.reasonOther">Other</span></label>
-              </fieldset>
             </form>
           </section>
-          <div class="lead-form__actions">
-            <button class="lead-form__submit" type="submit" form="lead-form-body" data-i18n="form.submit">Submit request</button>
-          </div>
-
+        </aside>
       </div>
-      <button class="hero-panel-arrow" type="button" data-dir="1" data-i18n-aria-label="gallery.next" aria-label="Next product">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polyline points="9 18 15 12 9 6" />
-        </svg>
-      </button>
-      </div>
-      </div>
-
-      <div class="product-gallery" data-i18n-aria-label="gallery.products" aria-label="Products">
-        <button class="product-gallery__arrow" type="button" data-dir="-1" data-i18n-aria-label="gallery.prev" aria-label="Previous product">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
-        </button>
-        <ul class="product-gallery__track">
-          <li class="product-gallery__card liquid-glass is-active">
-            <img class="product-gallery__img" src="assets/nodi.png" alt="Nodi" />
-          </li>
-          <li class="product-gallery__card liquid-glass">
-            <img class="product-gallery__img" src="assets/intellectum.png" alt="Intellectum" />
-          </li>
-          <li class="product-gallery__card liquid-glass">
-            <img class="product-gallery__img" src="assets/neyri.png" alt="Neyri" />
-          </li>
-        </ul>
-        <button class="product-gallery__arrow" type="button" data-dir="1" data-i18n-aria-label="gallery.next" aria-label="Next product">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="9 18 15 12 9 6" />
-          </svg>
-        </button>
-      </div>
-    </div>
 
     <section
       id="bento-showcase"
@@ -513,10 +454,12 @@
         </div>
       </div>
       <div class="bento-showcase__grid">
-        <a class="bento-showcase__cell bento-showcase__cell--a" href="#" data-i18n-aria-label="categories.cta" aria-label="Learn More">
+        <a class="bento-showcase__cell bento-showcase__cell--a" href="/intellectum" data-i18n-aria-label="categories.cta" aria-label="Learn More">
           <div class="bento-showcase__media">
             <img
               class="bento-showcase__img"
+              loading="lazy"
+              decoding="async"
               src="assets/intellectum_25-24.png"
               alt="Intellectum"
               data-i18n-alt="categories.intellectum.title"
@@ -530,7 +473,7 @@
         </a>
         <a class="bento-showcase__cell bento-showcase__cell--b" href="#">
           <div class="bento-showcase__media">
-            <img class="bento-showcase__img" src="assets/neyri_25-16.png" alt="Neyri" data-i18n-alt="categories.neyri.title" />
+            <img class="bento-showcase__img" loading="lazy" decoding="async" src="assets/neyri_25-16.png" alt="Neyri" data-i18n-alt="categories.neyri.title" />
           </div>
           <div class="bento-showcase__body">
             <span class="bento-showcase__name" data-i18n="categories.neyri.title">Neyri</span>
@@ -538,10 +481,12 @@
             <span class="bento-showcase__cta" data-i18n="categories.cta">Learn More ></span>
           </div>
         </a>
-        <a class="bento-showcase__cell bento-showcase__cell--c" href="#" data-i18n-aria-label="categories.cta" aria-label="Learn More">
+        <a class="bento-showcase__cell bento-showcase__cell--c" href="/nodi" data-i18n-aria-label="categories.cta" aria-label="Learn More">
           <div class="bento-showcase__media">
             <img
               class="bento-showcase__img"
+              loading="lazy"
+              decoding="async"
               src="assets/nodi_25-24.png"
               alt="Nodi Ecosystem"
               data-i18n-alt="categories.nodi.title"
@@ -557,6 +502,8 @@
           <div class="bento-showcase__media">
             <img
               class="bento-showcase__img"
+              loading="lazy"
+              decoding="async"
               src="assets/labo_25-16.png"
               alt="School Equipments"
               data-i18n-alt="categories.equipment.title"
@@ -572,6 +519,8 @@
           <div class="bento-showcase__media">
             <img
               class="bento-showcase__img"
+              loading="lazy"
+              decoding="async"
               src="assets/pasco_5-8.png"
               alt="Pasco"
               data-i18n-alt="categories.pasco.title"
@@ -586,53 +535,92 @@
       </div>
     </section>
 
-    <section id="learning-labs" class="land-section land-section--mist" aria-labelledby="learning-labs-title">
-      <div class="land-section__inner">
-        <p class="land-section__eyebrow" data-i18n="land.learning.eyebrow">01 · Learning</p>
-        <h2 class="land-section__title" id="learning-labs-title" data-i18n="land.learning.title">Learning Labs</h2>
-        <p class="land-section__lead" data-i18n="land.learning.lead">
-          Hands-on digital labs where students explore STEM, design, and AI through guided simulations
-          and real-time feedback.
-        </p>
-        <ul class="land-section__list">
-          <li data-i18n="land.learning.item1">Adaptive lesson paths for grades 6–12</li>
-          <li data-i18n="land.learning.item2">Collaborative whiteboards and group projects</li>
-          <li data-i18n="land.learning.item3">Progress dashboards for teachers and parents</li>
-        </ul>
-        <a class="land-section__cta" href="#teacher-toolkit" data-i18n="land.learning.cta">Explore labs</a>
-      </div>
-      <div class="land-section__visual land-section__visual--grid" aria-hidden="true">
-        <span></span><span></span><span></span><span></span>
+    <section id="teacher-toolkit" class="land-feature land-feature--mist" aria-labelledby="featured-solutions-title">
+      <div class="land-feature__inner">
+        <header class="land-feature__head">
+          <h2 class="land-feature__title" id="featured-solutions-title">Featured Solutions</h2>
+          <p class="land-feature__subtitle">Learning Experiences Enhanced by Insight</p>
+        </header>
+        <div class="land-feature__grid">
+          <article class="land-feature__card liquid-glass">
+            <p class="land-feature__card-kicker">Intellectum + Neiry</p>
+            <h3 class="land-feature__card-title">Develop Skills Through Play. Understand Learning Through Data.</h3>
+            <p class="land-feature__card-text">
+              Intellectum develops essential cognitive and social skills through structured game-based
+              learning. Neiry can complement selected activities with insights into focus, engagement,
+              fatigue, stress, and response patterns.
+            </p>
+          </article>
+          <article class="land-feature__card liquid-glass">
+            <p class="land-feature__card-kicker">Nodi + Neiry</p>
+            <h3 class="land-feature__card-title">Make STEM Visible. Understand Learning Through Data.</h3>
+            <p class="land-feature__card-text">
+              Nodi makes physics, coding, robotics, motion, and engineering visible through hands-on
+              learning. Neiry can complement selected STEM activities with insights into engagement,
+              focus, and response to task complexity.
+            </p>
+          </article>
+          <article class="land-feature__card liquid-glass">
+            <p class="land-feature__card-kicker">TELOS</p>
+            <h3 class="land-feature__card-title">Turn Observation Into Growth.</h3>
+            <p class="land-feature__card-text">
+              TELOS helps school leaders turn classroom observations into clearer feedback, targeted
+              professional development, and measurable instructional improvement.
+            </p>
+          </article>
+        </div>
       </div>
     </section>
 
-    <section id="teacher-toolkit" class="land-section land-section--lavender" aria-labelledby="teacher-toolkit-title">
-      <div class="land-section__inner">
-        <p class="land-section__eyebrow" data-i18n="land.teacher.eyebrow">02 · Educators</p>
-        <h2 class="land-section__title" id="teacher-toolkit-title" data-i18n="land.teacher.title">Teacher Toolkit</h2>
-        <p class="land-section__lead" data-i18n="land.teacher.lead">
-          Everything educators need to plan lessons, assess outcomes, and connect with families — in one
-          calm, focused workspace.
-        </p>
-        <ul class="land-section__list">
-          <li data-i18n="land.teacher.item1">Curriculum templates aligned to national standards</li>
-          <li data-i18n="land.teacher.item2">AI-assisted rubrics and assignment builders</li>
-          <li data-i18n="land.teacher.item3">Secure messaging with students and guardians</li>
-        </ul>
-        <button class="land-section__cta land-section__cta--dark" type="button" data-i18n="land.teacher.cta">Request access</button>
+    <section id="learning-labs" class="land-feature land-feature--lavender" aria-labelledby="for-schools-title">
+      <div class="land-feature__inner">
+        <header class="land-feature__head">
+          <h2 class="land-feature__title" id="for-schools-title">For Schools</h2>
+          <p class="land-feature__subtitle">Designed for Implementation, Not Just Delivery</p>
+        </header>
+        <div class="land-feature__body">
+          <p class="land-feature__lead">We support schools from the first conversation through implementation.</p>
+          <ul class="land-section__list land-feature__list">
+            <li>Product selection and solution planning</li>
+            <li>Teacher onboarding and training</li>
+            <li>Curriculum and learning materials</li>
+            <li>Pilot projects and demonstrations</li>
+            <li>Ongoing methodology and implementation support</li>
+          </ul>
+        </div>
       </div>
-      <div class="land-section__stats">
-        <div class="land-stat">
-          <span class="land-stat__value">120+</span>
-          <span class="land-stat__label" data-i18n="land.teacher.stat1">Partner schools</span>
+    </section>
+
+    <section class="land-feature land-feature--mist" aria-labelledby="for-partners-title">
+      <div class="land-feature__inner">
+        <header class="land-feature__head">
+          <h2 class="land-feature__title" id="for-partners-title">For Partners</h2>
+          <p class="land-feature__subtitle">Grow With Intellectum US</p>
+        </header>
+        <div class="land-feature__body">
+          <p class="land-feature__lead">
+            We work with distributors, resellers, schools, learning centers, education groups, and
+            regional representatives.
+          </p>
+          <p class="land-feature__lead">
+            Partners gain access to differentiated educational solutions, commercial terms, sales
+            materials, curriculum resources, training support, and opportunities for long-term market
+            development.
+          </p>
         </div>
-        <div class="land-stat">
-          <span class="land-stat__value">48k</span>
-          <span class="land-stat__label" data-i18n="land.teacher.stat2">Active learners</span>
-        </div>
-        <div class="land-stat">
-          <span class="land-stat__value">98%</span>
-          <span class="land-stat__label" data-i18n="land.teacher.stat3">Satisfaction rate</span>
+      </div>
+    </section>
+
+    <section class="land-feature land-feature--cta" aria-labelledby="build-cta-title">
+      <div class="land-feature__inner land-feature__inner--center">
+        <h2 class="land-feature__title" id="build-cta-title">Let's Build Better Learning Environments</h2>
+        <p class="land-feature__lead">
+          Tell us what you are looking for — a school solution, product information, a pilot, or a
+          distribution partnership.
+        </p>
+        <div class="land-feature__actions">
+          <a class="land-section__cta" href="mailto:info@intellectumus.com">Request Information</a>
+          <a class="land-section__cta land-section__cta--ghost" href="mailto:info@intellectumus.com">Book a Meeting</a>
         </div>
       </div>
     </section>
@@ -653,8 +641,9 @@
         <nav class="site-footer__nav" aria-label="Footer products">
           <h2 class="site-footer__heading" id="site-footer-title" data-i18n="footer.products">Products</h2>
           <ul class="site-footer__list">
-            <li><a href="#" data-i18n="nav.intellectum">Intellectum</a></li>
-            <li><a href="#" data-i18n="nav.nodi">Nodi</a></li>
+            <li><a href="/intellectum" data-i18n="nav.intellectum">Intellectum</a></li>
+            <li><a href="/nodi" data-i18n="nav.nodi">Nodi</a></li>
+            <li><a href="/telos">TELOS</a></li>
             <li><a href="#" data-i18n="nav.iot">IoT Board</a></li>
             <li><a href="#" data-i18n="nav.equipment">School Equipments</a></li>
           </ul>
@@ -711,9 +700,9 @@
       <p class="lead-form__select-empty" hidden data-i18n="search.empty">No countries found</p>
     </div>
 
-    <script src="js/boot-loader.js"></script>
-    <script src="js/countries.js"></script>
-    <script src="js/i18n.js"></script>
-    <script src="js/app.js"></script>
+    <script defer src="js/boot-loader.js"></script>
+    <script defer src="js/countries.js"></script>
+    <script defer src="js/i18n.js"></script>
+    <script defer src="js/app.js"></script>
   </body>
 </html>

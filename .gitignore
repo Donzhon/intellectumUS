@@ -22,3 +22,6 @@ node_modules/
 
 # Cursor local workspace (not project source)
 .cursor/
+
+# Brand source assets (not part of the site)
+assets/Intellectum logoguide (3).pdf

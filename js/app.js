@@ -229,12 +229,15 @@ productsNavToggle?.addEventListener("click", (event) => {
 const DESKTOP_NODI_INTRO_VIDEO = "assets/video/nodi-in.mp4";
 const DESKTOP_NODI_LOOP_VIDEO = "assets/video/nodi-main.mp4";
 const DESKTOP_NODI_EXIT_VIDEO = "assets/video/nodi-intellectum.mp4";
-const DESKTOP_INTELLECTUM_MAIN_IMAGE = "assets/video/intellectum.jpg";
+const DESKTOP_HERO_IMAGE = "assets/intellectumuc-pc.jpg";
+const MOBILE_HERO_IMAGE = "assets/intellectumus-mob.jpg";
+const DESKTOP_INTELLECTUM_MAIN_IMAGE = DESKTOP_HERO_IMAGE;
 const MOBILE_NODI_INTRO_VIDEO = "assets/video/mobile-video/mob-nodi-input.mp4";
 const MOBILE_NODI_LOOP_VIDEO = "assets/video/mobile-video/mob-nodi-2.mp4";
 const MOBILE_NODI_EXIT_VIDEO = "assets/video/mobile-video/mob-nodi-change-intellectum.mp4";
 const MOBILE_INTELLECTUM_EXIT_VIDEO = "assets/video/mobile-video/intellecum-out.mp4";
-const MOBILE_INTELLECTUM_MAIN_IMAGE = "assets/video/mobile-video/intellectum-2.jpg";
+const MOBILE_INTELLECTUM_MAIN_IMAGE = MOBILE_HERO_IMAGE;
+const HERO_VIDEO_ENABLED = false;
 const mobileBackgroundQuery = window.matchMedia?.("(max-width: 720px)");
 const useMobileBackgroundSources = mobileBackgroundQuery?.matches ?? false;
 const pickBackgroundVideo = (desktopSrc, mobileSrc) =>
@@ -243,10 +246,8 @@ const pickBackgroundAsset = pickBackgroundVideo;
 const NODI_INTRO_VIDEO = pickBackgroundVideo(DESKTOP_NODI_INTRO_VIDEO, MOBILE_NODI_INTRO_VIDEO);
 const NODI_LOOP_VIDEO = pickBackgroundVideo(DESKTOP_NODI_LOOP_VIDEO, MOBILE_NODI_LOOP_VIDEO);
 const NODI_EXIT_VIDEO = pickBackgroundVideo(DESKTOP_NODI_EXIT_VIDEO, MOBILE_NODI_EXIT_VIDEO);
-const INTELLECTUM_MAIN_IMAGE = pickBackgroundAsset(
-  DESKTOP_INTELLECTUM_MAIN_IMAGE,
-  MOBILE_INTELLECTUM_MAIN_IMAGE
-);
+const HERO_IMAGE = pickBackgroundAsset(DESKTOP_HERO_IMAGE, MOBILE_HERO_IMAGE);
+const INTELLECTUM_MAIN_IMAGE = HERO_IMAGE;
 const INTELLECTUM_EXIT_VIDEO = useMobileBackgroundSources ? MOBILE_INTELLECTUM_EXIT_VIDEO : null;
 const responsiveBackgroundFallbacks = new Map([
   [MOBILE_NODI_INTRO_VIDEO, DESKTOP_NODI_INTRO_VIDEO],
@@ -263,7 +264,7 @@ const bgCtx = bgCanvas ? bgCanvas.getContext("2d") : null;
 const CROSSFADE_MS = 700;
 const useNativeTouchVideo =
   window.matchMedia?.("(hover: none) and (pointer: coarse)").matches ?? false;
-let currentBackgroundSrc = NODI_INTRO_VIDEO;
+let currentBackgroundSrc = HERO_IMAGE;
 let visibleLayerIndex = 0;
 let isShowingImage = false;
 let isTransitioning = false;
@@ -271,17 +272,12 @@ let failedAttempts = 0;
 let videoDisabled = false;
 let galleryActiveIndex = 0;
 let videoAfterEndSrc = null;
-let intellectumIntroLayoutHook = null;
-let intellectumLayoutOffHook = null;
 const backgroundImages = new Map();
 
 const isImageSrc = (src) => /\.(jpe?g|png|webp|gif)$/i.test(src);
 
-const maybeStartIntellectumLayout = (src) => {
-  if (src === INTELLECTUM_MAIN_IMAGE) {
-    intellectumIntroLayoutHook?.();
-  }
-};
+// Single-product hero: no Nodi/Intellectum layout switch anymore.
+const maybeStartIntellectumLayout = () => {};
 
 const setActiveVideoLayer = (activeLayer) => {
   videoLayers.forEach((layer) => {
@@ -787,40 +783,6 @@ const handleBackgroundEnded = () => {
   }
 };
 
-const onGalleryProductChange = (prevIndex, nextIndex) => {
-  galleryActiveIndex = nextIndex;
-  videoAfterEndSrc = null;
-
-  if (prevIndex === 0 && nextIndex === 1) {
-    videoAfterEndSrc = INTELLECTUM_MAIN_IMAGE;
-    playBackgroundSrc(NODI_EXIT_VIDEO, { force: true });
-    schedulePreloadBackgroundSrc(INTELLECTUM_MAIN_IMAGE);
-    intellectumIntroLayoutHook?.();
-    return;
-  }
-
-  if (nextIndex === 0) {
-    if (prevIndex === 1 && INTELLECTUM_EXIT_VIDEO) {
-      videoAfterEndSrc = NODI_INTRO_VIDEO;
-      playBackgroundSrc(INTELLECTUM_EXIT_VIDEO, { force: true });
-      schedulePreloadBackgroundSrc(NODI_LOOP_VIDEO);
-      intellectumLayoutOffHook?.();
-      return;
-    }
-
-    playBackgroundSrc(NODI_INTRO_VIDEO, { force: true });
-    schedulePreloadBackgroundSrc(NODI_LOOP_VIDEO);
-    intellectumLayoutOffHook?.();
-    return;
-  }
-
-  if (nextIndex === 1 && prevIndex !== 0) {
-    playBackgroundSrc(INTELLECTUM_MAIN_IMAGE, { force: true });
-    schedulePreloadBackgroundSrc(INTELLECTUM_MAIN_IMAGE);
-    intellectumIntroLayoutHook?.();
-  }
-};
-
 const handleVideoError = (failedSrc = currentBackgroundSrc) => {
   const fallbackSrc = responsiveBackgroundFallbacks.get(failedSrc);
 
@@ -894,18 +856,23 @@ if (videoLayers.length > 0 && (bgCtx || useNativeTouchVideo)) {
     });
   });
 
-  const firstLayer = videoLayers[0];
+  if (!HERO_VIDEO_ENABLED) {
+    pauseAllVideoLayers();
+    playBackgroundSrc(HERO_IMAGE, { force: true });
+  } else {
+    const firstLayer = videoLayers[0];
 
-  prepareLayerSrc(firstLayer, NODI_INTRO_VIDEO)
-    .then(() => {
-      isShowingImage = false;
-      currentBackgroundSrc = NODI_INTRO_VIDEO;
-      setActiveVideoLayer(firstLayer);
-      tryPlay(firstLayer);
-      schedulePreloadBackgroundSrc(NODI_LOOP_VIDEO);
-      schedulePreloadBackgroundSrc(INTELLECTUM_MAIN_IMAGE);
-    })
-    .catch(() => handleVideoError(NODI_INTRO_VIDEO));
+    prepareLayerSrc(firstLayer, NODI_INTRO_VIDEO)
+      .then(() => {
+        isShowingImage = false;
+        currentBackgroundSrc = NODI_INTRO_VIDEO;
+        setActiveVideoLayer(firstLayer);
+        tryPlay(firstLayer);
+        schedulePreloadBackgroundSrc(NODI_LOOP_VIDEO);
+        schedulePreloadBackgroundSrc(INTELLECTUM_MAIN_IMAGE);
+      })
+      .catch(() => handleVideoError(NODI_INTRO_VIDEO));
+  }
 
   if (!useNativeTouchVideo) {
     requestAnimationFrame(renderFrame);
@@ -985,105 +952,12 @@ const HEX_COLOR_RE = /^#[0-9A-Fa-f]{6}$/;
 
 const bloomPage = document.querySelector(".bloom-page");
 const heroStage = document.querySelector(".hero-stage");
-const splitHeadline = document.querySelector("#site-hero-headline");
-const splitHeadlineMirror = document.querySelector("#site-hero-headline-mirror");
 const leftContent = document.querySelector(".left-content");
-const leftContentGroup = document.querySelector(".left-content-group");
-const PANEL_LAYOUT_MS = 1100;
-let intellectumLayoutOn = false;
-
-const updateHeroPanelArrowMode = (intellectum) => {
-  const t = window.SiteI18n?.t;
-  document.querySelectorAll(".hero-panel-arrow").forEach((btn) => {
-    btn.dataset.dir = intellectum ? "-1" : "1";
-    const key = intellectum ? "gallery.prev" : "gallery.next";
-    btn.setAttribute("aria-label", t ? t(key) : intellectum ? "Previous product" : "Next product");
-  });
-};
-
-document.addEventListener("site-language-change", () => {
-  const intellectum = heroStage?.classList.contains("is-intellectum") ?? false;
-  updateHeroPanelArrowMode(intellectum);
-  updateLeadFormProduct(intellectum);
-});
-
-const updateHeadlineMirrorVisibility = (intellectum) => {
-  splitHeadline?.setAttribute("aria-hidden", intellectum ? "true" : "false");
-  splitHeadlineMirror?.setAttribute("aria-hidden", intellectum ? "false" : "true");
-};
-
-const updateLeadFormProduct = (intellectum) => {
-  const t = window.SiteI18n?.t;
-  if (!t) {
-    return;
-  }
-
-  const prefix = intellectum ? "form.intellectum" : "form.nodi";
-  const titleEl = document.getElementById("lead-form-title");
-  const leadEl = document.querySelector(".lead-form__lead");
-
-  if (titleEl) {
-    titleEl.dataset.i18n = `${prefix}.title`;
-    titleEl.textContent = t(titleEl.dataset.i18n);
-  }
-
-  if (leadEl) {
-    leadEl.dataset.i18n = `${prefix}.lead`;
-    leadEl.textContent = t(leadEl.dataset.i18n);
-  }
-};
-
-const animatePanelMirror = (enableIntellectum) => {
-  if (!leftContentGroup || !heroStage) {
-    return;
-  }
-
-  const firstRect = leftContentGroup.getBoundingClientRect();
-  heroStage.classList.toggle("is-intellectum", enableIntellectum);
-  updateHeadlineMirrorVisibility(enableIntellectum);
-  updateHeroPanelArrowMode(enableIntellectum);
-  updateLeadFormProduct(enableIntellectum);
-  const lastRect = leftContentGroup.getBoundingClientRect();
-  const invertX = firstRect.left - lastRect.left;
-
-  leftContentGroup.style.transition = "none";
-  leftContentGroup.style.transform = `translateX(${invertX}px)`;
-  leftContentGroup.getBoundingClientRect();
-
-  requestAnimationFrame(() => {
-    leftContentGroup.style.transition = `transform ${PANEL_LAYOUT_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`;
-    leftContentGroup.style.transform = "";
-
-    const cleanup = (event) => {
-      if (event.propertyName !== "transform") {
-        return;
-      }
-
-      leftContentGroup.style.transition = "";
-      leftContentGroup.removeEventListener("transitionend", cleanup);
-    };
-
-    leftContentGroup.addEventListener("transitionend", cleanup);
-  });
-};
-
-const setIntellectumLayout = (active) => {
-  if (!heroStage || intellectumLayoutOn === active) {
-    return;
-  }
-
-  intellectumLayoutOn = active;
-  animatePanelMirror(active);
-};
-
-intellectumIntroLayoutHook = () => setIntellectumLayout(true);
-intellectumLayoutOffHook = () => setIntellectumLayout(false);
 const siteChrome = document.querySelector(".site-chrome");
 const siteBrand = document.querySelector(".site-brand");
 const siteNav = document.querySelector(".site-nav");
 const siteActions = document.querySelector(".site-actions");
 const innerActions = document.querySelector(".inner-actions");
-const productGallery = document.querySelector(".product-gallery");
 const presetSelect = document.getElementById("settings-preset");
 const blurRange = document.getElementById("left-glass-blur");
 const blurValue = document.getElementById("left-glass-blur-value");
@@ -1245,7 +1119,7 @@ const applyLeftGlassSettings = (settings) => {
     settings.blur * 0.5
   )}%)`;
 
-  [leftContent, siteChrome, siteBrand, siteNav, siteActions, innerActions, productGallery].forEach((el) => {
+  [leftContent, siteChrome, siteBrand, siteNav, siteActions, innerActions].forEach((el) => {
     if (!el) {
       return;
     }
@@ -1262,20 +1136,8 @@ const applyLeftGlassSettings = (settings) => {
     leftContent.style.setProperty("--lead-field-opacity", String(settings.leadFieldOpacity));
   }
 
-  if (leftContentGroup) {
-    leftContentGroup.style.setProperty("--panel-text-color", settings.textColor);
-  }
-
   if (bloomPage) {
     bloomPage.style.setProperty("--video-overlay-strength", String(settings.overlay));
-  }
-
-  if (splitHeadline) {
-    splitHeadline.style.setProperty("--hero-text-color", settings.heroTextColor);
-  }
-
-  if (splitHeadlineMirror) {
-    splitHeadlineMirror.style.setProperty("--hero-text-color", settings.heroTextColor);
   }
 
   if (blurRange) {
@@ -1993,16 +1855,14 @@ const refreshNavMergeThreshold = () => {
 const updateSiteScrollUi = () => {
   const pastThreshold = window.scrollY > navMergeScrollThreshold;
 
-  if (productGallery) {
-    productGallery.classList.toggle("is-hidden", pastThreshold);
-  }
-
   if (siteChrome && navMergeMode === "auto") {
     document.body.classList.toggle("is-nav-merged", pastThreshold);
   }
 };
 
-if (siteChrome && navMergeMode === "never") {
+if (siteChrome && navMergeMode === "always") {
+  document.body.classList.add("is-nav-merged");
+} else if (siteChrome && navMergeMode === "never") {
   document.body.classList.remove("is-nav-merged");
 }
 
@@ -2014,7 +1874,8 @@ window.addEventListener("orientationchange", () => {
   updateSiteScrollUi();
 });
 
-if (siteChrome && navMergeMode === "auto") {
+const enableScrollSync = siteChrome && navMergeMode === "auto";
+if (enableScrollSync) {
   window.addEventListener(
     "scroll",
     () => {
@@ -2029,45 +1890,6 @@ if (siteChrome && navMergeMode === "auto") {
     { passive: true }
   );
   updateSiteScrollUi();
-}
-
-/* ---------- Product gallery: arrow selection + hide on scroll ---------- */
-if (productGallery) {
-  const cards = Array.from(productGallery.querySelectorAll(".product-gallery__card"));
-
-  if (cards.length) {
-    let activeIndex = 0;
-
-    const setActive = (index) => {
-      const total = cards.length;
-      const nextIndex = ((index % total) + total) % total;
-
-      if (nextIndex !== activeIndex) {
-        onGalleryProductChange(activeIndex, nextIndex);
-      }
-
-      activeIndex = nextIndex;
-      cards.forEach((card, i) => {
-        card.classList.toggle("is-active", i === activeIndex);
-      });
-    };
-
-    setActive(activeIndex);
-
-    const bindProductStep = (arrow) => {
-      arrow.addEventListener("click", () => {
-        const dir = Number(arrow.dataset.dir) || 1;
-        setActive(activeIndex + dir);
-      });
-    };
-
-    productGallery.querySelectorAll(".product-gallery__arrow").forEach(bindProductStep);
-    document.querySelectorAll(".hero-panel-arrow").forEach(bindProductStep);
-
-    cards.forEach((card, i) => {
-      card.addEventListener("click", () => setActive(i));
-    });
-  }
 }
 
 /* ---------- Bento showcase: mobile layout mode toggle ---------- */
