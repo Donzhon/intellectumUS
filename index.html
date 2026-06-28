@@ -509,14 +509,17 @@
         </a>
         <a class="bento-showcase__cell bento-showcase__cell--e" href="#">
           <div class="bento-showcase__media">
-            <img
-              class="bento-showcase__img"
-              loading="lazy"
-              decoding="async"
-              src="assets/pasco_25-24.png"
-              alt="Pasco"
-              data-i18n-alt="categories.pasco.title"
-            />
+            <picture>
+              <source media="(min-width: 901px)" srcset="assets/pasco/pasco%2025-24.png" />
+              <img
+                class="bento-showcase__img"
+                loading="lazy"
+                decoding="async"
+                src="assets/pasco/pasco11.png"
+                alt="Pasco"
+                data-i18n-alt="categories.pasco.title"
+              />
+            </picture>
           </div>
           <div class="bento-showcase__body">
             <span class="bento-showcase__name" data-i18n="categories.pasco.title">Pasco</span>
