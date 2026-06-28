@@ -2908,6 +2908,12 @@ html.is-boot-loading .lead-form__select-menu {
   background: #fff;
 }
 
+.bento-showcase__media picture {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
 .bento-showcase__img {
   position: absolute;
   inset: 0;
