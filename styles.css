@@ -3196,7 +3196,7 @@ html.is-boot-loading .lead-form__select-menu {
     box-shadow: none;
   }
 
-  /* Index hero: nav pinned to viewport center; brand docks to its left after scroll */
+  /* Index hero: brand + nav in one centered pill cluster after scroll */
   .bloom-page:has(.hero-brand__mark) .site-chrome {
     display: block;
     left: 0;
@@ -3218,35 +3218,75 @@ html.is-boot-loading .lead-form__select-menu {
     display: none;
   }
 
-  .bloom-page:has(.hero-brand__mark) .site-nav {
+  .bloom-page:has(.hero-brand__mark) .site-chrome__cluster {
     position: fixed;
     left: 50%;
     top: max(0.65rem, env(safe-area-inset-top));
-    grid-column: auto;
-    justify-self: auto;
-    transform: translateX(-50%);
     z-index: 101;
-    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    max-width: calc(100vw - 1.25rem);
+    transform: translateX(-50%);
+    pointer-events: auto;
+    border-radius: 999px;
+    isolation: isolate;
     transition:
-      border-radius 0.35s ease,
-      padding 0.35s ease,
+      transform 0.35s ease,
       background 0.35s ease,
-      box-shadow 0.35s ease;
+      box-shadow 0.35s ease,
+      padding 0.35s ease;
   }
 
-  .bloom-page:has(.hero-brand__mark) .site-brand {
-    position: fixed;
-    top: max(0.65rem, env(safe-area-inset-top));
-    left: calc(50% - var(--site-nav-half, 0px));
-    transform: translateX(-100%);
+  .bloom-page:has(.hero-brand__mark).is-nav-merged .site-chrome__cluster {
+    transform: translateX(calc(-50% - var(--brand-half, 0px)));
+    padding: 0.3rem 0.5rem 0.3rem 0.35rem;
+    background: color-mix(
+      in srgb,
+      var(--panel-tint-color) calc(var(--panel-dim-strength) / 100 * 52%),
+      transparent
+    );
+    backdrop-filter: var(--left-glass-backdrop-filter);
+    -webkit-backdrop-filter: var(--left-glass-backdrop-filter);
+    box-shadow:
+      0 calc(var(--left-glass-shadow) * 0.4px) calc(var(--left-glass-shadow) * 1.25px)
+        rgba(0, 0, 0, calc(0.12 + var(--left-glass-shadow) * 0.006)),
+      0 calc(var(--left-glass-shadow) * 0.12px) calc(var(--left-glass-shadow) * 0.45px)
+        rgba(0, 0, 0, calc(0.08 + var(--left-glass-shadow) * 0.004)),
+      inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  }
+
+  .bloom-page:has(.hero-brand__mark).is-nav-merged .site-chrome__cluster::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.4px;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.45) 0%,
+      rgba(255, 255, 255, 0.15) 20%,
+      transparent 40%,
+      transparent 60%,
+      rgba(255, 255, 255, 0.15) 80%,
+      rgba(255, 255, 255, 0.45) 100%
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+
+  .bloom-page:has(.hero-brand__mark) .site-chrome__cluster .site-brand,
+  .bloom-page:has(.hero-brand__mark) .site-chrome__cluster .site-nav {
+    position: static;
+    left: auto;
+    top: auto;
+    transform: none;
     grid-column: auto;
     justify-self: auto;
-    z-index: 101;
+    z-index: 1;
     margin: 0;
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transition: opacity 0.35s ease;
   }
 
   .bloom-page:has(.hero-brand__mark):not(.is-nav-merged) .site-brand,
@@ -3256,37 +3296,34 @@ html.is-boot-loading .lead-form__select-menu {
 
   .bloom-page:has(.hero-brand__mark).is-nav-merged .site-brand {
     display: inline-flex;
-    min-height: var(--mobile-tap-size);
-    padding: 0.1rem 0.45rem 0.1rem 0.2rem;
-    border-radius: 999px 0 0 999px;
+    flex: 0 0 auto;
+    min-height: 0;
+    padding: 0.1rem 0.55rem 0.1rem 0.2rem;
+    margin: 0;
+    border-radius: 0;
     border-right: 1px solid color-mix(in srgb, var(--panel-text-color) 20%, rgba(255, 255, 255, 0.12));
-    background: color-mix(
-      in srgb,
-      var(--panel-tint-color) calc(var(--panel-dim-strength) / 100 * 52%),
-      transparent
-    );
-    backdrop-filter: var(--left-glass-backdrop-filter);
-    -webkit-backdrop-filter: var(--left-glass-backdrop-filter);
-    box-shadow:
-      0 calc(var(--left-glass-shadow) * 0.4px) calc(var(--left-glass-shadow) * 1.25px)
-        rgba(0, 0, 0, calc(0.12 + var(--left-glass-shadow) * 0.006)),
-      inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+  }
+
+  .bloom-page:has(.hero-brand__mark).is-nav-merged .site-brand.liquid-glass::before,
+  .bloom-page:has(.hero-brand__mark).is-nav-merged .site-brand.liquid-glass::after,
+  .bloom-page:has(.hero-brand__mark).is-nav-merged .site-nav.liquid-glass::before,
+  .bloom-page:has(.hero-brand__mark).is-nav-merged .site-nav.liquid-glass::after {
+    display: none;
   }
 
   .bloom-page:has(.hero-brand__mark).is-nav-merged .site-nav {
-    border-radius: 0 999px 999px 0;
-    padding-left: 0.15rem;
-    background: color-mix(
-      in srgb,
-      var(--panel-tint-color) calc(var(--panel-dim-strength) / 100 * 52%),
-      transparent
-    );
-    backdrop-filter: var(--left-glass-backdrop-filter);
-    -webkit-backdrop-filter: var(--left-glass-backdrop-filter);
-    box-shadow:
-      0 calc(var(--left-glass-shadow) * 0.4px) calc(var(--left-glass-shadow) * 1.25px)
-        rgba(0, 0, 0, calc(0.12 + var(--left-glass-shadow) * 0.006)),
-      inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    flex: 0 0 auto;
+    min-height: 0;
+    padding: 0.1rem 0.2rem 0.1rem 0.15rem;
+    border-radius: 0;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
   }
 
   .site-nav__list {

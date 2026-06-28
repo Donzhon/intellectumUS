@@ -1943,6 +1943,13 @@ const mobileNavQuery = window.matchMedia(`(max-width: ${MOBILE_NAV_MAX_WIDTH}px)
 let navMergeScrollThreshold = window.innerHeight * NAV_MERGE_SCROLL_RATIO;
 let heroBrandInView = true;
 
+if (heroBrandMark && siteChrome && siteBrand && siteNav && !siteChrome.querySelector(".site-chrome__cluster")) {
+  const siteChromeCluster = document.createElement("div");
+  siteChromeCluster.className = "site-chrome__cluster";
+  siteChrome.insertBefore(siteChromeCluster, siteBrand);
+  siteChromeCluster.append(siteBrand, siteNav);
+}
+
 const usesMobileHeroBrandSync = () => Boolean(heroBrandMark && mobileNavQuery.matches);
 
 const refreshNavMergeThreshold = () => {
@@ -1959,7 +1966,7 @@ const updateSiteScrollUi = () => {
   }
 
   document.body.classList.remove("is-hero-brand-in-view");
-  document.documentElement.style.removeProperty("--site-nav-half");
+  document.documentElement.style.removeProperty("--brand-half");
 
   if (siteChrome && navMergeMode === "always") {
     document.body.classList.add("is-nav-merged");
@@ -1973,14 +1980,25 @@ const updateSiteScrollUi = () => {
 
 const syncMobileChromeAnchor = () => {
   if (!usesMobileHeroBrandSync() || !siteNav) {
-    document.documentElement.style.removeProperty("--site-nav-half");
+    document.documentElement.style.removeProperty("--brand-half");
     return;
   }
 
-  document.documentElement.style.setProperty(
-    "--site-nav-half",
-    `${siteNav.getBoundingClientRect().width / 2}px`
-  );
+  const applyBrandHalf = () => {
+    if (document.body.classList.contains("is-nav-merged") && siteBrand) {
+      const brandWidth = siteBrand.getBoundingClientRect().width;
+      if (brandWidth > 0) {
+        document.documentElement.style.setProperty("--brand-half", `${brandWidth / 2}px`);
+        return;
+      }
+    }
+    document.documentElement.style.removeProperty("--brand-half");
+  };
+
+  applyBrandHalf();
+  if (document.body.classList.contains("is-nav-merged")) {
+    window.requestAnimationFrame(applyBrandHalf);
+  }
 };
 
 let siteScrollTicking = false;
