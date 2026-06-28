@@ -3896,6 +3896,125 @@ html.is-boot-loading .lead-form__select-menu {
   background: var(--bloom-accent);
 }
 
+/* ---------- Nodi Ecosystem: connected stage cards ---------- */
+.feature-grid--stages {
+  --stage-gap: clamp(1rem, 2.5vw, 1.6rem);
+  counter-reset: stage;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--stage-gap);
+  align-items: stretch;
+}
+
+.feature-grid--stages .feature-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 1.35rem;
+  padding: clamp(1.6rem, 2.6vw, 2.1rem);
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    color-mix(in srgb, var(--bloom-surface) 38%, #ffffff) 100%
+  );
+  border: 1px solid color-mix(in srgb, var(--bloom-ink) 8%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 14px 34px rgba(65, 53, 70, 0.1);
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+/* Top accent bar */
+.feature-grid--stages .feature-card::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--bloom-accent),
+    color-mix(in srgb, var(--bloom-accent) 40%, #7a5cff)
+  );
+  opacity: 0.9;
+}
+
+.feature-grid--stages .feature-card:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--bloom-accent) 35%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 24px 52px rgba(65, 53, 70, 0.18);
+}
+
+/* Numbered stage badge before the eyebrow label */
+.feature-grid--stages .feature-card__eyebrow {
+  counter-increment: stage;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0 0 0.95rem;
+  font-size: 0.78rem;
+  color: color-mix(in srgb, var(--bloom-ink) 58%, transparent);
+}
+
+.feature-grid--stages .feature-card__eyebrow::before {
+  content: counter(stage, decimal-leading-zero);
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: none;
+  border-radius: 0.85rem;
+  font-family: "Rajdhani", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  background: linear-gradient(
+    140deg,
+    var(--bloom-accent),
+    color-mix(in srgb, var(--bloom-accent) 45%, #6b5cff)
+  );
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--bloom-accent) 35%, transparent);
+}
+
+/* Push the key-areas list to the bottom so cards align */
+.feature-grid--stages .feature-card__sub {
+  margin-top: 1.25rem;
+}
+
+.feature-grid--stages .feature-card__list {
+  margin-top: 0.6rem;
+}
+
+/* Connector chevrons between stages on wide desktop (single row of 4) */
+@media (min-width: 64rem) {
+  .feature-grid--stages .feature-card:not(:nth-child(4n))::before {
+    content: "";
+    position: absolute;
+    top: 3rem;
+    right: calc(var(--stage-gap) * -0.5);
+    width: 0.7rem;
+    height: 0.7rem;
+    border-top: 2px solid color-mix(in srgb, var(--bloom-accent) 70%, transparent);
+    border-right: 2px solid color-mix(in srgb, var(--bloom-accent) 70%, transparent);
+    transform: translate(50%, -50%) rotate(45deg);
+    z-index: 2;
+  }
+}
+
+@media (max-width: 64rem) {
+  .feature-grid--stages {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 36rem) {
+  .feature-grid--stages {
+    grid-template-columns: 1fr;
+  }
+}
+
 .inner-section__note {
   max-width: 42rem;
   margin: clamp(1.5rem, 3vw, 2rem) auto 0;
