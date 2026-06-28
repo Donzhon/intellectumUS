@@ -171,6 +171,21 @@ html.is-boot-loading .lead-form__select-menu {
 
 /* Mobile: portrait art — products in the lower band; lockup sits above. */
 @media (max-width: 720px) {
+  .hero-art {
+    height: var(--hero-mobile-vh, 100svh);
+    max-height: var(--hero-mobile-vh, 100svh);
+    overflow: hidden;
+  }
+
+  .hero-stage__overlay {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    height: var(--hero-mobile-vh, 100svh);
+    max-height: var(--hero-mobile-vh, 100svh);
+  }
+
   .hero-art__img {
     object-position: center bottom;
   }
@@ -3080,22 +3095,11 @@ html.is-boot-loading .lead-form__select-menu {
     height: auto;
   }
 
-  .hero-art {
-    height: 100svh;
-    height: 100dvh;
-  }
-
-  .hero-stage__overlay {
-    height: 100svh;
-    height: 100dvh;
-    bottom: auto;
-  }
-
   .hero-intro {
     display: flex;
     flex-direction: column;
-    min-height: 100svh;
-    max-height: 100svh;
+    min-height: var(--hero-mobile-vh, 100svh);
+    max-height: var(--hero-mobile-vh, 100svh);
   }
 
   .site-chrome {

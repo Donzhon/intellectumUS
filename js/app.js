@@ -231,6 +231,7 @@ const DESKTOP_NODI_LOOP_VIDEO = "assets/video/nodi-main.mp4";
 const DESKTOP_NODI_EXIT_VIDEO = "assets/video/nodi-intellectum.mp4";
 const DESKTOP_HERO_IMAGE = "assets/hero-perple.png";
 const MOBILE_HERO_IMAGE = "assets/hero/full-mob.png";
+const MOBILE_HERO_VH_VAR = "--hero-mobile-vh";
 const DESKTOP_INTELLECTUM_MAIN_IMAGE = DESKTOP_HERO_IMAGE;
 const MOBILE_NODI_INTRO_VIDEO = "assets/video/mobile-video/mob-nodi-input.mp4";
 const MOBILE_NODI_LOOP_VIDEO = "assets/video/mobile-video/mob-nodi-2.mp4";
@@ -240,6 +241,19 @@ const MOBILE_INTELLECTUM_MAIN_IMAGE = MOBILE_HERO_IMAGE;
 const HERO_VIDEO_ENABLED = false;
 const mobileBackgroundQuery = window.matchMedia?.("(max-width: 720px)");
 const useMobileBackgroundSources = mobileBackgroundQuery?.matches ?? false;
+
+const lockMobileHeroViewport = () => {
+  if (!mobileBackgroundQuery?.matches) {
+    document.documentElement.style.removeProperty(MOBILE_HERO_VH_VAR);
+    return;
+  }
+
+  document.documentElement.style.setProperty(MOBILE_HERO_VH_VAR, `${window.innerHeight}px`);
+};
+
+lockMobileHeroViewport();
+window.addEventListener("orientationchange", lockMobileHeroViewport);
+mobileBackgroundQuery?.addEventListener("change", lockMobileHeroViewport);
 const pickBackgroundVideo = (desktopSrc, mobileSrc) =>
   useMobileBackgroundSources ? mobileSrc : desktopSrc;
 const pickBackgroundAsset = pickBackgroundVideo;
