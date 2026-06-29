@@ -4676,6 +4676,13 @@ body.is-scrolling .bloom-page:has(.hero-brand__mark) .site-chrome__cluster .site
 }
 
 @media (min-width: 721px) {
+  .inner-page__hero--telos.inner-page__hero--media {
+    /* 16:9 image at full width — avoid vertical crop on 27–32" screens */
+    min-height: clamp(28rem, 56.25vw, 100svh);
+    background-size: cover;
+    background-position: center center;
+  }
+
   .inner-page__hero--telos::before {
     display: none;
   }
