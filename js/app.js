@@ -1480,13 +1480,6 @@ const showLeadFormToast = (type = "success") => {
 
 const showLeadFormSuccess = () => showLeadFormToast("success");
 
-document.addEventListener("site-language-change", () => {
-  if (leadFormToast?.classList.contains("is-visible") && leadFormToastText) {
-    const translate = window.SiteI18n?.t ?? ((key) => key);
-    leadFormToastText.textContent = translate(leadFormToastKey);
-  }
-});
-
 const playLeadSubmitError = (submitBtn) => {
   if (!submitBtn) {
     return;

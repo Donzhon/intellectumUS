@@ -2099,39 +2099,6 @@ html.is-boot-loading .lead-form__select-menu {
   background: color-mix(in srgb, var(--panel-text-color) 12%, transparent);
 }
 
-.site-lang {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.1rem;
-  padding: 0.12rem;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--panel-text-color) 8%, transparent);
-}
-
-.site-lang__btn {
-  border: none;
-  background: transparent;
-  color: color-mix(in srgb, var(--panel-text-color) 55%, #ffffff);
-  font-family: inherit;
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  line-height: 1;
-  padding: 0.42rem 0.48rem;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.site-lang__btn.is-active {
-  background: color-mix(in srgb, var(--panel-text-color) 16%, #ffffff 12%);
-  color: color-mix(in srgb, var(--panel-text-color) 70%, #ffffff);
-}
-
-.site-lang__btn:hover:not(.is-active) {
-  background: color-mix(in srgb, var(--panel-text-color) 10%, transparent);
-}
-
 .site-actions .nav-menu-wrap {
   display: inline-flex;
   align-items: center;
@@ -3614,18 +3581,6 @@ html.is-boot-loading .lead-form__select-menu {
   .site-actions .menu-pill svg {
     width: var(--mobile-icon-size);
     height: var(--mobile-icon-size);
-  }
-
-  .site-lang {
-    min-height: var(--mobile-tap-size);
-    padding: 0.1rem;
-  }
-
-  .site-lang__btn {
-    min-width: 1.85rem;
-    min-height: calc(var(--mobile-tap-size) - 0.2rem);
-    padding: 0.35rem 0.42rem;
-    font-size: 0.58rem;
   }
 
   .split {
