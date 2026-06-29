@@ -5065,7 +5065,8 @@ html.is-boot-loading .lead-form__select-menu {
     object-position: 72% center;
   }
 
-  .telos-spotlight--analyze .telos-spotlight__visual img {
+  .telos-spotlight--analyze .telos-spotlight__visual img,
+  .telos-spotlight--observe .telos-spotlight__visual img {
     object-position: center center;
   }
 }

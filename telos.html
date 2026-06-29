@@ -286,8 +286,26 @@
                 </li>
               </ul>
             </div>
-            <div class="telos-spotlight__visual telos-spotlight__visual--placeholder" role="img" aria-label="Observe illustration placeholder">
-              <span class="telos-spotlight__visual-label">Observe image</span>
+            <div class="telos-spotlight__visual">
+              <picture>
+                <source
+                  type="image/webp"
+                  srcset="
+                    assets/telos/observe_5-6-480.webp 480w,
+                    assets/telos/observe_5-6-800.webp 800w,
+                    assets/telos/observe_5-6-853.webp 853w
+                  "
+                  sizes="(max-width: 860px) 100vw, min(50vw, 32rem)"
+                />
+                <img
+                  src="assets/telos/observe_5-6.png"
+                  alt="Observer using TELOS on a tablet to evaluate classroom instruction during a live lesson"
+                  width="853"
+                  height="1024"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
             </div>
           </div>
         </div>
