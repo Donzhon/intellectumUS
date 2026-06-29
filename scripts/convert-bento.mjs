@@ -39,9 +39,9 @@ const sources = [
   },
   {
     dir: "assets/telos",
-    input: "develop_1-1.png",
-    prefix: "develop_1-1",
-    widths: [480, 800, 1024],
+    input: "develop_5-6.png",
+    prefix: "develop_5-6",
+    widths: [480, 800, 853],
     fullWebp: true,
   },
   {
