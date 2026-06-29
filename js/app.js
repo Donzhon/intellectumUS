@@ -1134,7 +1134,7 @@ const applyLeftGlassSettings = (settings) => {
   )}%)`;
 
   [leftContent, siteChrome, siteBrand, siteNav, siteActions, innerActions].forEach((el) => {
-    if (!el) {
+    if (!el || el.classList.contains("left-content--inner")) {
       return;
     }
 
@@ -1145,7 +1145,7 @@ const applyLeftGlassSettings = (settings) => {
     el.style.setProperty("--panel-text-color", settings.textColor);
   });
 
-  if (leftContent) {
+  if (leftContent && !leftContent.classList.contains("left-content--inner")) {
     leftContent.style.setProperty("--left-glass-blur", `${settings.blur}px`);
     leftContent.style.setProperty("--lead-field-opacity", String(settings.leadFieldOpacity));
   }

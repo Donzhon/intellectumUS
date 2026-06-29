@@ -467,6 +467,26 @@
         <a class="bento-showcase__cell bento-showcase__cell--b" href="#">
           <div class="bento-showcase__media">
             <picture>
+              <source
+                type="image/webp"
+                media="(min-width: 901px)"
+                srcset="
+                  assets/neiry/neyri_25-16-400.webp 400w,
+                  assets/neiry/neyri_25-16-800.webp 800w,
+                  assets/neiry/neyri_25-16-1200.webp 1200w
+                "
+                sizes="33vw"
+              />
+              <source
+                type="image/webp"
+                media="(max-width: 900px)"
+                srcset="
+                  assets/neiry/neiry-11-400.webp 400w,
+                  assets/neiry/neiry-11-800.webp 800w,
+                  assets/neiry/neiry-11-1200.webp 1200w
+                "
+                sizes="(max-width: 560px) 100vw, 50vw"
+              />
               <source media="(min-width: 901px)" srcset="assets/neiry/neyri_25-16.png" />
               <img
                 class="bento-showcase__img"
@@ -474,6 +494,8 @@
                 decoding="async"
                 src="assets/neiry/neiry%2011.png"
                 alt="Neyri"
+                width="1254"
+                height="1254"
                 data-i18n-alt="categories.neyri.title"
               />
             </picture>
