@@ -49,6 +49,10 @@
   --chrome-actions-reserve: 6.25rem;
 }
 
+.bloom-page:has(.inner-page) {
+  --chrome-actions-reserve: 0;
+}
+
 .bloom-page *,
 .bloom-page *::before,
 .bloom-page *::after {

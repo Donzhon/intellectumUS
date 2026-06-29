@@ -1953,6 +1953,7 @@ const MOBILE_NAV_MAX_WIDTH = 720;
 const navMergeMode = siteChrome?.dataset.navMerge || "auto";
 const heroStageForScroll = document.querySelector(".hero-stage");
 const heroBrandMark = document.querySelector(".hero-brand__mark");
+const isInnerPage = Boolean(document.querySelector(".inner-page"));
 const mobileNavQuery = window.matchMedia(`(max-width: ${MOBILE_NAV_MAX_WIDTH}px)`);
 let navMergeScrollThreshold = window.innerHeight * NAV_MERGE_SCROLL_RATIO;
 let heroBrandInView = true;
@@ -1981,6 +1982,11 @@ const updateSiteScrollUi = () => {
 
   document.body.classList.remove("is-hero-brand-in-view");
   document.documentElement.style.removeProperty("--brand-width");
+
+  if (isInnerPage) {
+    document.body.classList.add("is-nav-merged");
+    return;
+  }
 
   if (siteChrome && navMergeMode === "always") {
     document.body.classList.add("is-nav-merged");
