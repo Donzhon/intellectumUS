@@ -4666,13 +4666,7 @@ html.is-boot-loading .lead-form__select-menu {
   }
 
   .inner-page__hero--telos::before {
-    background: linear-gradient(
-      180deg,
-      rgba(20, 16, 24, 0.42) 0%,
-      rgba(20, 16, 24, 0.12) 38%,
-      rgba(20, 16, 24, 0.55) 72%,
-      rgba(20, 16, 24, 0.9) 100%
-    );
+    display: none;
   }
 
   .inner-page__hero--telos .inner-page__hero-inner {
