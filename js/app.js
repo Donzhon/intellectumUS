@@ -1171,7 +1171,7 @@ const CHROME_LUMINANCE_THRESHOLD = 0.45;
 const CHROME_TEXT_ON_DARK = "#f8f6fa";
 const CHROME_TEXT_ON_LIGHT = "#1a1a1f";
 const CHROME_DARK_SURFACE_SELECTOR =
-  ".site-footer, .email-cta, .hero-stage, .inner-page__hero--dark, .inner-page__hero--media, [data-chrome-surface='dark']";
+  ".site-footer, .email-cta, .inner-page__hero--dark, .inner-page__hero--media, [data-chrome-surface='dark']";
 const CHROME_LIGHT_SURFACE_SELECTOR =
   ".bento-showcase, .land-feature, .land-feature--mist, .land-feature--lavender, .land-feature--cta, " +
   ".inner-section--surface, .inner-section--mist, .telos-how, .telos-how__step, " +
