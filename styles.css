@@ -726,52 +726,24 @@ html.is-boot-loading .lead-form__select-menu {
   }
 }
 
-/* Desktop / tablet landscape: compact first screen — brand lockup + lead form
-   fit above the fold; hero art crops the empty upper band of the desktop render. */
+/* Desktop: keep full-viewport hero art; only stack brand + form so the form
+   bottom sits flush with the screen edge (split no longer consumes 100vh). */
 @media (min-width: 721px) {
-  .hero-stage {
-    --hero-fold-height: clamp(26rem, 68vh, 42rem);
-    min-height: auto;
-  }
-
-  .hero-art {
-    height: var(--hero-fold-height);
-    max-height: var(--hero-fold-height);
-  }
-
-  .hero-stage__overlay {
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: auto;
-    height: var(--hero-fold-height);
-    max-height: var(--hero-fold-height);
-  }
-
   .hero-intro {
     display: flex;
     flex-direction: column;
-    min-height: var(--hero-fold-height);
+    min-height: 100vh;
+    min-height: 100dvh;
   }
 
   .split {
     min-height: 0;
     flex: 0 0 auto;
-    padding:
-      clamp(4.25rem, 8vh, 5.5rem)
-      var(--panel-edge-gap)
-      0.5rem;
   }
 
   .hero-intro > .email-cta {
     flex: 0 0 auto;
     margin-top: auto;
-    padding-top: clamp(0.85rem, 1.8vh, 1.25rem);
-    padding-bottom: clamp(0.85rem, 1.8vh, 1.15rem);
-  }
-
-  .hero-art__img {
-    object-position: center 88%;
   }
 }
 
