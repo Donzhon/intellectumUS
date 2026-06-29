@@ -3665,6 +3665,10 @@ html.is-boot-loading .lead-form__select-menu {
       calc(0.6rem + env(safe-area-inset-bottom));
   }
 
+  .hero-intro > .email-cta {
+    margin-top: auto;
+  }
+
   .email-cta__inner {
     gap: 0.5rem;
   }
