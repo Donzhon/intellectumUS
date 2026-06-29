@@ -134,6 +134,8 @@
   "footer.privacy": "Privacy Policy",
   "footer.terms": "Terms of Use",
   "page.title.about": "About us - intellectumUS",
+  "page.title.privacy": "Privacy Policy - intellectumUS",
+  "page.title.terms": "Terms of Use - intellectumUS",
   "page.title.partners": "For Partners - intellectumUS",
   "about.hero.eyebrow": "Company",
   "about.hero.title": "About us",

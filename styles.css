@@ -5044,6 +5044,88 @@ html.is-boot-loading .lead-form__select-menu {
   }
 }
 
+/* Legal pages (Privacy Policy, Terms of Use) */
+.legal-document {
+  max-width: 46rem;
+  margin-inline: auto;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: rgba(15, 23, 42, 0.88);
+}
+
+.legal-document h2 {
+  margin: 2.25rem 0 0.75rem;
+  font-family: var(--font-display, "Poppins", sans-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: rgba(15, 23, 42, 0.95);
+}
+
+.legal-document h3 {
+  margin: 1.5rem 0 0.5rem;
+  font-family: var(--font-display, "Poppins", sans-serif);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: rgba(15, 23, 42, 0.92);
+}
+
+.legal-document p,
+.legal-document ul {
+  margin: 0 0 1rem;
+}
+
+.legal-document ul {
+  padding-left: 1.35rem;
+}
+
+.legal-document li {
+  margin-bottom: 0.35rem;
+}
+
+.legal-document li ul {
+  margin-top: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.legal-document a {
+  color: var(--bloom-accent, #2563eb);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.legal-document a:hover {
+  color: #1d4ed8;
+}
+
+.legal-document__meta {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: rgba(15, 23, 42, 0.65);
+}
+
+.lead-form__consent {
+  margin: 0 0 0.75rem;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: rgba(15, 23, 42, 0.62);
+}
+
+.lead-form__consent a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.email-cta__form .lead-form__consent {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.email-cta__form .lead-form__consent a {
+  color: rgba(255, 255, 255, 0.85);
+}
+
 @media (max-width: 560px) {
   .site-footer__inner {
     grid-template-columns: 1fr;
