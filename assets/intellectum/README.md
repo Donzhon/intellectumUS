@@ -7,6 +7,7 @@
 | Слот | Где на странице | Реком. размер | Пропорции |
 | --- | --- | --- | --- |
 | `hero.jpg` | Фон Hero (верхний блок) | 1920×1080 | 16:9 |
+| `bento/` | Карточка Products на главной | см. `bento/*.png` | — |
 | `classroom.jpg` | Секция "More Than Educational Games" | 1280×720 | 16:9 |
 | `kit.jpg` | Секция "What Is Included" | 800×600 | 4:3 |
 

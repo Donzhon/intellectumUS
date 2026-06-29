@@ -7,15 +7,15 @@ const DEFAULT_WIDTHS = [400, 800, 1200];
 
 /** @type {{ dir: string; input: string; prefix: string; widths?: number[]; fullWebp?: boolean }[]} */
 const sources = [
-  { dir: "assets", input: "intellectum_25-24.png", prefix: "intellectum_25-24" },
-  { dir: "assets", input: "nodi_25-24.png", prefix: "nodi_25-24" },
-  { dir: "assets", input: "labo_25-16.png", prefix: "labo_25-16" },
-  { dir: "assets/neiry", input: "neyri_25-16.png", prefix: "neyri_25-16" },
-  { dir: "assets/neiry", input: "neiry 11.png", prefix: "neiry-11" },
-  { dir: "assets/pasco", input: "pasco 25-24.png", prefix: "pasco_25-24" },
-  { dir: "assets/pasco", input: "pasco11.png", prefix: "pasco11" },
-  { dir: "assets/telos", input: "telos 1250-800.png", prefix: "telos_1250-800" },
-  { dir: "assets/telos", input: "telos-bento.png", prefix: "telos-bento" },
+  { dir: "assets/intellectum/bento", input: "intellectum_25-24.png", prefix: "intellectum_25-24" },
+  { dir: "assets/nodi/bento", input: "nodi_25-24.png", prefix: "nodi_25-24" },
+  { dir: "assets/labo/bento", input: "labo_25-16.png", prefix: "labo_25-16" },
+  { dir: "assets/neiry/bento", input: "neyri_25-16.png", prefix: "neyri_25-16" },
+  { dir: "assets/neiry/bento", input: "neiry 11.png", prefix: "neiry-11" },
+  { dir: "assets/pasco/bento", input: "pasco 25-24.png", prefix: "pasco_25-24" },
+  { dir: "assets/pasco/bento", input: "pasco11.png", prefix: "pasco11" },
+  { dir: "assets/telos/bento", input: "telos 1250-800.png", prefix: "telos_1250-800" },
+  { dir: "assets/telos/bento", input: "telos-bento.png", prefix: "telos-bento" },
   {
     dir: "assets/hero",
     input: "hero-full.png",
