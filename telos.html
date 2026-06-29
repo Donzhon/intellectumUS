@@ -515,8 +515,26 @@
               </ol>
             </div>
             <div class="split-section__media">
-              <div class="media-frame media-frame--card" data-size="800×600" role="img" aria-label="TELOS workflow illustration placeholder">
-                <span class="media-frame__label">Workflow image</span>
+              <div class="media-frame media-frame--photo media-frame--split">
+                <picture>
+                  <source
+                    type="image/webp"
+                    srcset="
+                      assets/telos/workflow_4-3-400.webp 400w,
+                      assets/telos/workflow_4-3-800.webp 800w,
+                      assets/telos/workflow_4-3-1024.webp 1024w
+                    "
+                    sizes="(max-width: 860px) 100vw, min(50vw, 30rem)"
+                  />
+                  <img
+                    src="assets/telos/workflow_4-3.png"
+                    alt="TELOS connected platform workflow: framework, observations, teacher growth plans, and development hub"
+                    width="1024"
+                    height="768"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
               </div>
             </div>
           </div>

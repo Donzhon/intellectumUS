@@ -13,9 +13,9 @@
 | `observe_5-6.png` | Блок «Observe» | 853×1024 | 5:6 |
 | `analyze_5-6.png` | Блок «Analyze» | 853×1024 | 5:6 |
 | `bento/` | Карточка Products на главной | см. `bento/*.png` | — |
-| `workflow.jpg` | Секция "How TELOS Works" (плейсхолдер) | 800×600 | 4:3 |
+| `workflow_4-3.png` | Секция «How TELOS Works» | 1024×768 | 4:3 |
 
 Форматы: `.png` (мастер) / `.webp` (фон), прозрачные `.png` при необходимости.
 После загрузки можно подставить путь в `telos.html`:
 - Hero: класс `inner-page__hero--telos` (ПК: `hero.webp`, мобилка: `hero-mobile.webp`, на узких экранах `hero-mobile-400.webp`). На мобилке в hero только заголовок внизу; форма — в блоке ниже.
-- Плейсхолдер: заменить блок `.media-frame` на `<img src="assets/telos/workflow.jpg" alt="...">`.
+- Workflow: `assets/telos/workflow_4-3.png` в секции «How TELOS Works».

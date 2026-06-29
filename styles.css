@@ -4887,6 +4887,10 @@ html.is-boot-loading .lead-form__select-menu {
   object-fit: unset;
 }
 
+.split-section__media .media-frame--split {
+  max-width: none;
+}
+
 /* ---------- TELOS: spotlight blocks (Observe / Analyze / Develop) ---------- */
 .telos-spotlight {
   --telos-spotlight-accent: #4f7fd4;
