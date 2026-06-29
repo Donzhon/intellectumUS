@@ -1,0 +1,22 @@
+{
+  "name": "intellectumUS — Educational Technology",
+  "short_name": "intellectumUS",
+  "description": "Educational technology for schools, kindergartens, and STEM classrooms.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3e4193",
+  "lang": "en-US",
+  "icons": [
+    {
+      "src": "assets/icon/intellectum-128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon/intellectum-256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ]
+}
