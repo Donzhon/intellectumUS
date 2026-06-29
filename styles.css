@@ -4189,6 +4189,31 @@ html.is-boot-loading .lead-form__select-menu {
   padding: clamp(3rem, 8vw, 6rem) clamp(1.5rem, 6vw, 5rem);
 }
 
+.inner-lead-panel__inner {
+  display: flex;
+  justify-content: center;
+}
+
+.inner-lead-panel .left-content {
+  width: min(100%, 32rem);
+  max-width: 32rem;
+  max-height: none;
+}
+
+.top-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-width: 0;
+  margin-bottom: 0.35rem;
+}
+
+.left-content.liquid-glass > .top-nav {
+  z-index: 20;
+}
+
 .inner-section__head {
   max-width: 42rem;
   margin: 0 auto clamp(2rem, 5vw, 3.25rem);

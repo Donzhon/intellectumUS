@@ -149,7 +149,127 @@
         </div>
       </section>
 
-      <section class="inner-section inner-section--surface" aria-labelledby="partners-types-title">
+      <section class="inner-section inner-section--surface inner-lead-panel" aria-labelledby="partners-lead-form-title">
+        <div class="inner-section__inner inner-lead-panel__inner">
+          <div class="left-content liquid-glass">
+            <header class="top-nav">
+              <a class="brand" href="/" aria-label="intellectumUS — Home">
+                <span class="brand-mark" aria-hidden="true">
+                  <picture>
+                    <source srcset="assets/icon/intellectum-128.webp" type="image/webp" />
+                    <img src="assets/icon/intellectum-128.png" alt="" width="128" height="128" decoding="async" />
+                  </picture>
+                </span>
+                <span class="brand-text">intellectumUS</span>
+              </a>
+            </header>
+
+            <section class="lead-form" aria-labelledby="partners-lead-form-title">
+              <h1 id="partners-lead-form-title" class="lead-form__title" data-i18n="form.partners.title">
+                Become a partner
+              </h1>
+              <p class="lead-form__lead" data-i18n="form.partners.lead">
+                Tell us about your organization and goals — we'll find the right partnership model and reach out with
+                next steps.
+              </p>
+              <form
+                id="partners-lead-form"
+                class="lead-form__body"
+                method="post"
+                data-lead-form
+                data-lead-product="partners"
+              >
+                <input
+                  type="text"
+                  name="company"
+                  class="lead-form__hp"
+                  tabindex="-1"
+                  autocomplete="off"
+                  aria-hidden="true"
+                />
+                <label class="lead-form__field">
+                  <span class="lead-form__control liquid-glass">
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="Your email"
+                      autocomplete="email"
+                      aria-label="Email"
+                      data-i18n-placeholder="form.email"
+                      data-i18n-aria-label="form.email"
+                    />
+                  </span>
+                </label>
+                <div class="lead-form__field lead-form__field--select">
+                  <label class="lead-form__select-label">
+                    <span class="lead-form__control liquid-glass">
+                      <span class="lead-form__select" data-lead-select>
+                        <button
+                          type="button"
+                          class="lead-form__select-trigger"
+                          aria-haspopup="listbox"
+                          aria-expanded="false"
+                          aria-controls="lead-location-listbox"
+                          id="lead-location-trigger"
+                        >
+                          <span class="lead-form__select-value">US - United States</span>
+                          <svg
+                            class="lead-form__select-caret"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <polyline points="6 9 12 15 18 9" />
+                          </svg>
+                        </button>
+                        <select class="lead-form__select-native" name="location" aria-label="Location" tabindex="-1"></select>
+                      </span>
+                    </span>
+                  </label>
+                </div>
+                <label class="lead-form__field lead-form__field--comment">
+                  <span class="lead-form__control lead-form__control--area liquid-glass">
+                    <textarea
+                      name="comment"
+                      rows="4"
+                      placeholder="Comments about product..."
+                      aria-label="Comment"
+                      data-i18n-placeholder="form.comment"
+                      data-i18n-aria-label="form.comment"
+                    ></textarea>
+                  </span>
+                </label>
+                <fieldset class="lead-form__reason">
+                  <legend data-i18n="form.reasonLegend">Why you need it?</legend>
+                  <label
+                    ><input type="radio" name="reason" value="personal" checked />
+                    <span data-i18n="form.reasonPersonal">Personal use</span></label
+                  >
+                  <label
+                    ><input type="radio" name="reason" value="school" /> <span data-i18n="form.reasonSchool">For school</span></label
+                  >
+                  <label
+                    ><input type="radio" name="reason" value="reselling" />
+                    <span data-i18n="form.reasonReselling">For reselling</span></label
+                  >
+                  <label
+                    ><input type="radio" name="reason" value="other" /> <span data-i18n="form.reasonOther">Other</span></label
+                  >
+                </fieldset>
+                <div class="lead-form__actions">
+                  <button class="lead-form__submit" type="submit" data-i18n="form.submit">Submit request</button>
+                </div>
+              </form>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="inner-section inner-section--mist" aria-labelledby="partners-types-title">
         <div class="inner-section__inner">
           <div class="inner-section__head">
             <p class="inner-section__eyebrow" data-i18n="partners.types.eyebrow">Who we work with</p>
@@ -178,7 +298,7 @@
         </div>
       </section>
 
-      <section class="inner-section inner-section--mist" aria-labelledby="partners-cta-title">
+      <section class="inner-section inner-section--surface" aria-labelledby="partners-cta-title">
         <div class="inner-section__inner">
           <div class="inner-cta">
             <p class="inner-section__eyebrow" data-i18n="partners.cta.eyebrow">Become a partner</p>
@@ -250,6 +370,28 @@
       </div>
     </footer>
 
+    <div class="lead-form__select-menu" id="lead-location-menu" hidden>
+      <input
+        type="search"
+        class="lead-form__select-search"
+        placeholder="Search country..."
+        autocomplete="off"
+        aria-label="Search country"
+        data-i18n-placeholder="search.country"
+        data-i18n-aria-label="search.country"
+        tabindex="-1"
+      />
+      <ul
+        class="lead-form__select-list"
+        id="lead-location-listbox"
+        role="listbox"
+        aria-labelledby="lead-location-trigger"
+      ></ul>
+      <p class="lead-form__select-empty" hidden data-i18n="search.empty">No countries found</p>
+    </div>
+
+    <script defer src="js/config.js"></script>
+    <script defer src="js/countries.js"></script>
     <script defer src="js/i18n.js"></script>
     <script defer src="js/app.js"></script>
   </body>

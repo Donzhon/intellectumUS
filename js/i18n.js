@@ -45,6 +45,12 @@
   "form.intellectum.title": "Intellectum",
   "form.intellectum.lead":
     "Hands-on tabletop developmental games for kindergarten classrooms — playful activities that build logic, memory, focus, and fine motor skills through guided group play.",
+  "form.partners.title": "Become a partner",
+  "form.partners.lead":
+    "Tell us about your organization and goals — we'll find the right partnership model and reach out with next steps.",
+  "form.about.title": "Get in touch",
+  "form.about.lead":
+    "Share your details and our team will respond with information about intellectumUS products and support.",
   "form.email": "Your email",
   "form.comment": "Comments about product...",
   "form.reasonLegend": "Why you need it?",
