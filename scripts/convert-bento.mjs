@@ -45,6 +45,13 @@ const sources = [
     fullWebp: true,
   },
   {
+    dir: "assets/telos",
+    input: "analyze_5-6.png",
+    prefix: "analyze_5-6",
+    widths: [480, 800, 853],
+    fullWebp: true,
+  },
+  {
     dir: "assets/hero",
     input: "hero-full.png",
     prefix: "hero-full",

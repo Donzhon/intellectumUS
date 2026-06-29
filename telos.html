@@ -344,8 +344,26 @@
                 </li>
               </ul>
             </div>
-            <div class="telos-spotlight__visual telos-spotlight__visual--placeholder" role="img" aria-label="Analyze illustration placeholder">
-              <span class="telos-spotlight__visual-label">Analyze image</span>
+            <div class="telos-spotlight__visual">
+              <picture>
+                <source
+                  type="image/webp"
+                  srcset="
+                    assets/telos/analyze_5-6-480.webp 480w,
+                    assets/telos/analyze_5-6-800.webp 800w,
+                    assets/telos/analyze_5-6-853.webp 853w
+                  "
+                  sizes="(max-width: 860px) 100vw, min(50vw, 32rem)"
+                />
+                <img
+                  src="assets/telos/analyze_5-6.png"
+                  alt="School leaders reviewing TELOS analytics dashboards with charts and progress data"
+                  width="853"
+                  height="1024"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
             </div>
           </div>
         </div>

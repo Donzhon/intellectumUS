@@ -5064,6 +5064,10 @@ html.is-boot-loading .lead-form__select-menu {
     object-fit: cover;
     object-position: 72% center;
   }
+
+  .telos-spotlight--analyze .telos-spotlight__visual img {
+    object-position: center center;
+  }
 }
 
 @media (max-width: 860px) {
@@ -5078,8 +5082,21 @@ html.is-boot-loading .lead-form__select-menu {
 
   .telos-spotlight__visual {
     order: 2;
+    width: 100%;
     max-width: 28rem;
     margin-inline: auto;
+  }
+
+  .telos-spotlight__visual--placeholder {
+    aspect-ratio: 1 / 1;
+    min-height: 0;
+  }
+
+  .telos-spotlight__visual img {
+    width: 100%;
+    height: auto;
+    object-fit: unset;
+    object-position: unset;
   }
 
   .telos-spotlight--reverse .telos-spotlight__content,
