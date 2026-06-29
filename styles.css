@@ -600,11 +600,11 @@ html.is-boot-loading .lead-form__select-menu {
   margin: 0;
   font-size: 0.62rem;
   line-height: 1.35;
-  color: rgba(255, 255, 255, 0.52);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .email-cta__consent a {
-  color: rgba(255, 255, 255, 0.75);
+  color: #fff;
 }
 
 /* Honeypot field: hidden from users, used to catch bots. */
@@ -661,19 +661,26 @@ html.is-boot-loading .lead-form__select-menu {
   .email-cta__inner {
     flex-direction: column;
     align-items: stretch;
+    justify-content: flex-start;
+    gap: 0.5rem;
+  }
+
+  .email-cta__copy {
+    flex: 0 0 auto;
   }
 
   .email-cta__form {
-    flex: 1 1 auto;
-    flex-basis: 100%;
+    flex: 0 0 auto;
     width: 100%;
     min-width: 0;
     max-width: none;
+    gap: 0.35rem;
   }
 
   .email-cta__row {
     flex-direction: column;
     align-items: stretch;
+    gap: 0.45rem;
   }
 
   .email-cta__field,
@@ -3651,15 +3658,15 @@ html.is-boot-loading .lead-form__select-menu {
 
   .email-cta {
     flex: 0 0 auto;
-    margin-top: auto;
+    margin-top: 0.35rem;
     padding:
-      clamp(0.85rem, 2.5vw, 1.15rem)
+      clamp(0.65rem, 2vw, 0.85rem)
       var(--panel-edge-gap)
-      calc(0.75rem + env(safe-area-inset-bottom));
+      calc(0.6rem + env(safe-area-inset-bottom));
   }
 
   .email-cta__inner {
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
 
   .email-cta__title {
@@ -5170,6 +5177,14 @@ html.is-boot-loading .lead-form__select-menu {
   color: inherit;
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+
+.email-cta .lead-form__consent {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.email-cta .lead-form__consent a {
+  color: #fff;
 }
 
 /* Compact band forms: consent sits below the form row */
