@@ -29,7 +29,7 @@ const sources = [
     dir: "assets/telos",
     input: "hero-mobile.png",
     prefix: "hero-mobile",
-    widths: [400, 576, 800],
+    widths: [400, 576],
     fullWebp: true,
     webpQuality: HERO_WEBP_QUALITY,
   },

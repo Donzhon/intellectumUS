@@ -232,6 +232,8 @@ const DESKTOP_NODI_EXIT_VIDEO = "assets/video/nodi-intellectum.mp4";
 const DESKTOP_HERO_IMAGE = "assets/hero/hero-full.webp";
 const MOBILE_HERO_IMAGE = "assets/hero/hero-mobile.webp";
 const MOBILE_HERO_VH_VAR = "--hero-mobile-vh";
+const DESKTOP_HERO_FORM_BAND_VAR = "--hero-form-band";
+const DESKTOP_HERO_MIN_WIDTH = 721;
 const DESKTOP_INTELLECTUM_MAIN_IMAGE = DESKTOP_HERO_IMAGE;
 const MOBILE_NODI_INTRO_VIDEO = "assets/video/mobile-video/mob-nodi-input.mp4";
 const MOBILE_NODI_LOOP_VIDEO = "assets/video/mobile-video/mob-nodi-2.mp4";
@@ -240,6 +242,7 @@ const MOBILE_INTELLECTUM_EXIT_VIDEO = "assets/video/mobile-video/intellecum-out.
 const MOBILE_INTELLECTUM_MAIN_IMAGE = MOBILE_HERO_IMAGE;
 const HERO_VIDEO_ENABLED = false;
 const mobileBackgroundQuery = window.matchMedia?.("(max-width: 720px)");
+const desktopHeroQuery = window.matchMedia?.(`(min-width: ${DESKTOP_HERO_MIN_WIDTH}px)`);
 const useMobileBackgroundSources = mobileBackgroundQuery?.matches ?? false;
 
 const lockMobileHeroViewport = () => {
@@ -251,9 +254,39 @@ const lockMobileHeroViewport = () => {
   document.documentElement.style.setProperty(MOBILE_HERO_VH_VAR, `${window.innerHeight}px`);
 };
 
+const heroIntroForm = document.querySelector(".hero-intro > .email-cta");
+
+const syncDesktopHeroFormBand = () => {
+  if (!heroIntroForm || !desktopHeroQuery?.matches) {
+    document.documentElement.style.removeProperty(DESKTOP_HERO_FORM_BAND_VAR);
+    return;
+  }
+
+  document.documentElement.style.setProperty(
+    DESKTOP_HERO_FORM_BAND_VAR,
+    `${heroIntroForm.offsetHeight}px`
+  );
+};
+
 lockMobileHeroViewport();
-window.addEventListener("orientationchange", lockMobileHeroViewport);
-mobileBackgroundQuery?.addEventListener("change", lockMobileHeroViewport);
+syncDesktopHeroFormBand();
+window.addEventListener("orientationchange", () => {
+  lockMobileHeroViewport();
+  syncDesktopHeroFormBand();
+});
+window.addEventListener("resize", syncDesktopHeroFormBand);
+mobileBackgroundQuery?.addEventListener("change", () => {
+  lockMobileHeroViewport();
+  syncDesktopHeroFormBand();
+});
+desktopHeroQuery?.addEventListener("change", syncDesktopHeroFormBand);
+
+if (heroIntroForm && typeof ResizeObserver !== "undefined") {
+  const heroFormBandObserver = new ResizeObserver(syncDesktopHeroFormBand);
+  heroFormBandObserver.observe(heroIntroForm);
+}
+
+document.fonts?.ready?.then(syncDesktopHeroFormBand);
 const pickBackgroundVideo = (desktopSrc, mobileSrc) =>
   useMobileBackgroundSources ? mobileSrc : desktopSrc;
 const pickBackgroundAsset = pickBackgroundVideo;

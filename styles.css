@@ -726,9 +726,22 @@ html.is-boot-loading .lead-form__select-menu {
   }
 }
 
-/* Desktop: keep full-viewport hero art; only stack brand + form so the form
-   bottom sits flush with the screen edge (split no longer consumes 100vh). */
+/* Desktop: brand + form fill the viewport; hero art ends where the form begins. */
 @media (min-width: 721px) {
+  .hero-art {
+    height: calc(100dvh - var(--hero-form-band, 9.5rem));
+    max-height: calc(100dvh - var(--hero-form-band, 9.5rem));
+  }
+
+  .hero-stage__overlay {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    height: calc(100dvh - var(--hero-form-band, 9.5rem));
+    max-height: calc(100dvh - var(--hero-form-band, 9.5rem));
+  }
+
   .hero-intro {
     display: flex;
     flex-direction: column;
@@ -744,6 +757,37 @@ html.is-boot-loading .lead-form__select-menu {
   .hero-intro > .email-cta {
     flex: 0 0 auto;
     margin-top: auto;
+    padding: clamp(1rem, 1.8vw, 1.35rem) var(--panel-edge-gap);
+  }
+
+  .hero-intro > .email-cta .email-cta__inner {
+    gap: clamp(0.7rem, 1.8vw, 1.15rem);
+  }
+
+  .hero-intro > .email-cta .email-cta__title {
+    font-size: clamp(1.15rem, 2vw, 1.55rem);
+    margin-bottom: 0.15rem;
+  }
+
+  .hero-intro > .email-cta .email-cta__lead {
+    font-size: clamp(0.86rem, 1.15vw, 0.95rem);
+    line-height: 1.35;
+  }
+
+  .hero-intro > .email-cta .email-cta__form {
+    gap: 0.35rem;
+  }
+
+  .hero-intro > .email-cta .lead-form__field input {
+    padding: 0.7rem 1rem;
+  }
+
+  .hero-intro > .email-cta .lead-form__submit {
+    padding: 0.7rem 1.3rem;
+  }
+
+  .hero-intro > .email-cta .email-cta__consent {
+    font-size: 0.58rem;
   }
 }
 
@@ -4731,7 +4775,7 @@ body.is-scrolling .bloom-page:has(.hero-brand__mark) .site-chrome__cluster .site
 
 @media (max-width: 720px) {
   .inner-page__hero--telos {
-    --hero-bg: url("assets/telos/hero-mobile.png");
+    --hero-bg: url("assets/telos/hero-mobile.webp");
     align-items: flex-end;
     min-height: clamp(34rem, 92svh, 42rem);
     padding: clamp(5.5rem, 14vh, 7rem) 0 0;
@@ -4786,7 +4830,7 @@ body.is-scrolling .bloom-page:has(.hero-brand__mark) .site-chrome__cluster .site
 
 @media (max-width: 420px) {
   .inner-page__hero--telos {
-    --hero-bg: url("assets/telos/hero-mobile-800.webp");
+    --hero-bg: url("assets/telos/hero-mobile-400.webp");
   }
 }
 

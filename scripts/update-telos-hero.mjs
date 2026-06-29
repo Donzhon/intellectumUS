@@ -56,7 +56,7 @@ await writePngMaster(DESKTOP_SOURCE, HERO_PNG);
 await writePngMaster(MOBILE_SOURCE, HERO_MOBILE_PNG);
 
 await writeHeroWebp(HERO_PNG, "hero", [800, 1024]);
-await writeHeroWebp(HERO_MOBILE_PNG, "hero-mobile", [400, 576, 800]);
+await writeHeroWebp(HERO_MOBILE_PNG, "hero-mobile", [400, 576]);
 
 const desktopMeta = await sharp(HERO_PNG).metadata();
 const mobileMeta = await sharp(HERO_MOBILE_PNG).metadata();
