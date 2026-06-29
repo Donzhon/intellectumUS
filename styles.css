@@ -4891,6 +4891,174 @@ html.is-boot-loading .lead-form__select-menu {
   max-width: none;
 }
 
+/* ---------- TELOS: intro section ---------- */
+.telos-intro {
+  --telos-intro-accent: #4f7fd4;
+  background:
+    radial-gradient(ellipse 90% 55% at 50% -15%, color-mix(in srgb, var(--telos-intro-accent) 10%, transparent), transparent),
+    var(--bloom-mist);
+}
+
+.telos-intro__inner {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.75rem, 4.5vw, 3rem);
+  padding-top: clamp(2.5rem, 6vw, 4.5rem);
+  padding-bottom: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.telos-intro__head {
+  max-width: 44rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.telos-intro__eyebrow {
+  margin: 0 0 0.85rem;
+  font-family: "Rajdhani", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--telos-intro-accent);
+}
+
+.telos-intro__title {
+  margin: 0 0 1rem;
+  font-family: "Rajdhani", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: clamp(1.85rem, 4.5vw, 2.85rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #1a2b4b;
+}
+
+.telos-intro__lead {
+  margin: 0;
+  font-size: clamp(1rem, 2.2vw, 1.15rem);
+  line-height: 1.65;
+  color: color-mix(in srgb, var(--bloom-ink) 72%, transparent);
+}
+
+.telos-intro__figure {
+  margin: 0;
+  width: 100%;
+}
+
+.telos-intro__visual {
+  position: relative;
+  max-width: 58rem;
+  margin-inline: auto;
+  border-radius: 1.35rem;
+  overflow: hidden;
+  background: #fff;
+  box-shadow:
+    0 2px 4px rgba(26, 43, 75, 0.04),
+    0 20px 48px rgba(26, 43, 75, 0.1);
+}
+
+.telos-intro__visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--telos-intro-accent) 14%, transparent);
+  pointer-events: none;
+}
+
+.telos-intro__visual picture {
+  display: block;
+  line-height: 0;
+}
+
+.telos-intro__visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.telos-intro__footer {
+  max-width: 52rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.telos-intro__tags-label {
+  margin: 0 0 clamp(0.85rem, 2.5vw, 1.15rem);
+  font-family: "Rajdhani", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--bloom-ink) 55%, transparent);
+}
+
+.telos-intro__chips {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.telos-intro__chip {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.7rem 0.95rem;
+  border-radius: 0.85rem;
+  background: color-mix(in srgb, #ffffff 88%, var(--bloom-mist));
+  border: 1px solid color-mix(in srgb, var(--telos-intro-accent) 16%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 4px 14px rgba(26, 43, 75, 0.05);
+  font-family: "Rajdhani", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: clamp(0.82rem, 2.8vw, 0.92rem);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: #1a2b4b;
+  text-align: left;
+}
+
+.telos-intro__chip::before {
+  content: "";
+  flex-shrink: 0;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--telos-intro-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--telos-intro-accent) 18%, transparent);
+}
+
+@media (min-width: 640px) {
+  .telos-intro__chips {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .telos-intro__chip {
+    padding: 0.75rem 1.05rem;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .telos-intro__chip::before {
+    display: none;
+  }
+}
+
+@media (min-width: 960px) {
+  .telos-intro__chips {
+    gap: 0.85rem 1rem;
+  }
+
+  .telos-intro__chip {
+    font-size: 0.92rem;
+  }
+}
+
 /* ---------- TELOS: spotlight blocks (Observe / Analyze / Develop) ---------- */
 .telos-spotlight {
   --telos-spotlight-accent: #4f7fd4;
