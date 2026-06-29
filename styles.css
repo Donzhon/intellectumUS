@@ -4655,6 +4655,10 @@ html.is-boot-loading .lead-form__select-menu {
   --hero-bg: url("assets/telos/hero.webp");
 }
 
+.inner-page__hero--telos + .email-cta--telos-hero .email-cta__copy {
+  display: block;
+}
+
 @media (min-width: 721px) {
   .inner-page__hero--telos::before {
     display: none;
