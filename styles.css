@@ -4916,6 +4916,18 @@ html.is-boot-loading .lead-form__select-menu {
   gap: clamp(2rem, 5vw, 4rem);
 }
 
+.telos-spotlight__copy {
+  min-width: 0;
+}
+
+.telos-spotlight__intro {
+  min-width: 0;
+}
+
+.telos-spotlight__body {
+  min-width: 0;
+}
+
 .telos-spotlight__eyebrow {
   margin: 0 0 0.85rem;
   font-family: "Rajdhani", "Segoe UI", ui-sans-serif, sans-serif;
@@ -5045,7 +5057,7 @@ html.is-boot-loading .lead-form__select-menu {
 }
 
 @media (min-width: 861px) {
-  .telos-spotlight--reverse .telos-spotlight__content {
+  .telos-spotlight--reverse .telos-spotlight__copy {
     order: 2;
   }
 
@@ -5074,11 +5086,16 @@ html.is-boot-loading .lead-form__select-menu {
 
 @media (max-width: 860px) {
   .telos-spotlight__grid {
-    grid-template-columns: 1fr;
-    gap: clamp(1.75rem, 5vw, 2.5rem);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1rem, 3vw, 1.5rem);
   }
 
-  .telos-spotlight__content {
+  .telos-spotlight__copy {
+    display: contents;
+  }
+
+  .telos-spotlight__intro {
     order: 1;
   }
 
@@ -5087,6 +5104,14 @@ html.is-boot-loading .lead-form__select-menu {
     width: 100%;
     max-width: 28rem;
     margin-inline: auto;
+  }
+
+  .telos-spotlight__body {
+    order: 3;
+  }
+
+  .telos-spotlight__title {
+    margin-bottom: 0.35rem;
   }
 
   .telos-spotlight__visual--placeholder {
@@ -5099,19 +5124,6 @@ html.is-boot-loading .lead-form__select-menu {
     height: auto;
     object-fit: unset;
     object-position: unset;
-  }
-
-  .telos-spotlight--reverse .telos-spotlight__content,
-  .telos-spotlight--reverse .telos-spotlight__visual {
-    order: unset;
-  }
-
-  .telos-spotlight--reverse .telos-spotlight__content {
-    order: 1;
-  }
-
-  .telos-spotlight--reverse .telos-spotlight__visual {
-    order: 2;
   }
 }
 
