@@ -2,26 +2,32 @@ import fs from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
 
-const ROOT = path.resolve("assets/neiry");
 const WEBP_QUALITY = 90;
 const WIDTHS = [400, 800, 1200];
 
+/** @type {{ dir: string; input: string; prefix: string }[]} */
 const sources = [
-  { input: "neyri_25-16.png", prefix: "neyri_25-16" },
-  { input: "neiry 11.png", prefix: "neiry-11" },
+  { dir: "assets", input: "intellectum_25-24.png", prefix: "intellectum_25-24" },
+  { dir: "assets", input: "nodi_25-24.png", prefix: "nodi_25-24" },
+  { dir: "assets", input: "labo_25-16.png", prefix: "labo_25-16" },
+  { dir: "assets/neiry", input: "neyri_25-16.png", prefix: "neyri_25-16" },
+  { dir: "assets/neiry", input: "neiry 11.png", prefix: "neiry-11" },
+  { dir: "assets/pasco", input: "pasco 25-24.png", prefix: "pasco_25-24" },
+  { dir: "assets/pasco", input: "pasco11.png", prefix: "pasco11" },
+  { dir: "assets/telos", input: "telos 1250-800.png", prefix: "telos_1250-800" },
+  { dir: "assets/telos", input: "telos-bento.png", prefix: "telos-bento" },
 ];
-
-const formatKb = (bytes) => `${(bytes / 1024).toFixed(1)} KB`;
 
 const results = [];
 
-for (const { input, prefix } of sources) {
-  const inputPath = path.join(ROOT, input);
+for (const { dir, input, prefix } of sources) {
+  const root = path.resolve(dir);
+  const inputPath = path.join(root, input);
   const meta = await sharp(inputPath).metadata();
   const originalBytes = fs.statSync(inputPath).size;
 
   results.push({
-    file: input,
+    file: path.join(dir, input),
     type: "original-png",
     width: meta.width,
     height: meta.height,
@@ -34,7 +40,7 @@ for (const { input, prefix } of sources) {
     }
 
     const outName = `${prefix}-${width}.webp`;
-    const outPath = path.join(ROOT, outName);
+    const outPath = path.join(root, outName);
 
     await sharp(inputPath)
       .resize({ width, withoutEnlargement: true })
@@ -45,7 +51,7 @@ for (const { input, prefix } of sources) {
     const outBytes = fs.statSync(outPath).size;
 
     results.push({
-      file: outName,
+      file: path.join(dir, outName),
       type: "webp",
       width: outMeta.width,
       height: outMeta.height,
