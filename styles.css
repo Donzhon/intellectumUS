@@ -4696,8 +4696,24 @@ html.is-boot-loading .lead-form__select-menu {
   }
 
   .inner-page__hero--telos .inner-page__hero-inner {
+    position: relative;
+    z-index: 0;
     max-width: none;
     width: 100%;
+    padding: 0.85rem 1rem;
+  }
+
+  .inner-page__hero--telos .inner-page__hero-inner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: 0.75rem;
+    background: linear-gradient(
+      180deg,
+      rgba(20, 16, 24, 0.45) 0%,
+      rgba(20, 16, 24, 0.62) 100%
+    );
   }
 
   .inner-page__hero--telos .inner-page__eyebrow,
@@ -4714,10 +4730,6 @@ html.is-boot-loading .lead-form__select-menu {
 
   .inner-page__hero--telos + .email-cta--telos-hero {
     padding-top: clamp(2rem, 6vw, 2.75rem);
-  }
-
-  .inner-page__hero--telos + .email-cta--telos-hero .email-cta__copy {
-    display: none;
   }
 }
 
