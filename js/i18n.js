@@ -7,8 +7,9 @@
   "nav.resources": "Resources",
   "nav.contact": "Contact",
   "nav.intellectum": "Intellectum",
+  "nav.neyri": "Neyri",
   "nav.nodi": "Nodi",
-  "nav.iot": "IoT Board",
+  "nav.pasco": "Pasco",
   "nav.equipment": "School Equipments",
   "hero.nodi.1": "Innovations in",
   "hero.nodi.2": "School Education",
@@ -37,6 +38,24 @@
   "cta.email.telos.footer.title": "Make teaching quality visible with TELOS",
   "cta.email.telos.footer.lead":
     "Share your goals — we'll outline a pilot, onboarding path, and rollout for your team.",
+  "cta.email.neyri.hero.title": "Add learning insights to your classroom",
+  "cta.email.neyri.hero.lead":
+    "Leave your email and we'll show how Neyri complements Intellectum and Nodi activities.",
+  "cta.email.neyri.footer.title": "Bring Neyri insights to your learning programs",
+  "cta.email.neyri.footer.lead":
+    "Share your goals — we'll outline how Neyri fits with Intellectum, Nodi, or both.",
+  "cta.email.pasco.hero.title": "Equip your science lab with Pasco",
+  "cta.email.pasco.hero.lead":
+    "Leave your email and our team will help you select sensors and kits for your curriculum.",
+  "cta.email.pasco.footer.title": "Start with Pasco in your science classroom",
+  "cta.email.pasco.footer.lead":
+    "Tell us about your lab — we'll recommend sensors, kits, and a rollout plan.",
+  "cta.email.labo.hero.title": "Outfit your STEM lab with the right equipment",
+  "cta.email.labo.hero.lead":
+    "Leave your email and our team will help you plan hardware for your science and engineering programs.",
+  "cta.email.labo.footer.title": "Get a tailored equipment proposal for your school",
+  "cta.email.labo.footer.lead":
+    "Share your lab goals — we'll recommend hardware and a practical rollout plan.",
   "hero.intellectum.1": "Develop your personal",
   "hero.intellectum.2": "intelligence",
   "form.nodi.title": "Nodi Ecosystem",
