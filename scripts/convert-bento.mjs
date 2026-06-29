@@ -3,9 +3,9 @@ import path from "node:path";
 import sharp from "sharp";
 
 const WEBP_QUALITY = 90;
-const WIDTHS = [400, 800, 1200];
+const DEFAULT_WIDTHS = [400, 800, 1200];
 
-/** @type {{ dir: string; input: string; prefix: string }[]} */
+/** @type {{ dir: string; input: string; prefix: string; widths?: number[]; fullWebp?: boolean }[]} */
 const sources = [
   { dir: "assets", input: "intellectum_25-24.png", prefix: "intellectum_25-24" },
   { dir: "assets", input: "nodi_25-24.png", prefix: "nodi_25-24" },
@@ -16,11 +16,25 @@ const sources = [
   { dir: "assets/pasco", input: "pasco11.png", prefix: "pasco11" },
   { dir: "assets/telos", input: "telos 1250-800.png", prefix: "telos_1250-800" },
   { dir: "assets/telos", input: "telos-bento.png", prefix: "telos-bento" },
+  {
+    dir: "assets/hero",
+    input: "hero-full.png",
+    prefix: "hero-full",
+    widths: [800, 1200, 1734],
+    fullWebp: true,
+  },
+  {
+    dir: "assets/hero",
+    input: "hero-mobile.png",
+    prefix: "hero-mobile",
+    widths: [400, 800],
+    fullWebp: true,
+  },
 ];
 
 const results = [];
 
-for (const { dir, input, prefix } of sources) {
+for (const { dir, input, prefix, widths = DEFAULT_WIDTHS, fullWebp = false } of sources) {
   const root = path.resolve(dir);
   const inputPath = path.join(root, input);
   const meta = await sharp(inputPath).metadata();
@@ -34,7 +48,24 @@ for (const { dir, input, prefix } of sources) {
     bytes: originalBytes,
   });
 
-  for (const width of WIDTHS) {
+  if (fullWebp) {
+    const outName = `${prefix}.webp`;
+    const outPath = path.join(root, outName);
+
+    await sharp(inputPath).webp({ quality: WEBP_QUALITY, effort: 6 }).toFile(outPath);
+
+    const outMeta = await sharp(outPath).metadata();
+    results.push({
+      file: path.join(dir, outName),
+      type: "webp-full",
+      width: outMeta.width,
+      height: outMeta.height,
+      bytes: fs.statSync(outPath).size,
+      source: input,
+    });
+  }
+
+  for (const width of widths) {
     if (width > meta.width) {
       continue;
     }
@@ -48,14 +79,13 @@ for (const { dir, input, prefix } of sources) {
       .toFile(outPath);
 
     const outMeta = await sharp(outPath).metadata();
-    const outBytes = fs.statSync(outPath).size;
 
     results.push({
       file: path.join(dir, outName),
       type: "webp",
       width: outMeta.width,
       height: outMeta.height,
-      bytes: outBytes,
+      bytes: fs.statSync(outPath).size,
       source: input,
     });
   }
