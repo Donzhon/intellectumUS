@@ -4663,19 +4663,6 @@ html.is-boot-loading .lead-form__select-menu {
 
 .inner-page__hero--telos + .email-cta--telos-hero .email-cta__copy {
   display: block;
-  text-align: center;
-}
-
-.email-cta--telos-hero .email-cta__lead {
-  margin-inline: auto;
-}
-
-.email-cta--telos-hero .lead-form__field input {
-  text-align: center;
-}
-
-.email-cta--telos-hero .lead-form__field input::placeholder {
-  text-align: center;
 }
 
 @media (min-width: 721px) {
