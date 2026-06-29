@@ -19,6 +19,27 @@ const SITE_I18N = {
     "hero.cta.explore": "Explore Solutions",
     "cta.email.title": "Bring intellectumUS to your school",
     "cta.email.lead": "Leave your email and our team will reach out with a tailored proposal.",
+    "cta.email.footer.title": "Ready to transform learning at your school?",
+    "cta.email.footer.lead":
+      "Share your email — we'll follow up with solutions matched to your goals and classroom needs.",
+    "cta.email.intellectum.hero.title": "Bring Intellectum to your classroom",
+    "cta.email.intellectum.hero.lead":
+      "Leave your email and we'll show how structured play builds language, thinking, and social skills.",
+    "cta.email.intellectum.footer.title": "Start purposeful play with Intellectum",
+    "cta.email.intellectum.footer.lead":
+      "Tell us about your kindergarten or learning center — we'll prepare a demo and rollout plan.",
+    "cta.email.nodi.hero.title": "Bring Nodi STEM labs to your school",
+    "cta.email.nodi.hero.lead":
+      "Leave your email and our team will walk you through hands-on physics, coding, and robotics.",
+    "cta.email.nodi.footer.title": "Build your STEM lab with Nodi",
+    "cta.email.nodi.footer.lead":
+      "Get curriculum guidance, hardware options, and a tailored proposal for your students.",
+    "cta.email.telos.hero.title": "Bring TELOS to your school network",
+    "cta.email.telos.hero.lead":
+      "Leave your email and we'll show how observation, feedback, and teacher growth work in one platform.",
+    "cta.email.telos.footer.title": "Make teaching quality visible with TELOS",
+    "cta.email.telos.footer.lead":
+      "Share your goals — we'll outline a pilot, onboarding path, and rollout for your team.",
     "hero.intellectum.1": "Develop your personal",
     "hero.intellectum.2": "intelligence",
     "form.nodi.title": "Nodi Ecosystem",
@@ -161,6 +182,27 @@ const SITE_I18N = {
     "hero.cta.explore": "Шешімдерді көру",
     "cta.email.title": "intellectumUS-ті мектебіңізге әкеліңіз",
     "cta.email.lead": "Электрондық поштаңызды қалдырыңыз — біз жеке ұсыныспен хабарласамыз.",
+    "cta.email.footer.title": "Мектебіңізде оқытуды жаңартуға дайынсыз ба?",
+    "cta.email.footer.lead":
+      "Электрондық поштаңызды қалдырыңыз — мақсаттарыңыз бен сынып қажеттіліктеріне сай шешім ұсынамыз.",
+    "cta.email.intellectum.hero.title": "Intellectum-ды сыныбыңызға әкеліңіз",
+    "cta.email.intellectum.hero.lead":
+      "Электрондық поштаңызды қалдырыңыз — құрылымдалған ойын тіл, ойлау және әлеуметтік дағдыларды қалай дамытатынын көрсетеміз.",
+    "cta.email.intellectum.footer.title": "Intellectum-мен мақсатты ойынды бастаңыз",
+    "cta.email.intellectum.footer.lead":
+      "Балабақша немесе оқу орталығыңыз туралы айтыңыз — демо және енгізу жоспарын дайындаймыз.",
+    "cta.email.nodi.hero.title": "Nodi STEM зертханасын мектебіңізге әкеліңіз",
+    "cta.email.nodi.hero.lead":
+      "Электрондық поштаңызды қалдырыңыз — практикалық физика, кодтау және робототехниканы көрсетеміз.",
+    "cta.email.nodi.footer.title": "Nodi арқылы STEM зертханаңызды құрыңыз",
+    "cta.email.nodi.footer.lead":
+      "Оқу бағдарламасы, жабдық нұсқалары және оқушыларыңызға арналған ұсыныс алыңыз.",
+    "cta.email.telos.hero.title": "TELOS-ты мектеп желісіне енгізіңіз",
+    "cta.email.telos.hero.lead":
+      "Электрондық поштаңызды қалдырыңыз — бақылау, кері байланыс және мұғалім дамуын бір платформада көрсетеміз.",
+    "cta.email.telos.footer.title": "TELOS арқылы сабақ сапасын көрінетін етіңіз",
+    "cta.email.telos.footer.lead":
+      "Мақсаттарыңызды бөлісіңіз — пилот, баптау және енгізу жоспарын ұсынамыз.",
     "hero.intellectum.1": "Жеке",
     "hero.intellectum.2": "интеллекті дамытыңыз",
     "form.nodi.title": "Nodi Ecosystem",

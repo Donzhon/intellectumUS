@@ -124,6 +124,52 @@
         </div>
       </section>
 
+      <section class="email-cta" aria-labelledby="email-cta-title-hero">
+        <div class="email-cta__inner">
+          <div class="email-cta__copy">
+            <h2 class="email-cta__title" id="email-cta-title-hero" data-i18n="cta.email.nodi.hero.title">
+              Bring Nodi STEM labs to your school
+            </h2>
+            <p class="email-cta__lead" data-i18n="cta.email.nodi.hero.lead">
+              Leave your email and our team will walk you through hands-on physics, coding, and robotics.
+            </p>
+          </div>
+          <form
+            id="lead-form-hero"
+            class="email-cta__form"
+            method="post"
+            data-lead-form
+            data-lead-product="nodi"
+          >
+            <input
+              type="text"
+              name="company"
+              class="lead-form__hp"
+              tabindex="-1"
+              autocomplete="off"
+              aria-hidden="true"
+            />
+            <label class="email-cta__field lead-form__field">
+              <span class="visually-hidden" data-i18n="form.email">Your email</span>
+              <span class="lead-form__control">
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Your email"
+                  autocomplete="email"
+                  aria-label="Email"
+                  data-i18n-placeholder="form.email"
+                  data-i18n-aria-label="form.email"
+                />
+              </span>
+            </label>
+            <button class="lead-form__submit" type="submit" data-i18n="form.submit">
+              Submit request
+            </button>
+          </form>
+        </div>
+      </section>
+
       <section class="inner-section inner-section--mist" aria-labelledby="nodi-learn-title">
         <div class="inner-section__inner">
           <div class="inner-section__head">
@@ -342,6 +388,52 @@
           </div>
         </div>
       </section>
+
+      <section class="email-cta" aria-labelledby="email-cta-title-footer">
+        <div class="email-cta__inner">
+          <div class="email-cta__copy">
+            <h2 class="email-cta__title" id="email-cta-title-footer" data-i18n="cta.email.nodi.footer.title">
+              Build your STEM lab with Nodi
+            </h2>
+            <p class="email-cta__lead" data-i18n="cta.email.nodi.footer.lead">
+              Get curriculum guidance, hardware options, and a tailored proposal for your students.
+            </p>
+          </div>
+          <form
+            id="lead-form-footer"
+            class="email-cta__form"
+            method="post"
+            data-lead-form
+            data-lead-product="nodi"
+          >
+            <input
+              type="text"
+              name="company"
+              class="lead-form__hp"
+              tabindex="-1"
+              autocomplete="off"
+              aria-hidden="true"
+            />
+            <label class="email-cta__field lead-form__field">
+              <span class="visually-hidden" data-i18n="form.email">Your email</span>
+              <span class="lead-form__control">
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Your email"
+                  autocomplete="email"
+                  aria-label="Email"
+                  data-i18n-placeholder="form.email"
+                  data-i18n-aria-label="form.email"
+                />
+              </span>
+            </label>
+            <button class="lead-form__submit" type="submit" data-i18n="form.submit">
+              Submit request
+            </button>
+          </form>
+        </div>
+      </section>
     </main>
 
     <footer class="site-footer" aria-labelledby="site-footer-title">
@@ -400,6 +492,7 @@
       </div>
     </footer>
 
+    <script defer src="js/config.js"></script>
     <script defer src="js/i18n.js"></script>
     <script defer src="js/app.js"></script>
   </body>

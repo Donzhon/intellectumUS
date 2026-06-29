@@ -1374,17 +1374,16 @@ if (hasGlassTuner) {
 }
 
 /* ---------- Lead form: focus email + shake submit when invalid ---------- */
-const leadForm = document.getElementById("lead-form-body");
-const leadEmailInput = leadForm?.querySelector('input[type="email"]');
-const leadSubmitBtn = document.querySelector(".lead-form__submit");
+const leadForms = document.querySelectorAll("[data-lead-form]");
 
-const isLeadEmailValid = () =>
-  Boolean(leadEmailInput?.value.trim() && leadEmailInput.checkValidity());
+const isLeadEmailValid = (emailInput) =>
+  Boolean(emailInput?.value.trim() && emailInput.checkValidity());
 
 let leadFormToast = null;
 let leadFormToastText = null;
 let leadFormToastIcon = null;
 let leadFormToastTimer = null;
+let activeLeadSubmitBtn = null;
 
 const positionLeadFormToast = () => {
   if (!leadFormToast) {
@@ -1392,7 +1391,7 @@ const positionLeadFormToast = () => {
   }
 
   const gap = 12;
-  const anchor = leadSubmitBtn?.getBoundingClientRect();
+  const anchor = activeLeadSubmitBtn?.getBoundingClientRect();
 
   if (anchor && anchor.width && anchor.bottom > 0 && anchor.top < window.innerHeight) {
     const toastWidth = leadFormToast.offsetWidth || 0;
@@ -1488,21 +1487,23 @@ document.addEventListener("site-language-change", () => {
   }
 });
 
-const playLeadSubmitError = () => {
-  if (!leadSubmitBtn) {
+const playLeadSubmitError = (submitBtn) => {
+  if (!submitBtn) {
     return;
   }
 
-  leadSubmitBtn.classList.remove("is-error");
-  void leadSubmitBtn.offsetWidth;
-  leadSubmitBtn.classList.add("is-error");
+  submitBtn.classList.remove("is-error");
+  void submitBtn.offsetWidth;
+  submitBtn.classList.add("is-error");
 };
 
-leadSubmitBtn?.addEventListener("animationend", (event) => {
-  if (event.animationName === "lead-form-submit-shake") {
-    leadSubmitBtn.classList.remove("is-error");
-  }
-});
+const bindLeadSubmitErrorAnimation = (submitBtn) => {
+  submitBtn?.addEventListener("animationend", (event) => {
+    if (event.animationName === "lead-form-submit-shake") {
+      submitBtn.classList.remove("is-error");
+    }
+  });
+};
 
 /* ---------- Lead form: country list + custom location select ---------- */
 const LEAD_COUNTRY_DEFAULT = "US";
@@ -1873,22 +1874,34 @@ document.querySelectorAll("[data-lead-select]").forEach((root) => {
   initLeadCountrySelect(root);
 });
 
-const submitLeadRequest = async () => {
+const resolveLeadProduct = (form) => {
+  if (form?.dataset.leadProduct) {
+    return form.dataset.leadProduct;
+  }
+
+  const heroStage = document.querySelector(".hero-stage");
+  if (heroStage?.classList.contains("is-intellectum")) {
+    return "intellectum";
+  }
+
+  return "nodi";
+};
+
+const submitLeadRequest = async (form) => {
   const endpoint = window.SiteConfig?.SUBMIT_LEAD_URL;
   if (!endpoint) {
     console.error("SUBMIT_LEAD_URL is not configured (js/config.js).");
     return false;
   }
 
-  const formData = new FormData(leadForm);
-  const heroStage = document.querySelector(".hero-stage");
+  const formData = new FormData(form);
   const payload = {
     email: (formData.get("email") || "").toString().trim(),
     location: (formData.get("location") || "").toString().trim() || null,
     comment: (formData.get("comment") || "").toString().trim() || null,
     reason: (formData.get("reason") || "").toString().trim() || null,
     company: (formData.get("company") || "").toString().trim() || null,
-    product: heroStage?.classList.contains("is-intellectum") ? "intellectum" : "nodi",
+    product: resolveLeadProduct(form),
     source_url: window.location.href,
   };
 
@@ -1910,41 +1923,50 @@ const submitLeadRequest = async () => {
   return true;
 };
 
-let leadSubmitInFlight = false;
+const leadSubmitInFlight = new WeakSet();
 
-leadForm?.addEventListener("submit", async (event) => {
-  if (!leadEmailInput || !leadSubmitBtn) {
-    return;
-  }
+leadForms.forEach((form) => {
+  const leadEmailInput = form.querySelector('input[type="email"]');
+  const leadSubmitBtn = form.querySelector(".lead-form__submit");
 
-  event.preventDefault();
+  bindLeadSubmitErrorAnimation(leadSubmitBtn);
 
-  if (!isLeadEmailValid()) {
-    leadEmailInput.focus({ preventScroll: false });
-    leadEmailInput.scrollIntoView({ block: "nearest", behavior: "smooth" });
-    playLeadSubmitError();
-    return;
-  }
+  form.addEventListener("submit", async (event) => {
+    if (!leadEmailInput || !leadSubmitBtn) {
+      return;
+    }
 
-  if (leadSubmitInFlight) {
-    return;
-  }
+    event.preventDefault();
 
-  leadSubmitInFlight = true;
-  leadSubmitBtn.disabled = true;
+    if (!isLeadEmailValid(leadEmailInput)) {
+      leadEmailInput.focus({ preventScroll: false });
+      leadEmailInput.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      activeLeadSubmitBtn = leadSubmitBtn;
+      playLeadSubmitError(leadSubmitBtn);
+      return;
+    }
 
-  try {
-    await submitLeadRequest();
-    leadForm.reset();
-    showLeadFormSuccess();
-  } catch (error) {
-    console.error(error);
-    showLeadFormToast("error");
-    playLeadSubmitError();
-  } finally {
-    leadSubmitInFlight = false;
-    leadSubmitBtn.disabled = false;
-  }
+    if (leadSubmitInFlight.has(form)) {
+      return;
+    }
+
+    leadSubmitInFlight.add(form);
+    leadSubmitBtn.disabled = true;
+    activeLeadSubmitBtn = leadSubmitBtn;
+
+    try {
+      await submitLeadRequest(form);
+      form.reset();
+      showLeadFormSuccess();
+    } catch (error) {
+      console.error(error);
+      showLeadFormToast("error");
+      playLeadSubmitError(leadSubmitBtn);
+    } finally {
+      leadSubmitInFlight.delete(form);
+      leadSubmitBtn.disabled = false;
+    }
+  });
 });
 
 /* ---------- Site chrome + gallery: sync on scroll (30vh threshold) ---------- */

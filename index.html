@@ -372,17 +372,23 @@
           </div>
         </div>
 
-        <section class="email-cta" aria-labelledby="email-cta-title">
+        <section class="email-cta" aria-labelledby="email-cta-title-hero">
           <div class="email-cta__inner">
             <div class="email-cta__copy">
-              <h2 class="email-cta__title" id="email-cta-title" data-i18n="cta.email.title">
+              <h2 class="email-cta__title" id="email-cta-title-hero" data-i18n="cta.email.title">
                 Bring intellectumUS to your school
               </h2>
               <p class="email-cta__lead" data-i18n="cta.email.lead">
                 Leave your email and our team will reach out with a tailored proposal.
               </p>
             </div>
-            <form id="lead-form-body" class="email-cta__form" method="post">
+            <form
+              id="lead-form-hero"
+              class="email-cta__form"
+              method="post"
+              data-lead-form
+              data-lead-product="intellectumus"
+            >
               <input
                 type="text"
                 name="company"
@@ -405,7 +411,7 @@
                   />
                 </span>
               </label>
-              <button class="lead-form__submit" type="submit" form="lead-form-body" data-i18n="form.submit">
+              <button class="lead-form__submit" type="submit" data-i18n="form.submit">
                 Submit request
               </button>
             </form>
@@ -645,6 +651,52 @@
           <a class="land-section__cta" href="mailto:info@intellectumus.com">Request Information</a>
           <a class="land-section__cta land-section__cta--ghost" href="mailto:info@intellectumus.com">Book a Meeting</a>
         </div>
+      </div>
+    </section>
+
+    <section class="email-cta" aria-labelledby="email-cta-title-footer">
+      <div class="email-cta__inner">
+        <div class="email-cta__copy">
+          <h2 class="email-cta__title" id="email-cta-title-footer" data-i18n="cta.email.footer.title">
+            Ready to transform learning at your school?
+          </h2>
+          <p class="email-cta__lead" data-i18n="cta.email.footer.lead">
+            Share your email — we'll follow up with solutions matched to your goals and classroom needs.
+          </p>
+        </div>
+        <form
+          id="lead-form-footer"
+          class="email-cta__form"
+          method="post"
+          data-lead-form
+          data-lead-product="intellectumus"
+        >
+          <input
+            type="text"
+            name="company"
+            class="lead-form__hp"
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+          />
+          <label class="email-cta__field lead-form__field">
+            <span class="visually-hidden" data-i18n="form.email">Your email</span>
+            <span class="lead-form__control">
+              <input
+                type="email"
+                name="email"
+                placeholder="Your email"
+                autocomplete="email"
+                aria-label="Email"
+                data-i18n-placeholder="form.email"
+                data-i18n-aria-label="form.email"
+              />
+            </span>
+          </label>
+          <button class="lead-form__submit" type="submit" data-i18n="form.submit">
+            Submit request
+          </button>
+        </form>
       </div>
     </section>
 
