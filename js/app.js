@@ -1220,41 +1220,59 @@ const getHexLuminance = (hex) => {
 };
 
 const resolveSurfaceLuminance = (element) => {
+  const chain = [];
   let node = element;
 
   while (node && node !== document.documentElement) {
-    const background = parseCssColor(getComputedStyle(node).backgroundColor);
-    if (background && background.a > 0.12) {
+    chain.push(node);
+    node = node.parentElement;
+  }
+
+  for (const item of chain) {
+    if (item === document.body) {
+      continue;
+    }
+
+    const background = parseCssColor(getComputedStyle(item).backgroundColor);
+    if (background && background.a > 0.08) {
       return getRgbLuminance(background);
     }
-
-    node = node.parentElement;
   }
 
-  node = element;
-  while (node && node !== document.documentElement) {
-    if (node.getAttribute?.("data-chrome-surface") === "light") {
+  for (const item of chain) {
+    if (item.getAttribute?.("data-chrome-surface") === "light") {
       return CHROME_SURFACE_LIGHT_LUM;
     }
 
-    if (node.matches?.(CHROME_LIGHT_SURFACE_SELECTOR)) {
+    if (item.matches?.(CHROME_LIGHT_SURFACE_SELECTOR)) {
+      return CHROME_SURFACE_LIGHT_LUM;
+    }
+  }
+
+  for (const item of chain) {
+    const textColor = parseCssColor(getComputedStyle(item).color);
+    if (!textColor || textColor.a <= 0.45) {
+      continue;
+    }
+
+    const textLuminance = getRgbLuminance(textColor);
+    if (textLuminance < 0.4) {
       return CHROME_SURFACE_LIGHT_LUM;
     }
 
-    node = node.parentElement;
+    if (textLuminance > 0.7) {
+      return CHROME_SURFACE_DARK_LUM;
+    }
   }
 
-  node = element;
-  while (node && node !== document.documentElement) {
-    if (node.getAttribute?.("data-chrome-surface") === "dark") {
+  for (const item of chain) {
+    if (item.getAttribute?.("data-chrome-surface") === "dark") {
       return CHROME_SURFACE_DARK_LUM;
     }
 
-    if (node.matches?.(CHROME_DARK_SURFACE_SELECTOR)) {
+    if (item.matches?.(CHROME_DARK_SURFACE_SELECTOR)) {
       return CHROME_SURFACE_DARK_LUM;
     }
-
-    node = node.parentElement;
   }
 
   return CHROME_SURFACE_DARK_LUM;
@@ -1273,7 +1291,8 @@ const peekBelowSiteChrome = (x, y) => {
     node.style.pointerEvents = "none";
   });
 
-  const element = document.elementFromPoint(x, y);
+  const elements = document.elementsFromPoint(x, y);
+  const element = elements.find((candidate) => !siteChrome.contains(candidate)) || null;
 
   toggled.forEach(([node, previous]) => {
     node.style.pointerEvents = previous;
@@ -1283,25 +1302,41 @@ const peekBelowSiteChrome = (x, y) => {
 };
 
 const sampleChromeSurfaceLuminance = () => {
-  const anchor = siteNav || siteChrome;
+  const anchor = siteChrome || siteNav;
   if (!anchor) {
     return CHROME_SURFACE_LIGHT_LUM;
   }
 
   const rect = anchor.getBoundingClientRect();
-  const x = Math.round(rect.left + rect.width / 2);
-  const y = Math.round(rect.top + rect.height / 2);
+  const sampleYs = [
+    Math.round(rect.top + rect.height * 0.5),
+    Math.round(rect.bottom + 1),
+  ];
+  const sampleXs = [
+    Math.round(rect.left + rect.width * 0.35),
+    Math.round(rect.left + rect.width * 0.65),
+  ];
 
-  if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight) {
-    return CHROME_SURFACE_LIGHT_LUM;
-  }
+  const luminances = [];
 
-  const element = peekBelowSiteChrome(x, y);
-  if (!element) {
+  sampleYs.forEach((y) => {
+    sampleXs.forEach((x) => {
+      if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight) {
+        return;
+      }
+
+      const element = peekBelowSiteChrome(x, y);
+      if (element) {
+        luminances.push(resolveSurfaceLuminance(element));
+      }
+    });
+  });
+
+  if (!luminances.length) {
     return CHROME_SURFACE_DARK_LUM;
   }
 
-  return resolveSurfaceLuminance(element);
+  return luminances.reduce((sum, value) => sum + value, 0) / luminances.length;
 };
 
 const getChromeBaseTextColor = () => {
