@@ -35,7 +35,6 @@
     loginError: document.getElementById("admin-login-error"),
     panel: document.getElementById("admin-panel"),
     logout: document.getElementById("admin-logout"),
-    refresh: document.getElementById("admin-refresh"),
     updated: document.getElementById("admin-updated"),
     period: document.getElementById("admin-period"),
     kpis: document.getElementById("admin-kpis"),
@@ -623,7 +622,9 @@
     showLogin();
   });
 
-  el.refresh.addEventListener("click", refreshAll);
+  document.querySelectorAll(".js-admin-refresh").forEach((btn) => {
+    btn.addEventListener("click", refreshAll);
+  });
 
   el.period.addEventListener("click", (event) => {
     const chip = event.target.closest(".admin__chip");

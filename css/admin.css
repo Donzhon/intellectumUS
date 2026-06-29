@@ -116,6 +116,16 @@ body.is-drawer-open {
   background: var(--admin-surface-2);
 }
 
+.admin__btn--accent {
+  background: transparent;
+  border-color: var(--admin-accent);
+  color: var(--admin-accent);
+}
+
+.admin__btn--accent:hover {
+  background: rgba(79, 140, 255, 0.14);
+}
+
 .admin__btn--danger {
   background: transparent;
   border-color: var(--admin-danger);
