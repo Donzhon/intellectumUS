@@ -41,9 +41,8 @@
         }
       })();
     </script>
-    <link rel="preload" as="image" href="assets/icon/intellectum-256.webp" type="image/webp" />
-    <link rel="preload" as="image" href="assets/hero/hero-full.png" media="(min-width: 721px)" />
-    <link rel="preload" as="image" href="assets/hero/hero-mobile.png" media="(max-width: 720px)" />
+    <link rel="preload" as="image" href="assets/hero/hero-full.png" media="(min-width: 721px)" fetchpriority="high" />
+    <link rel="preload" as="image" href="assets/hero/hero-mobile.png" media="(max-width: 720px)" fetchpriority="high" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -56,7 +55,7 @@
     <div class="boot-screen" id="boot-screen" hidden aria-live="polite" aria-label="Loading">
       <picture>
         <source srcset="assets/icon/intellectum-256.webp" type="image/webp" />
-        <img class="boot-screen__logo" src="assets/icon/intellectum-256.png" alt="" width="256" height="256" decoding="async" fetchpriority="high" />
+        <img class="boot-screen__logo" src="assets/icon/intellectum-256.png" alt="" width="256" height="256" decoding="async" />
       </picture>
       <div class="boot-screen__spinner" aria-hidden="true"></div>
     </div>

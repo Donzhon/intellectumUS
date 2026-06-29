@@ -1,10 +1,10 @@
 /* First-visit boot screen for the home page.
-   Shows a short loading screen (1–2.5s) while the hero image and fonts
-   warm up, so the hero never appears with a black canvas or unstyled text. */
+   Waits only for the hero <img> (no duplicate fetch, no font gate) so the
+   main visual appears as soon as it is decoded. Boot logo is already in DOM. */
 (() => {
   const STORAGE_KEY = "intellectum-us-index-boot-v1";
-  const MIN_VISIBLE_MS = 1000;
-  const MAX_VISIBLE_MS = 2500;
+  const MIN_VISIBLE_MS = 400;
+  const MAX_VISIBLE_MS = 2000;
   const FADE_MS = 400;
 
   const root = document.documentElement;
@@ -31,33 +31,20 @@
 
   const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
 
-  const fontsReady = document.fonts?.ready
-    ? document.fonts.ready.catch(() => {})
-    : Promise.resolve();
-
-  const heroImageSrc = window.matchMedia("(max-width: 720px)").matches
-    ? "assets/hero/hero-mobile.png"
-    : "assets/hero/hero-full.png";
-  const heroImageReady = new Promise((resolve) => {
-    const img = new Image();
-    img.addEventListener("load", () => resolve(), { once: true });
-    img.addEventListener("error", () => resolve(), { once: true });
-    img.src = heroImageSrc;
-  });
-
-  const bootLogoReady = new Promise((resolve) => {
-    const img = new Image();
-    img.addEventListener("load", () => resolve(), { once: true });
-    img.addEventListener("error", () => resolve(), { once: true });
-    if (img.srcset !== undefined) {
-      img.srcset = "assets/icon/intellectum-256.webp";
-      img.src = "assets/icon/intellectum-256.png";
-    } else {
-      img.src = "assets/icon/intellectum-256.png";
+  const waitForImage = (img) => {
+    if (!img) {
+      return Promise.resolve();
     }
-  });
+    if (img.complete && img.naturalWidth > 0) {
+      return Promise.resolve();
+    }
+    return new Promise((resolve) => {
+      img.addEventListener("load", () => resolve(), { once: true });
+      img.addEventListener("error", () => resolve(), { once: true });
+    });
+  };
 
-  const assetsReady = Promise.all([fontsReady, bootLogoReady, heroImageReady]);
+  const heroImageReady = waitForImage(document.querySelector(".hero-art__img"));
 
   let finished = false;
 
@@ -81,6 +68,6 @@
     }, FADE_MS);
   };
 
-  Promise.all([assetsReady, sleep(MIN_VISIBLE_MS)]).then(finish);
+  Promise.all([heroImageReady, sleep(MIN_VISIBLE_MS)]).then(finish);
   window.setTimeout(finish, MAX_VISIBLE_MS);
 })();
