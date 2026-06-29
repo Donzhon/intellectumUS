@@ -1135,10 +1135,24 @@ const CHROME_TEXT_ON_LIGHT = "#1a1a1f";
 const CHROME_DARK_SURFACE_SELECTOR =
   ".site-footer, .email-cta, .hero-stage, .inner-page__hero--dark, [data-chrome-surface='dark']";
 const CHROME_LIGHT_SURFACE_SELECTOR =
-  ".bento-showcase, .land-feature, [data-chrome-surface='light']";
+  ".bento-showcase, .land-feature, .land-feature--mist, .land-feature--lavender, .land-feature--cta, " +
+  ".inner-section--surface, .inner-section--mist, .telos-how, .telos-how__step, " +
+  "[data-chrome-surface='light']";
 
 const chromeGlassElements = () =>
   [siteChrome, siteBrand, siteNav, siteActions, innerActions].filter(Boolean);
+
+let chromeColorProbeEl = null;
+
+const getChromeColorProbe = () => {
+  if (!chromeColorProbeEl) {
+    chromeColorProbeEl = document.createElement("div");
+    chromeColorProbeEl.hidden = true;
+    document.documentElement.appendChild(chromeColorProbeEl);
+  }
+
+  return chromeColorProbeEl;
+};
 
 const parseCssRgbColor = (value) => {
   if (!value || value === "transparent") {
@@ -1161,6 +1175,22 @@ const parseCssRgbColor = (value) => {
     b: Number(match[3]),
     a: alpha,
   };
+};
+
+const parseCssColor = (value) => {
+  if (!value || value === "transparent") {
+    return null;
+  }
+
+  const direct = parseCssRgbColor(value);
+  if (direct) {
+    return direct;
+  }
+
+  const probe = getChromeColorProbe();
+  probe.style.backgroundColor = "";
+  probe.style.backgroundColor = value;
+  return parseCssRgbColor(getComputedStyle(probe).backgroundColor);
 };
 
 const getRgbLuminance = ({ r, g, b }) => {
@@ -1193,25 +1223,35 @@ const resolveSurfaceLuminance = (element) => {
   let node = element;
 
   while (node && node !== document.documentElement) {
-    if (node.matches?.(CHROME_DARK_SURFACE_SELECTOR)) {
-      return CHROME_SURFACE_DARK_LUM;
+    const background = parseCssColor(getComputedStyle(node).backgroundColor);
+    if (background && background.a > 0.12) {
+      return getRgbLuminance(background);
+    }
+
+    node = node.parentElement;
+  }
+
+  node = element;
+  while (node && node !== document.documentElement) {
+    if (node.getAttribute?.("data-chrome-surface") === "light") {
+      return CHROME_SURFACE_LIGHT_LUM;
     }
 
     if (node.matches?.(CHROME_LIGHT_SURFACE_SELECTOR)) {
       return CHROME_SURFACE_LIGHT_LUM;
     }
 
-    const surfaceAttr = node.getAttribute?.("data-chrome-surface");
-    if (surfaceAttr === "dark") {
+    node = node.parentElement;
+  }
+
+  node = element;
+  while (node && node !== document.documentElement) {
+    if (node.getAttribute?.("data-chrome-surface") === "dark") {
       return CHROME_SURFACE_DARK_LUM;
     }
-    if (surfaceAttr === "light") {
-      return CHROME_SURFACE_LIGHT_LUM;
-    }
 
-    const background = parseCssRgbColor(getComputedStyle(node).backgroundColor);
-    if (background) {
-      return getRgbLuminance(background);
+    if (node.matches?.(CHROME_DARK_SURFACE_SELECTOR)) {
+      return CHROME_SURFACE_DARK_LUM;
     }
 
     node = node.parentElement;
