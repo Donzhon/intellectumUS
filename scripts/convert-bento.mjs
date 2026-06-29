@@ -17,6 +17,13 @@ const sources = [
   { dir: "assets/telos/bento", input: "telos 1250-800.png", prefix: "telos_1250-800" },
   { dir: "assets/telos/bento", input: "telos-bento.png", prefix: "telos-bento" },
   {
+    dir: "assets/telos",
+    input: "hero.png",
+    prefix: "hero",
+    widths: [400, 800, 1024],
+    fullWebp: true,
+  },
+  {
     dir: "assets/hero",
     input: "hero-full.png",
     prefix: "hero-full",
