@@ -383,15 +383,20 @@ const getVisibleBackgroundSource = () => {
   return videoLayers[visibleLayerIndex] ?? null;
 };
 
+const shouldRunCanvasLoop = () =>
+  HERO_VIDEO_ENABLED && !useNativeTouchVideo && bgCtx && !videoDisabled && videoLayers.length > 0;
+
 const renderFrame = () => {
-  if (!useNativeTouchVideo && bgCtx && !videoDisabled && videoLayers.length > 0) {
-    if (fadeTo) {
-      const t = Math.min(1, (performance.now() - fadeStart) / CROSSFADE_MS);
-      drawCoverSource(fadeFrom, 1);
-      drawCoverSource(fadeTo, t);
-    } else {
-      drawCoverSource(getVisibleBackgroundSource(), 1);
-    }
+  if (!shouldRunCanvasLoop()) {
+    return;
+  }
+
+  if (fadeTo) {
+    const t = Math.min(1, (performance.now() - fadeStart) / CROSSFADE_MS);
+    drawCoverSource(fadeFrom, 1);
+    drawCoverSource(fadeTo, t);
+  } else {
+    drawCoverSource(getVisibleBackgroundSource(), 1);
   }
 
   requestAnimationFrame(renderFrame);
@@ -888,7 +893,7 @@ if (videoLayers.length > 0 && (bgCtx || useNativeTouchVideo)) {
       .catch(() => handleVideoError(NODI_INTRO_VIDEO));
   }
 
-  if (!useNativeTouchVideo) {
+  if (shouldRunCanvasLoop()) {
     requestAnimationFrame(renderFrame);
   }
 }
@@ -1283,20 +1288,13 @@ const peekBelowSiteChrome = (x, y) => {
     return null;
   }
 
-  const toggled = [];
-  const stack = [siteChrome, ...siteChrome.querySelectorAll("*")];
+  const previous = siteChrome.style.pointerEvents;
+  siteChrome.style.pointerEvents = "none";
 
-  stack.forEach((node) => {
-    toggled.push([node, node.style.pointerEvents]);
-    node.style.pointerEvents = "none";
-  });
+  const element =
+    document.elementsFromPoint(x, y).find((candidate) => !siteChrome.contains(candidate)) ?? null;
 
-  const elements = document.elementsFromPoint(x, y);
-  const element = elements.find((candidate) => !siteChrome.contains(candidate)) || null;
-
-  toggled.forEach(([node, previous]) => {
-    node.style.pointerEvents = previous;
-  });
+  siteChrome.style.pointerEvents = previous;
 
   return element;
 };
@@ -1361,6 +1359,9 @@ const resolveChromeTextColor = (surfaceLuminance) => {
 };
 
 let chromeContrastTicking = false;
+let chromeContrastTrailingTimer = null;
+let chromeContrastLastRun = 0;
+const CHROME_CONTRAST_SCROLL_MS = 120;
 
 const applyChromeTextColor = (color) => {
   chromeGlassElements().forEach((el) => {
@@ -1380,14 +1381,43 @@ const syncChromeContrast = () => {
   document.body.classList.toggle("is-chrome-on-dark", surfaceLuminance < CHROME_LUMINANCE_THRESHOLD);
 };
 
-const scheduleChromeContrastSync = () => {
-  if (!siteChrome || chromeContrastTicking) {
+const scheduleChromeContrastSync = ({ immediate = false } = {}) => {
+  if (!siteChrome) {
+    return;
+  }
+
+  if (immediate) {
+    if (chromeContrastTrailingTimer) {
+      clearTimeout(chromeContrastTrailingTimer);
+      chromeContrastTrailingTimer = null;
+    }
+
+    chromeContrastLastRun = performance.now();
+    syncChromeContrast();
+    return;
+  }
+
+  if (chromeContrastTicking) {
     return;
   }
 
   chromeContrastTicking = true;
   window.requestAnimationFrame(() => {
     chromeContrastTicking = false;
+
+    const now = performance.now();
+    if (now - chromeContrastLastRun < CHROME_CONTRAST_SCROLL_MS) {
+      if (!chromeContrastTrailingTimer) {
+        chromeContrastTrailingTimer = window.setTimeout(() => {
+          chromeContrastTrailingTimer = null;
+          chromeContrastLastRun = performance.now();
+          syncChromeContrast();
+        }, CHROME_CONTRAST_SCROLL_MS);
+      }
+      return;
+    }
+
+    chromeContrastLastRun = now;
     syncChromeContrast();
   });
 };
@@ -1414,7 +1444,7 @@ const applyLeftGlassSettings = (settings) => {
     }
   });
 
-  scheduleChromeContrastSync();
+  scheduleChromeContrastSync({ immediate: true });
 
   if (leftContent && !leftContent.classList.contains("left-content--inner")) {
     leftContent.style.setProperty("--left-glass-blur", `${settings.blur}px`);
@@ -2259,12 +2289,15 @@ const refreshNavMergeThreshold = () => {
 };
 
 const updateSiteScrollUi = () => {
-  scheduleChromeContrastSync();
+  const wasNavMerged = document.body.classList.contains("is-nav-merged");
 
   if (usesHeroBrandSync()) {
     document.body.classList.toggle("is-nav-merged", !heroBrandInView);
     document.body.classList.toggle("is-hero-brand-in-view", heroBrandInView);
     syncMobileChromeAnchor();
+
+    const navMergeChanged = wasNavMerged !== document.body.classList.contains("is-nav-merged");
+    scheduleChromeContrastSync({ immediate: navMergeChanged });
     return;
   }
 
@@ -2273,6 +2306,9 @@ const updateSiteScrollUi = () => {
 
   if (isInnerPage) {
     document.body.classList.add("is-nav-merged");
+    scheduleChromeContrastSync({
+      immediate: wasNavMerged !== document.body.classList.contains("is-nav-merged"),
+    });
     return;
   }
 
@@ -2284,6 +2320,10 @@ const updateSiteScrollUi = () => {
     const pastThreshold = window.scrollY > navMergeScrollThreshold;
     document.body.classList.toggle("is-nav-merged", pastThreshold);
   }
+
+  scheduleChromeContrastSync({
+    immediate: wasNavMerged !== document.body.classList.contains("is-nav-merged"),
+  });
 };
 
 let cachedMobileBrandWidth = 0;
@@ -2335,6 +2375,20 @@ const syncMobileChromeAnchor = () => {
 };
 
 let siteScrollTicking = false;
+let scrollMotionTimer = null;
+const SCROLL_MOTION_MS = 140;
+
+const markScrollMotion = () => {
+  if (!document.body.classList.contains("is-scrolling")) {
+    document.body.classList.add("is-scrolling");
+  }
+
+  window.clearTimeout(scrollMotionTimer);
+  scrollMotionTimer = window.setTimeout(() => {
+    document.body.classList.remove("is-scrolling");
+    scheduleChromeContrastSync({ immediate: true });
+  }, SCROLL_MOTION_MS);
+};
 
 refreshNavMergeThreshold();
 window.addEventListener("orientationchange", () => {
@@ -2378,9 +2432,14 @@ if (enableScrollSync) {
 updateSiteScrollUi();
 
 if (siteChrome) {
-  window.addEventListener("scroll", scheduleChromeContrastSync, { passive: true });
-  window.addEventListener("resize", scheduleChromeContrastSync);
-  scheduleChromeContrastSync();
+  const onChromeScroll = () => {
+    markScrollMotion();
+    scheduleChromeContrastSync();
+  };
+
+  window.addEventListener("scroll", onChromeScroll, { passive: true });
+  window.addEventListener("resize", () => scheduleChromeContrastSync({ immediate: true }));
+  scheduleChromeContrastSync({ immediate: true });
 }
 
 /* ---------- Bento showcase: mobile layout mode toggle ---------- */

@@ -3,9 +3,10 @@ import path from "node:path";
 import sharp from "sharp";
 
 const WEBP_QUALITY = 90;
+const HERO_WEBP_QUALITY = 95;
 const DEFAULT_WIDTHS = [400, 800, 1200];
 
-/** @type {{ dir: string; input: string; prefix: string; widths?: number[]; fullWebp?: boolean }[]} */
+/** @type {{ dir: string; input: string; prefix: string; widths?: number[]; fullWebp?: boolean; webpQuality?: number }[]} */
 const sources = [
   { dir: "assets/intellectum/bento", input: "intellectum_25-24.png", prefix: "intellectum_25-24" },
   { dir: "assets/nodi/bento", input: "nodi_25-24.png", prefix: "nodi_25-24" },
@@ -20,15 +21,17 @@ const sources = [
     dir: "assets/telos",
     input: "hero.png",
     prefix: "hero",
-    widths: [400, 800, 1024],
+    widths: [800, 1024],
     fullWebp: true,
+    webpQuality: HERO_WEBP_QUALITY,
   },
   {
     dir: "assets/telos",
     input: "hero-mobile.png",
     prefix: "hero-mobile",
-    widths: [400],
+    widths: [400, 576, 800],
     fullWebp: true,
+    webpQuality: HERO_WEBP_QUALITY,
   },
   {
     dir: "assets/telos",
@@ -83,7 +86,7 @@ const sources = [
 
 const results = [];
 
-for (const { dir, input, prefix, widths = DEFAULT_WIDTHS, fullWebp = false } of sources) {
+for (const { dir, input, prefix, widths = DEFAULT_WIDTHS, fullWebp = false, webpQuality = WEBP_QUALITY } of sources) {
   const root = path.resolve(dir);
   const inputPath = path.join(root, input);
   const meta = await sharp(inputPath).metadata();
@@ -101,7 +104,7 @@ for (const { dir, input, prefix, widths = DEFAULT_WIDTHS, fullWebp = false } of 
     const outName = `${prefix}.webp`;
     const outPath = path.join(root, outName);
 
-    await sharp(inputPath).webp({ quality: WEBP_QUALITY, effort: 6 }).toFile(outPath);
+    await sharp(inputPath).webp({ quality: webpQuality, effort: 6, smartSubsample: false }).toFile(outPath);
 
     const outMeta = await sharp(outPath).metadata();
     results.push({
@@ -124,7 +127,7 @@ for (const { dir, input, prefix, widths = DEFAULT_WIDTHS, fullWebp = false } of 
 
     await sharp(inputPath)
       .resize({ width, withoutEnlargement: true })
-      .webp({ quality: WEBP_QUALITY, effort: 6 })
+      .webp({ quality: webpQuality, effort: 6, smartSubsample: false })
       .toFile(outPath);
 
     const outMeta = await sharp(outPath).metadata();

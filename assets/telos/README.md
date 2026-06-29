@@ -17,5 +17,5 @@
 
 Форматы: `.png` (мастер) / `.webp` (фон), прозрачные `.png` при необходимости.
 После загрузки можно подставить путь в `telos.html`:
-- Hero: класс `inner-page__hero--telos` (ПК: `hero.webp`, мобилка: `hero-mobile.webp`, на узких экранах `hero-mobile-400.webp`). На мобилке в hero только заголовок внизу; форма — в блоке ниже.
+- Hero: класс `inner-page__hero--telos` (ПК: `hero.png`, мобилка: `hero-mobile.png`, на узких экранах `hero-mobile-800.webp` q95). На мобилке в hero только заголовок внизу; форма — в блоке ниже.
 - Workflow: `assets/telos/workflow_4-3.png` в секции «How TELOS Works».
