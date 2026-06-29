@@ -1907,6 +1907,26 @@ html.is-boot-loading .lead-form__select-menu {
   --left-glass-shadow: 20;
   --left-glass-backdrop-filter: blur(18px) saturate(132%) contrast(109%);
   --panel-text-color: #413546;
+  --chrome-glass-dim-boost: 0;
+  --chrome-glass-shade: #1c1826;
+  --chrome-glass-fill: color-mix(
+    in srgb,
+    color-mix(
+      in srgb,
+      var(--panel-tint-color) calc((var(--panel-dim-strength) + var(--chrome-glass-dim-boost)) / 100 * 52%),
+      var(--chrome-glass-shade) calc(var(--chrome-glass-dim-boost) * 2.75%)
+    ),
+    transparent
+  );
+  --chrome-glass-fill-soft: color-mix(
+    in srgb,
+    color-mix(
+      in srgb,
+      var(--panel-tint-color) calc((var(--panel-dim-strength) + var(--chrome-glass-dim-boost)) / 100 * 22%),
+      var(--chrome-glass-shade) calc(var(--chrome-glass-dim-boost) * 1.85%)
+    ),
+    transparent
+  );
   --site-chrome-bar-min-height: 3rem;
   --site-chrome-pad-y: 0.4rem;
   position: fixed;
@@ -1971,10 +1991,9 @@ html.is-boot-loading .lead-form__select-menu {
   border-radius: 999px;
   overflow: visible;
   flex-wrap: nowrap;
-  background: color-mix(
-    in srgb,
-    var(--panel-tint-color) calc(var(--panel-dim-strength) / 100 * 52%),
-    transparent
+  background: var(
+    --chrome-glass-fill,
+    color-mix(in srgb, var(--panel-tint-color) calc(var(--panel-dim-strength) / 100 * 52%), transparent)
   );
   backdrop-filter: var(--left-glass-backdrop-filter);
   -webkit-backdrop-filter: var(--left-glass-backdrop-filter);
@@ -1989,6 +2008,19 @@ html.is-boot-loading .lead-form__select-menu {
     background 0.4s ease,
     padding 0.4s ease,
     gap 0.4s ease;
+}
+
+body.is-chrome-on-dark .bloom-page.is-nav-merged .site-chrome {
+  box-shadow:
+    0 calc(var(--left-glass-shadow) * 0.4px) calc(var(--left-glass-shadow) * 1.25px)
+      rgba(0, 0, 0, calc(0.16 + var(--left-glass-shadow) * 0.007)),
+    0 calc(var(--left-glass-shadow) * 0.12px) calc(var(--left-glass-shadow) * 0.45px)
+      rgba(0, 0, 0, calc(0.1 + var(--left-glass-shadow) * 0.004)),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
+body.is-chrome-on-dark .bloom-page.is-nav-merged .site-chrome::before {
+  opacity: 0.42;
 }
 
 .bloom-page.is-nav-merged .site-chrome::before {
@@ -2020,10 +2052,9 @@ html.is-boot-loading .lead-form__select-menu {
   border-radius: inherit;
   pointer-events: none;
   z-index: 0;
-  background: color-mix(
-    in srgb,
-    var(--panel-tint-color) calc(var(--panel-dim-strength) / 100 * 22%),
-    transparent
+  background: var(
+    --chrome-glass-fill-soft,
+    color-mix(in srgb, var(--panel-tint-color) calc(var(--panel-dim-strength) / 100 * 22%), transparent)
   );
 }
 
@@ -2074,6 +2105,26 @@ html.is-boot-loading .lead-form__select-menu {
   --left-glass-shadow: 20;
   --left-glass-backdrop-filter: blur(18px) saturate(132%) contrast(109%);
   --panel-text-color: #413546;
+  --chrome-glass-dim-boost: 0;
+  --chrome-glass-shade: #1c1826;
+  --chrome-glass-fill: color-mix(
+    in srgb,
+    color-mix(
+      in srgb,
+      var(--panel-tint-color) calc((var(--panel-dim-strength) + var(--chrome-glass-dim-boost)) / 100 * 52%),
+      var(--chrome-glass-shade) calc(var(--chrome-glass-dim-boost) * 2.75%)
+    ),
+    transparent
+  );
+  --chrome-glass-fill-soft: color-mix(
+    in srgb,
+    color-mix(
+      in srgb,
+      var(--panel-tint-color) calc((var(--panel-dim-strength) + var(--chrome-glass-dim-boost)) / 100 * 22%),
+      var(--chrome-glass-shade) calc(var(--chrome-glass-dim-boost) * 1.85%)
+    ),
+    transparent
+  );
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
@@ -2117,6 +2168,26 @@ html.is-boot-loading .lead-form__select-menu {
   --left-glass-shadow: 20;
   --left-glass-backdrop-filter: blur(18px) saturate(132%) contrast(109%);
   --panel-text-color: #413546;
+  --chrome-glass-dim-boost: 0;
+  --chrome-glass-shade: #1c1826;
+  --chrome-glass-fill: color-mix(
+    in srgb,
+    color-mix(
+      in srgb,
+      var(--panel-tint-color) calc((var(--panel-dim-strength) + var(--chrome-glass-dim-boost)) / 100 * 52%),
+      var(--chrome-glass-shade) calc(var(--chrome-glass-dim-boost) * 2.75%)
+    ),
+    transparent
+  );
+  --chrome-glass-fill-soft: color-mix(
+    in srgb,
+    color-mix(
+      in srgb,
+      var(--panel-tint-color) calc((var(--panel-dim-strength) + var(--chrome-glass-dim-boost)) / 100 * 22%),
+      var(--chrome-glass-shade) calc(var(--chrome-glass-dim-boost) * 1.85%)
+    ),
+    transparent
+  );
   box-sizing: border-box;
   position: relative;
   display: flex;
@@ -2133,6 +2204,12 @@ html.is-boot-loading .lead-form__select-menu {
     color 0.3s ease;
 }
 
+body.is-chrome-on-dark .site-chrome,
+body.is-chrome-on-dark .site-brand,
+body.is-chrome-on-dark .site-nav {
+  --chrome-glass-dim-boost: 8;
+}
+
 .site-brand.liquid-glass,
 .site-nav.liquid-glass,
 .site-actions.liquid-glass,
@@ -2140,10 +2217,9 @@ html.is-boot-loading .lead-form__select-menu {
 .lead-form__toast.liquid-glass {
   backdrop-filter: var(--left-glass-backdrop-filter);
   -webkit-backdrop-filter: var(--left-glass-backdrop-filter);
-  background: color-mix(
-    in srgb,
-    var(--panel-tint-color) calc(var(--panel-dim-strength) / 100 * 52%),
-    transparent
+  background: var(
+    --chrome-glass-fill,
+    color-mix(in srgb, var(--panel-tint-color) calc(var(--panel-dim-strength) / 100 * 52%), transparent)
   );
   background-blend-mode: normal;
   box-shadow:
@@ -2152,6 +2228,22 @@ html.is-boot-loading .lead-form__select-menu {
     0 calc(var(--left-glass-shadow) * 0.12px) calc(var(--left-glass-shadow) * 0.45px)
       rgba(0, 0, 0, calc(0.08 + var(--left-glass-shadow) * 0.004)),
     inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  transition: background 0.35s ease, box-shadow 0.35s ease;
+}
+
+body.is-chrome-on-dark .site-brand.liquid-glass,
+body.is-chrome-on-dark .site-nav.liquid-glass {
+  box-shadow:
+    0 calc(var(--left-glass-shadow) * 0.4px) calc(var(--left-glass-shadow) * 1.25px)
+      rgba(0, 0, 0, calc(0.16 + var(--left-glass-shadow) * 0.007)),
+    0 calc(var(--left-glass-shadow) * 0.12px) calc(var(--left-glass-shadow) * 0.45px)
+      rgba(0, 0, 0, calc(0.1 + var(--left-glass-shadow) * 0.004)),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
+body.is-chrome-on-dark .site-brand.liquid-glass::before,
+body.is-chrome-on-dark .site-nav.liquid-glass::before {
+  opacity: 0.42;
 }
 
 .site-brand.liquid-glass::after,
@@ -2165,10 +2257,9 @@ html.is-boot-loading .lead-form__select-menu {
   border-radius: inherit;
   pointer-events: none;
   z-index: 0;
-  background: color-mix(
-    in srgb,
-    var(--panel-tint-color) calc(var(--panel-dim-strength) / 100 * 22%),
-    transparent
+  background: var(
+    --chrome-glass-fill-soft,
+    color-mix(in srgb, var(--panel-tint-color) calc(var(--panel-dim-strength) / 100 * 22%), transparent)
   );
 }
 
@@ -2592,10 +2683,9 @@ html.is-boot-loading .lead-form__select-menu {
   border-radius: 999px;
   overflow: visible;
   flex-wrap: nowrap;
-  background: color-mix(
-    in srgb,
-    var(--panel-tint-color) calc(var(--panel-dim-strength) / 100 * 52%),
-    transparent
+  background: var(
+    --chrome-glass-fill,
+    color-mix(in srgb, var(--panel-tint-color) calc(var(--panel-dim-strength) / 100 * 52%), transparent)
   );
   backdrop-filter: var(--left-glass-backdrop-filter);
   -webkit-backdrop-filter: var(--left-glass-backdrop-filter);
@@ -3583,11 +3673,10 @@ html.is-boot-loading .lead-form__select-menu {
     min-height: var(--mobile-tap-size);
     padding: 0.3rem 0.35rem;
     border-radius: 999px;
-    background: color-mix(
-      in srgb,
-      var(--panel-tint-color) calc(var(--panel-dim-strength) / 100 * 52%),
-      transparent
-    );
+    background: var(
+    --chrome-glass-fill,
+    color-mix(in srgb, var(--panel-tint-color) calc(var(--panel-dim-strength) / 100 * 52%), transparent)
+  );
     backdrop-filter: var(--left-glass-backdrop-filter);
     -webkit-backdrop-filter: var(--left-glass-backdrop-filter);
     box-shadow:
