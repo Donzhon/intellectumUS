@@ -1171,7 +1171,7 @@ const CHROME_LUMINANCE_THRESHOLD = 0.45;
 const CHROME_TEXT_ON_DARK = "#f8f6fa";
 const CHROME_TEXT_ON_LIGHT = "#1a1a1f";
 const CHROME_DARK_SURFACE_SELECTOR =
-  ".site-footer, .email-cta, .hero-stage, .inner-page__hero--dark, [data-chrome-surface='dark']";
+  ".site-footer, .email-cta, .hero-stage, .inner-page__hero--dark, .inner-page__hero--media, [data-chrome-surface='dark']";
 const CHROME_LIGHT_SURFACE_SELECTOR =
   ".bento-showcase, .land-feature, .land-feature--mist, .land-feature--lavender, .land-feature--cta, " +
   ".inner-section--surface, .inner-section--mist, .telos-how, .telos-how__step, " +
@@ -1271,19 +1271,25 @@ const resolveSurfaceLuminance = (element) => {
       continue;
     }
 
-    const background = parseCssColor(getComputedStyle(item).backgroundColor);
-    if (background && background.a > 0.08) {
-      return getRgbLuminance(background);
+    if (item.getAttribute?.("data-chrome-surface") === "dark") {
+      return CHROME_SURFACE_DARK_LUM;
     }
-  }
 
-  for (const item of chain) {
     if (item.getAttribute?.("data-chrome-surface") === "light") {
       return CHROME_SURFACE_LIGHT_LUM;
     }
 
+    if (item.matches?.(CHROME_DARK_SURFACE_SELECTOR)) {
+      return CHROME_SURFACE_DARK_LUM;
+    }
+
     if (item.matches?.(CHROME_LIGHT_SURFACE_SELECTOR)) {
       return CHROME_SURFACE_LIGHT_LUM;
+    }
+
+    const background = parseCssColor(getComputedStyle(item).backgroundColor);
+    if (background && background.a > 0.08) {
+      return getRgbLuminance(background);
     }
   }
 
@@ -1299,16 +1305,6 @@ const resolveSurfaceLuminance = (element) => {
     }
 
     if (textLuminance > 0.7) {
-      return CHROME_SURFACE_DARK_LUM;
-    }
-  }
-
-  for (const item of chain) {
-    if (item.getAttribute?.("data-chrome-surface") === "dark") {
-      return CHROME_SURFACE_DARK_LUM;
-    }
-
-    if (item.matches?.(CHROME_DARK_SURFACE_SELECTOR)) {
       return CHROME_SURFACE_DARK_LUM;
     }
   }
