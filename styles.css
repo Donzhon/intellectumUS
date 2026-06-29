@@ -5059,6 +5059,179 @@ html.is-boot-loading .lead-form__select-menu {
   }
 }
 
+/* ---------- TELOS: how it works section ---------- */
+.telos-how {
+  --telos-how-accent: #5c63c7;
+  background:
+    radial-gradient(ellipse 75% 45% at 15% 0%, color-mix(in srgb, var(--telos-how-accent) 14%, transparent), transparent),
+    radial-gradient(ellipse 60% 40% at 95% 100%, color-mix(in srgb, #4f7fd4 10%, transparent), transparent),
+    linear-gradient(160deg, #d4d0db 0%, #c3bdcd 55%, #b3acbc 100%);
+}
+
+.telos-how__inner {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.75rem, 4.5vw, 3rem);
+  padding-top: clamp(2.5rem, 6vw, 4.5rem);
+  padding-bottom: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.telos-how__head {
+  max-width: 44rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.telos-how__eyebrow {
+  margin: 0 0 0.85rem;
+  font-family: "Rajdhani", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--telos-how-accent);
+}
+
+.telos-how__title {
+  margin: 0 0 0.85rem;
+  font-family: "Rajdhani", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: clamp(1.85rem, 4.5vw, 2.85rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #1a2b4b;
+}
+
+.telos-how__lead {
+  margin: 0;
+  font-size: clamp(0.98rem, 2.2vw, 1.12rem);
+  line-height: 1.65;
+  color: color-mix(in srgb, var(--bloom-ink) 72%, transparent);
+}
+
+.telos-how__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  align-items: start;
+  gap: clamp(1.75rem, 4vw, 3rem);
+}
+
+.telos-how__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: clamp(0.75rem, 2vw, 1rem);
+}
+
+.telos-how__step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9rem 1rem;
+  align-items: start;
+  padding: clamp(1rem, 2.5vw, 1.2rem) clamp(1rem, 2.8vw, 1.35rem);
+  border-radius: 1rem;
+  background: color-mix(in srgb, #ffffff 72%, transparent);
+  border: 1px solid color-mix(in srgb, #ffffff 55%, var(--bloom-ink));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    0 8px 24px rgba(26, 43, 75, 0.07);
+  backdrop-filter: blur(6px);
+}
+
+.telos-how__step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--telos-how-accent), color-mix(in srgb, var(--telos-how-accent) 75%, #4f7fd4));
+  color: #fff;
+  font-family: "Rajdhani", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--telos-how-accent) 35%, transparent);
+}
+
+.telos-how__step-title {
+  margin: 0.1rem 0 0.35rem;
+  font-family: "Rajdhani", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: clamp(1rem, 2.4vw, 1.12rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #1a2b4b;
+}
+
+.telos-how__step-text {
+  margin: 0;
+  font-size: clamp(0.88rem, 2.2vw, 0.95rem);
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--bloom-ink) 68%, transparent);
+}
+
+.telos-how__figure {
+  margin: 0;
+  min-width: 0;
+}
+
+.telos-how__visual {
+  position: relative;
+  border-radius: 1.35rem;
+  overflow: hidden;
+  background: #fff;
+  box-shadow:
+    0 2px 4px rgba(26, 43, 75, 0.04),
+    0 20px 48px rgba(26, 43, 75, 0.12);
+}
+
+.telos-how__visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--telos-how-accent) 16%, transparent);
+  pointer-events: none;
+}
+
+.telos-how__visual picture {
+  display: block;
+  line-height: 0;
+}
+
+.telos-how__visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (min-width: 861px) {
+  .telos-how__figure {
+    position: sticky;
+    top: clamp(5rem, 12vh, 7rem);
+  }
+}
+
+@media (max-width: 860px) {
+  .telos-how__grid {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.25rem, 3.5vw, 1.75rem);
+  }
+
+  .telos-how__steps {
+    order: 3;
+  }
+
+  .telos-how__figure {
+    order: 2;
+    width: 100%;
+    max-width: 28rem;
+    margin-inline: auto;
+  }
+}
+
 /* ---------- TELOS: spotlight blocks (Observe / Analyze / Develop) ---------- */
 .telos-spotlight {
   --telos-spotlight-accent: #4f7fd4;
