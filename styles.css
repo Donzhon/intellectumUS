@@ -4690,8 +4690,7 @@ html.is-boot-loading .lead-form__select-menu {
     --hero-bg: url("assets/telos/hero-mobile.webp");
     align-items: flex-end;
     min-height: clamp(34rem, 92svh, 42rem);
-    padding-top: clamp(5.5rem, 14vh, 7rem);
-    padding-bottom: clamp(1.25rem, 4vh, 1.75rem);
+    padding: clamp(5.5rem, 14vh, 7rem) 0 0;
     background-position: center top;
   }
 
@@ -4702,9 +4701,13 @@ html.is-boot-loading .lead-form__select-menu {
   .inner-page__hero--telos .inner-page__hero-inner {
     position: relative;
     z-index: 0;
+    align-self: stretch;
     max-width: none;
     width: 100%;
-    padding: 0.85rem 1rem;
+    margin-top: auto;
+    padding: clamp(1rem, 4vw, 1.35rem) clamp(1rem, 4vw, 1.5rem)
+      max(1.25rem, env(safe-area-inset-bottom));
+    box-sizing: border-box;
   }
 
   .inner-page__hero--telos .inner-page__hero-inner::before {
@@ -4712,7 +4715,7 @@ html.is-boot-loading .lead-form__select-menu {
     position: absolute;
     inset: 0;
     z-index: -1;
-    border-radius: 0.75rem;
+    border-radius: 0;
     background: linear-gradient(
       180deg,
       rgba(20, 16, 24, 0.45) 0%,
