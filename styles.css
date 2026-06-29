@@ -4858,6 +4858,31 @@ html.is-boot-loading .lead-form__select-menu {
   max-width: 24rem;
 }
 
+.media-frame--photo {
+  aspect-ratio: 4 / 3;
+  max-width: 56rem;
+  margin-inline: auto;
+  border: none;
+  background: #fff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    0 16px 40px rgba(65, 53, 70, 0.12);
+}
+
+.media-frame--photo::after {
+  content: none;
+}
+
+.media-frame--photo > picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.media-frame--photo img {
+  object-fit: contain;
+}
+
 /* ---------- Product pages: two-column split ---------- */
 .split-section {
   display: grid;
