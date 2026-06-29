@@ -24,6 +24,13 @@ const sources = [
     fullWebp: true,
   },
   {
+    dir: "assets/telos",
+    input: "hero-mobile.png",
+    prefix: "hero-mobile",
+    widths: [400],
+    fullWebp: true,
+  },
+  {
     dir: "assets/hero",
     input: "hero-full.png",
     prefix: "hero-full",

@@ -4657,7 +4657,53 @@ html.is-boot-loading .lead-form__select-menu {
 
 @media (max-width: 720px) {
   .inner-page__hero--telos {
-    --hero-bg: url("assets/telos/hero-800.webp");
+    --hero-bg: url("assets/telos/hero-mobile.webp");
+    align-items: flex-end;
+    min-height: clamp(34rem, 92svh, 42rem);
+    padding-top: clamp(5.5rem, 14vh, 7rem);
+    padding-bottom: clamp(1.25rem, 4vh, 1.75rem);
+    background-position: center top;
+  }
+
+  .inner-page__hero--telos::before {
+    background: linear-gradient(
+      180deg,
+      rgba(20, 16, 24, 0.42) 0%,
+      rgba(20, 16, 24, 0.12) 38%,
+      rgba(20, 16, 24, 0.55) 72%,
+      rgba(20, 16, 24, 0.9) 100%
+    );
+  }
+
+  .inner-page__hero--telos .inner-page__hero-inner {
+    max-width: none;
+    width: 100%;
+  }
+
+  .inner-page__hero--telos .inner-page__eyebrow,
+  .inner-page__hero--telos .inner-page__lead,
+  .inner-page__hero--telos .inner-hero__actions {
+    display: none;
+  }
+
+  .inner-page__hero--telos .inner-page__title {
+    margin-bottom: 0;
+    font-size: clamp(1.65rem, 7.5vw, 2.15rem);
+    line-height: 1.05;
+  }
+
+  .inner-page__hero--telos + .email-cta--telos-hero {
+    padding-top: clamp(2rem, 6vw, 2.75rem);
+  }
+
+  .inner-page__hero--telos + .email-cta--telos-hero .email-cta__copy {
+    display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .inner-page__hero--telos {
+    --hero-bg: url("assets/telos/hero-mobile-400.webp");
   }
 }
 
