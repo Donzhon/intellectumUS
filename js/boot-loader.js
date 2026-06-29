@@ -36,8 +36,8 @@
     : Promise.resolve();
 
   const heroImageSrc = window.matchMedia("(max-width: 720px)").matches
-    ? "assets/hero/full-mob.png"
-    : "assets/hero-perple.png";
+    ? "assets/hero/hero-mobile.png"
+    : "assets/hero/hero-full.png";
   const heroImageReady = new Promise((resolve) => {
     const img = new Image();
     img.addEventListener("load", () => resolve(), { once: true });

@@ -42,8 +42,8 @@
       })();
     </script>
     <link rel="preload" as="image" href="assets/icon/intellectum-256.webp" type="image/webp" />
-    <link rel="preload" as="image" href="assets/hero-perple.png" media="(min-width: 721px)" />
-    <link rel="preload" as="image" href="assets/hero/full-mob.png" media="(max-width: 720px)" />
+    <link rel="preload" as="image" href="assets/hero/hero-full.png" media="(min-width: 721px)" />
+    <link rel="preload" as="image" href="assets/hero/hero-mobile.png" media="(max-width: 720px)" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -132,7 +132,7 @@
         muted
         playsinline
         preload="none"
-        poster="assets/hero-perple.png"
+        poster="assets/hero/hero-full.png"
         disablepictureinpicture
         disableremoteplayback
         controlslist="nodownload nofullscreen noremoteplayback"
@@ -143,7 +143,7 @@
         muted
         playsinline
         preload="none"
-        poster="assets/hero-perple.png"
+        poster="assets/hero/hero-full.png"
         disablepictureinpicture
         disableremoteplayback
         controlslist="nodownload nofullscreen noremoteplayback"
@@ -151,8 +151,8 @@
       ></video>
       <canvas class="bg-canvas" aria-hidden="true"></canvas>
       <picture class="hero-art" aria-hidden="true">
-        <source media="(max-width: 720px)" srcset="assets/hero/full-mob.png" />
-        <img class="hero-art__img" src="assets/hero-perple.png" alt="" fetchpriority="high" />
+        <source media="(max-width: 720px)" srcset="assets/hero/hero-mobile.png" />
+        <img class="hero-art__img" src="assets/hero/hero-full.png" alt="" fetchpriority="high" />
       </picture>
       <div class="hero-stage__overlay" aria-hidden="true"></div>
 
