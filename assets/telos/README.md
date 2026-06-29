@@ -9,6 +9,7 @@
 | `hero.png` | Фон Hero — ПК | 1024×576 | 16:9 |
 | `hero-mobile.png` | Фон Hero — мобилка | 576×1024 | 9:16 |
 | `eco_4-3.png` | Секция «From Classroom Observation…» | 1024×768 | 4:3 |
+| `develop_1-1.png` | Блок «Develop» | 1024×1024 | 1:1 |
 | `bento/` | Карточка Products на главной | см. `bento/*.png` | — |
 | `workflow.jpg` | Секция "How TELOS Works" (плейсхолдер) | 800×600 | 4:3 |
 

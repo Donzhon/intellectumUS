@@ -38,6 +38,13 @@ const sources = [
     fullWebp: true,
   },
   {
+    dir: "assets/telos",
+    input: "develop_1-1.png",
+    prefix: "develop_1-1",
+    widths: [480, 800, 1024],
+    fullWebp: true,
+  },
+  {
     dir: "assets/hero",
     input: "hero-full.png",
     prefix: "hero-full",
