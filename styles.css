@@ -4655,6 +4655,32 @@ html.is-boot-loading .lead-form__select-menu {
   --hero-bg: url("assets/telos/hero.webp");
 }
 
+@media (min-width: 721px) {
+  .inner-page__hero--telos::before {
+    display: none;
+  }
+
+  .inner-page__hero--telos .inner-page__hero-inner {
+    position: relative;
+    z-index: 0;
+    padding: clamp(1.25rem, 2.5vw, 2rem) clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .inner-page__hero--telos .inner-page__hero-inner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: 1rem;
+    background: linear-gradient(
+      135deg,
+      rgba(20, 16, 24, 0.9) 0%,
+      rgba(31, 25, 36, 0.78) 60%,
+      rgba(31, 25, 36, 0.55) 100%
+    );
+  }
+}
+
 @media (max-width: 720px) {
   .inner-page__hero--telos {
     --hero-bg: url("assets/telos/hero-mobile.webp");
