@@ -302,16 +302,22 @@
   }
 
   function upsertChart(key, config) {
+    if (!window.Chart) return;
     if (charts[key]) {
       charts[key].data = config.data;
       charts[key].options = config.options;
       charts[key].update();
+      charts[key].resize();
       return;
     }
     const canvas = document.getElementById(key);
-    if (canvas && window.Chart) {
+    if (canvas) {
       charts[key] = new window.Chart(canvas, config);
     }
+  }
+
+  function resizeCharts() {
+    Object.values(charts).forEach((chart) => chart.resize());
   }
 
   function renderCharts(stats) {
@@ -423,12 +429,17 @@
       const stats = await callAdmin({ action: "stats", filters: buildFilters() });
       setKpis(stats);
       renderCharts(stats);
+      requestAnimationFrame(resizeCharts);
       el.updated.textContent = `Обновлено: ${new Date().toLocaleTimeString("ru-RU")}${
         stats.capped ? " · показаны последние 10000" : ""
       }`;
     } catch (error) {
       if (error.code === 401) return handleUnauthorized();
-      el.updated.textContent = error.message;
+      const message = `Статистика недоступна: ${error.message}`;
+      el.updated.textContent = message;
+      if (!el.meta.textContent?.startsWith("Найдено заявок:")) {
+        el.meta.textContent = message;
+      }
     }
   }
 
@@ -574,6 +585,7 @@
   function showPanel() {
     el.login.hidden = true;
     el.panel.hidden = false;
+    requestAnimationFrame(resizeCharts);
   }
 
   function showLogin() {
