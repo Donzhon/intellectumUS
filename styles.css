@@ -585,7 +585,8 @@ html.is-boot-loading .lead-form__select-menu {
   flex: 0 1 30rem;
   min-width: min(100%, 17rem);
   display: flex;
-  align-items: stretch;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 0.6rem;
 }
 
@@ -643,6 +644,10 @@ html.is-boot-loading .lead-form__select-menu {
 
   .email-cta .lead-form__submit {
     width: 100%;
+  }
+
+  .email-cta__form .lead-form__consent {
+    text-align: center;
   }
 }
 
@@ -5106,10 +5111,10 @@ html.is-boot-loading .lead-form__select-menu {
 }
 
 .lead-form__consent {
-  margin: 0 0 0.75rem;
-  font-size: 0.75rem;
-  line-height: 1.45;
-  color: rgba(15, 23, 42, 0.62);
+  margin: 0;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  color: rgba(15, 23, 42, 0.55);
 }
 
 .lead-form__consent a {
@@ -5118,12 +5123,27 @@ html.is-boot-loading .lead-form__select-menu {
   text-underline-offset: 2px;
 }
 
+/* Compact band forms: consent on its own row below field + button */
 .email-cta__form .lead-form__consent {
-  color: rgba(255, 255, 255, 0.62);
+  flex: 1 1 100%;
+  order: 10;
+  margin-top: 0.15rem;
+  font-size: 0.62rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.52);
 }
 
 .email-cta__form .lead-form__consent a {
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.lead-form__actions .lead-form__consent {
+  margin-top: 0.55rem;
+  padding: 0 0.25rem;
+  font-size: 0.65rem;
+  line-height: 1.35;
+  text-align: center;
+  color: rgba(15, 23, 42, 0.52);
 }
 
 @media (max-width: 560px) {
