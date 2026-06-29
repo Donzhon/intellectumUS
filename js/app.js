@@ -1127,6 +1127,196 @@ const getActivePresetId = (presets) => {
   return DEFAULT_PRESET_ID;
 };
 
+const CHROME_SURFACE_DARK_LUM = 0.12;
+const CHROME_SURFACE_LIGHT_LUM = 0.88;
+const CHROME_LUMINANCE_THRESHOLD = 0.45;
+const CHROME_TEXT_ON_DARK = "#f8f6fa";
+const CHROME_TEXT_ON_LIGHT = "#1a1a1f";
+const CHROME_DARK_SURFACE_SELECTOR =
+  ".site-footer, .email-cta, .hero-stage, .inner-page__hero--dark, [data-chrome-surface='dark']";
+const CHROME_LIGHT_SURFACE_SELECTOR =
+  ".bento-showcase, .land-feature, [data-chrome-surface='light']";
+
+const chromeGlassElements = () =>
+  [siteChrome, siteBrand, siteNav, siteActions, innerActions].filter(Boolean);
+
+const parseCssRgbColor = (value) => {
+  if (!value || value === "transparent") {
+    return null;
+  }
+
+  const match = value.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\s*\)/);
+  if (!match) {
+    return null;
+  }
+
+  const alpha = match[4] !== undefined ? Number(match[4]) : 1;
+  if (!Number.isFinite(alpha) || alpha <= 0.08) {
+    return null;
+  }
+
+  return {
+    r: Number(match[1]),
+    g: Number(match[2]),
+    b: Number(match[3]),
+    a: alpha,
+  };
+};
+
+const getRgbLuminance = ({ r, g, b }) => {
+  const channel = (value) => {
+    const normalized = value / 255;
+    return normalized <= 0.03928
+      ? normalized / 12.92
+      : ((normalized + 0.055) / 1.055) ** 2.4;
+  };
+
+  return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+};
+
+const getHexLuminance = (hex) => {
+  const normalized = normalizeHexColor(hex, null);
+  if (!normalized) {
+    return 0.5;
+  }
+
+  const value = normalized.slice(1);
+  return getRgbLuminance({
+    r: Number.parseInt(value.slice(0, 2), 16),
+    g: Number.parseInt(value.slice(2, 4), 16),
+    b: Number.parseInt(value.slice(4, 6), 16),
+    a: 1,
+  });
+};
+
+const resolveSurfaceLuminance = (element) => {
+  let node = element;
+
+  while (node && node !== document.documentElement) {
+    if (node.matches?.(CHROME_DARK_SURFACE_SELECTOR)) {
+      return CHROME_SURFACE_DARK_LUM;
+    }
+
+    if (node.matches?.(CHROME_LIGHT_SURFACE_SELECTOR)) {
+      return CHROME_SURFACE_LIGHT_LUM;
+    }
+
+    const surfaceAttr = node.getAttribute?.("data-chrome-surface");
+    if (surfaceAttr === "dark") {
+      return CHROME_SURFACE_DARK_LUM;
+    }
+    if (surfaceAttr === "light") {
+      return CHROME_SURFACE_LIGHT_LUM;
+    }
+
+    const background = parseCssRgbColor(getComputedStyle(node).backgroundColor);
+    if (background) {
+      return getRgbLuminance(background);
+    }
+
+    node = node.parentElement;
+  }
+
+  return CHROME_SURFACE_DARK_LUM;
+};
+
+const peekBelowSiteChrome = (x, y) => {
+  if (!siteChrome) {
+    return null;
+  }
+
+  const toggled = [];
+  const stack = [siteChrome, ...siteChrome.querySelectorAll("*")];
+
+  stack.forEach((node) => {
+    toggled.push([node, node.style.pointerEvents]);
+    node.style.pointerEvents = "none";
+  });
+
+  const element = document.elementFromPoint(x, y);
+
+  toggled.forEach(([node, previous]) => {
+    node.style.pointerEvents = previous;
+  });
+
+  return element;
+};
+
+const sampleChromeSurfaceLuminance = () => {
+  const anchor = siteNav || siteChrome;
+  if (!anchor) {
+    return CHROME_SURFACE_LIGHT_LUM;
+  }
+
+  const rect = anchor.getBoundingClientRect();
+  const x = Math.round(rect.left + rect.width / 2);
+  const y = Math.round(rect.top + rect.height / 2);
+
+  if (x < 0 || y < 0 || x > window.innerWidth || y > window.innerHeight) {
+    return CHROME_SURFACE_LIGHT_LUM;
+  }
+
+  const element = peekBelowSiteChrome(x, y);
+  if (!element) {
+    return CHROME_SURFACE_DARK_LUM;
+  }
+
+  return resolveSurfaceLuminance(element);
+};
+
+const getChromeBaseTextColor = () => {
+  const fromNav = siteNav?.style.getPropertyValue("--panel-text-color-base").trim();
+  if (fromNav) {
+    return fromNav;
+  }
+
+  return glassSettings?.textColor || "#413546";
+};
+
+const resolveChromeTextColor = (surfaceLuminance) => {
+  const baseColor = getChromeBaseTextColor();
+  const baseLuminance = getHexLuminance(baseColor);
+  const surfaceIsDark = surfaceLuminance < CHROME_LUMINANCE_THRESHOLD;
+
+  if (surfaceIsDark) {
+    return baseLuminance < 0.55 ? CHROME_TEXT_ON_DARK : baseColor;
+  }
+
+  return baseLuminance > 0.55 ? CHROME_TEXT_ON_LIGHT : baseColor;
+};
+
+let chromeContrastTicking = false;
+
+const applyChromeTextColor = (color) => {
+  chromeGlassElements().forEach((el) => {
+    el.style.setProperty("--panel-text-color", color);
+  });
+};
+
+const syncChromeContrast = () => {
+  if (!siteChrome) {
+    return;
+  }
+
+  const surfaceLuminance = sampleChromeSurfaceLuminance();
+  const textColor = resolveChromeTextColor(surfaceLuminance);
+
+  applyChromeTextColor(textColor);
+  document.body.classList.toggle("is-chrome-on-dark", surfaceLuminance < CHROME_LUMINANCE_THRESHOLD);
+};
+
+const scheduleChromeContrastSync = () => {
+  if (!siteChrome || chromeContrastTicking) {
+    return;
+  }
+
+  chromeContrastTicking = true;
+  window.requestAnimationFrame(() => {
+    chromeContrastTicking = false;
+    syncChromeContrast();
+  });
+};
+
 const applyLeftGlassSettings = (settings) => {
   const visualBlur = Math.round(settings.blur * 1.8);
   const backdropFilter = `blur(${visualBlur}px) saturate(${112 + settings.blur * 2}%) contrast(${104 + Math.round(
@@ -1143,7 +1333,13 @@ const applyLeftGlassSettings = (settings) => {
     el.style.setProperty("--panel-dim-strength", String(settings.panelDim));
     el.style.setProperty("--panel-tint-color", settings.panelColor);
     el.style.setProperty("--panel-text-color", settings.textColor);
+
+    if (el === siteChrome || el === siteBrand || el === siteNav || el === siteActions || el === innerActions) {
+      el.style.setProperty("--panel-text-color-base", settings.textColor);
+    }
   });
+
+  scheduleChromeContrastSync();
 
   if (leftContent && !leftContent.classList.contains("left-content--inner")) {
     leftContent.style.setProperty("--left-glass-blur", `${settings.blur}px`);
@@ -1988,6 +2184,8 @@ const refreshNavMergeThreshold = () => {
 };
 
 const updateSiteScrollUi = () => {
+  scheduleChromeContrastSync();
+
   if (usesHeroBrandSync()) {
     document.body.classList.toggle("is-nav-merged", !heroBrandInView);
     document.body.classList.toggle("is-hero-brand-in-view", heroBrandInView);
@@ -2103,6 +2301,12 @@ if (enableScrollSync) {
 }
 
 updateSiteScrollUi();
+
+if (siteChrome) {
+  window.addEventListener("scroll", scheduleChromeContrastSync, { passive: true });
+  window.addEventListener("resize", scheduleChromeContrastSync);
+  scheduleChromeContrastSync();
+}
 
 /* ---------- Bento showcase: mobile layout mode toggle ---------- */
 const bentoShowcase = document.getElementById("bento-showcase");

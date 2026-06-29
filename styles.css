@@ -2019,7 +2019,11 @@ html.is-boot-loading .lead-form__select-menu {
   border-radius: 999px;
   color: var(--panel-text-color);
   text-decoration: none;
-  transition: transform 0.4s ease, opacity 0.4s ease, left 0.4s ease;
+  transition:
+    transform 0.4s ease,
+    opacity 0.4s ease,
+    left 0.4s ease,
+    color 0.3s ease;
 }
 
 .site-brand .brand-mark {
@@ -2059,7 +2063,9 @@ html.is-boot-loading .lead-form__select-menu {
   border-radius: 999px;
   color: var(--panel-text-color);
   font-size: 0.88rem;
-  transition: transform 0.4s ease;
+  transition:
+    transform 0.4s ease,
+    color 0.3s ease;
 }
 
 .site-brand.liquid-glass,
