@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Посещения сайта — intellectumUS Admin</title>
+    <meta
+      name="description"
+      content="Внутренняя панель intellectumUS для просмотра статистики посещений сайта."
+    />
+    <link rel="canonical" href="https://www.intellectumus.com/adminintus-visits" />
+    <link rel="icon" href="assets/icon/intellectum-128.png" type="image/png" />
+    <link rel="stylesheet" href="css/admin.css" />
+  </head>
+  <body class="admin">
+    <main class="admin__shell">
+      <section class="admin__login" id="admin-login">
+        <form class="admin__login-card" id="admin-login-form">
+          <h1 class="admin__title">Посещения сайта</h1>
+          <p class="admin__subtitle">Введите пароль доступа</p>
+          <input
+            class="admin__input"
+            type="password"
+            id="admin-password"
+            placeholder="Пароль"
+            autocomplete="current-password"
+            required
+          />
+          <button class="admin__btn admin__btn--primary" type="submit">Войти</button>
+          <p class="admin__error" id="admin-login-error" hidden></p>
+        </form>
+      </section>
+
+      <section class="admin__panel" id="admin-panel" hidden>
+        <header class="admin__header">
+          <div class="admin__brand">
+            <h1 class="admin__title">Посещения сайта</h1>
+            <p class="admin__subtitle" id="admin-updated"></p>
+          </div>
+          <div class="admin__header-actions">
+            <nav class="admin__nav" aria-label="Разделы админки">
+              <a class="admin__btn admin__btn--ghost" href="/adminintus">Заявки</a>
+              <a class="admin__btn admin__btn--primary" href="/adminintus-visits" aria-current="page">Посещения</a>
+            </nav>
+            <div class="admin__period" id="admin-period" role="group" aria-label="Период">
+              <button class="admin__chip" type="button" data-days="7">7 дней</button>
+              <button class="admin__chip is-active" type="button" data-days="30">30 дней</button>
+              <button class="admin__chip" type="button" data-days="90">90 дней</button>
+              <button class="admin__chip" type="button" data-days="0">Всё</button>
+            </div>
+            <button class="admin__btn admin__btn--accent js-admin-refresh" type="button">Обновить</button>
+            <button class="admin__btn admin__btn--ghost" id="admin-logout" type="button">Выйти</button>
+          </div>
+        </header>
+
+        <div class="admin__kpis" id="admin-kpis">
+          <article class="kpi" data-kpi="viewsToday">
+            <span class="kpi__label">Просмотры сегодня</span>
+            <span class="kpi__value" data-field="viewsToday">—</span>
+          </article>
+          <article class="kpi" data-kpi="viewsWeek">
+            <span class="kpi__label">Просмотры за неделю</span>
+            <span class="kpi__value" data-field="viewsWeek">—</span>
+          </article>
+          <article class="kpi" data-kpi="viewsMonth">
+            <span class="kpi__label">Просмотры за месяц</span>
+            <span class="kpi__value" data-field="viewsMonth">—</span>
+          </article>
+          <article class="kpi" data-kpi="viewsTotal">
+            <span class="kpi__label">Просмотров всего</span>
+            <span class="kpi__value" data-field="viewsTotal">—</span>
+          </article>
+          <article class="kpi kpi--new" data-kpi="sessionsToday">
+            <span class="kpi__label">Сессии сегодня</span>
+            <span class="kpi__value" data-field="sessionsToday">—</span>
+          </article>
+          <article class="kpi kpi--progress" data-kpi="sessionsWeek">
+            <span class="kpi__label">Сессии за неделю</span>
+            <span class="kpi__value" data-field="sessionsWeek">—</span>
+          </article>
+          <article class="kpi kpi--done" data-kpi="sessionsMonth">
+            <span class="kpi__label">Сессии за месяц</span>
+            <span class="kpi__value" data-field="sessionsMonth">—</span>
+          </article>
+          <article class="kpi" data-kpi="sessionsTotal">
+            <span class="kpi__label">Сессий всего</span>
+            <span class="kpi__value" data-field="sessionsTotal">—</span>
+          </article>
+        </div>
+
+        <div class="admin__charts">
+          <section class="card card--wide">
+            <h2 class="card__title">Динамика просмотров</h2>
+            <div class="card__canvas"><canvas id="chart-daily"></canvas></div>
+          </section>
+          <section class="card">
+            <h2 class="card__title">Топ страниц</h2>
+            <div class="card__canvas"><canvas id="chart-pages"></canvas></div>
+          </section>
+        </div>
+
+        <section class="card card--table">
+          <div class="card__head">
+            <h2 class="card__title">Список посещений</h2>
+          </div>
+
+          <form class="admin__filters" id="admin-filters">
+            <input
+              class="admin__input"
+              type="search"
+              id="filter-search"
+              placeholder="Поиск: страница, referrer, страна, город"
+            />
+            <select class="admin__input" id="filter-path">
+              <option value="">Все страницы</option>
+            </select>
+            <label class="admin__date">От<input class="admin__input" type="date" id="filter-from" /></label>
+            <label class="admin__date">До<input class="admin__input" type="date" id="filter-to" /></label>
+            <button class="admin__btn admin__btn--primary" type="submit">Применить</button>
+            <button class="admin__btn admin__btn--ghost" type="button" id="filter-reset">Сбросить</button>
+            <button class="admin__btn admin__btn--accent js-admin-refresh" type="button">Обновить</button>
+          </form>
+
+          <div class="admin__meta" id="admin-meta"></div>
+
+          <div class="admin__table-wrap">
+            <table class="admin__table">
+              <thead>
+                <tr>
+                  <th>Дата</th>
+                  <th>Страница</th>
+                  <th>Referrer</th>
+                  <th>Место</th>
+                  <th>Браузер</th>
+                  <th>Сессия</th>
+                </tr>
+              </thead>
+              <tbody id="admin-rows"></tbody>
+            </table>
+            <p class="admin__empty" id="admin-empty" hidden>Посещений не найдено.</p>
+          </div>
+
+          <div class="admin__pager">
+            <button class="admin__btn admin__btn--ghost" id="page-prev" type="button" disabled>Назад</button>
+            <span id="page-info">1</span>
+            <button class="admin__btn admin__btn--ghost" id="page-next" type="button" disabled>Вперёд</button>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/admin-visits.js"></script>
+  </body>
+</html>

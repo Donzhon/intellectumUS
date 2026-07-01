@@ -2,5 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /adminintus
 Disallow: /adminintus.html
+Disallow: /adminintus-visits
+Disallow: /adminintus-visits.html
 
 Sitemap: https://www.intellectumus.com/sitemap.xml

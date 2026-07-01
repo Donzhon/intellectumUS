@@ -209,21 +209,45 @@
             human users and is not stored when filled by bots.
           </p>
 
-          <h3>3.3 Local storage on your device</h3>
+          <h3>3.3 Local storage and session storage on your device</h3>
           <p>
             The Site may store small amounts of information in your browser’s <strong>local storage</strong> to
             support basic functionality (for example, remembering that you have already seen an introductory
             loading screen). We do not use local storage for cross-site advertising profiles.
           </p>
+          <p>
+            For first-party visit analytics (described in section 3.5), the Site may store an anonymous
+            session identifier in <strong>session storage</strong> for the duration of your browser tab.
+            This identifier is not linked to your name or account and is not shared with advertising networks.
+          </p>
 
           <h3>3.4 What we do not collect on this Site</h3>
           <p>On the public marketing Site, we do <strong>not</strong> knowingly:</p>
           <ul>
-            <li>run advertising or behavioral analytics trackers (such as Google Analytics or Meta Pixel);</li>
+            <li>run third-party advertising or behavioral analytics trackers (such as Google Analytics or Meta Pixel);</li>
             <li>require account registration or passwords;</li>
             <li>collect payment card information;</li>
             <li>intentionally collect student education records through these forms.</li>
           </ul>
+
+          <h3>3.5 First-party visit analytics</h3>
+          <p>
+            To understand how the Site is used and to improve our pages, we record anonymous page views through
+            our own infrastructure (Supabase). When you load a public page, our server may receive and store:
+          </p>
+          <ul>
+            <li><strong>Page path</strong> (for example, <code>/telos</code>);</li>
+            <li><strong>Referring page</strong> (if your browser sends a referrer);</li>
+            <li><strong>Browser type</strong> (via the User-Agent string);</li>
+            <li><strong>Approximate location</strong> (country and city inferred from your IP address on our server);</li>
+            <li><strong>Date and time</strong> of the visit;</li>
+            <li><strong>Anonymous session ID</strong> (a random identifier in session storage, used to count unique sessions).</li>
+          </ul>
+          <p>
+            We do <strong>not</strong> store your IP address in our analytics database after resolving location.
+            We do not use analytics cookies. This data is used only to operate and improve the Site and is not sold
+            or used for cross-context behavioral advertising.
+          </p>
 
           <h2>4. How we use information</h2>
           <p>We use personal information to:</p>
@@ -252,8 +276,8 @@
 
           <h2>6. Cookies and similar technologies</h2>
           <p>
-            We do not set advertising cookies or use third-party analytics cookies on the Site at this time.
-            The Site may use <strong>local storage</strong> as described above.
+            We do not set advertising cookies or use third-party analytics cookies on the Site.
+            The Site may use <strong>local storage</strong> and <strong>session storage</strong> as described above.
           </p>
           <p>
             We load fonts from <strong>Google Fonts</strong>. When your browser requests those font files, Google
@@ -273,7 +297,7 @@
             <li>
               <strong>Service providers</strong> that help us operate the Site and process inquiries, including:
               <ul>
-                <li><strong>Supabase</strong> — secure database storage for form submissions;</li>
+                <li><strong>Supabase</strong> — secure database storage for form submissions and anonymous page-view analytics;</li>
                 <li><strong>Resend</strong> — transactional email notifications to our team;</li>
                 <li><strong>Vercel</strong> — website hosting and content delivery;</li>
                 <li><strong>Google</strong> — font delivery via Google Fonts.</li>
@@ -473,6 +497,7 @@
     </footer>
 
     <script defer src="js/config.js"></script>
+    <script defer src="js/track.js"></script>
     <script defer src="js/countries.js"></script>
     <script defer src="js/i18n.js"></script>
     <script defer src="js/app.js"></script>

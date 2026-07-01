@@ -10,3 +10,7 @@ verify_jwt = false
 [functions.admin]
 # Protected by ADMIN_PASSWORD inside the function, not by JWT.
 verify_jwt = false
+
+[functions.track-visit]
+# Public endpoint for anonymous page-view analytics.
+verify_jwt = false

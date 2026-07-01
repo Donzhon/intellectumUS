@@ -164,6 +164,12 @@ body.is-drawer-open {
   flex-wrap: wrap;
 }
 
+.admin__nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .admin__period {
   display: inline-flex;
   background: var(--admin-surface);

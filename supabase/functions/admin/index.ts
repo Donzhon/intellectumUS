@@ -46,6 +46,7 @@ interface AdminPayload {
     from?: string;
     to?: string;
     page?: number;
+    path?: string;
   };
   id?: string;
   status?: string;
@@ -102,6 +103,26 @@ Deno.serve(async (request) => {
     if (filters.search) {
       const term = `%${filters.search.replace(/[%_]/g, "")}%`;
       query = query.or(`email.ilike.${term},comment.ilike.${term},location.ilike.${term}`);
+    }
+    if (filters.from) {
+      query = query.gte("created_at", filters.from);
+    }
+    if (filters.to) {
+      query = query.lte("created_at", filters.to);
+    }
+    return query;
+  }
+
+  // deno-lint-ignore no-explicit-any
+  function applyVisitFilters(query: any, filters: NonNullable<AdminPayload["filters"]>) {
+    if (filters.path) {
+      query = query.eq("path", filters.path);
+    }
+    if (filters.search) {
+      const term = `%${filters.search.replace(/[%_]/g, "")}%`;
+      query = query.or(
+        `path.ilike.${term},referrer.ilike.${term},country.ilike.${term},city.ilike.${term}`,
+      );
     }
     if (filters.from) {
       query = query.gte("created_at", filters.from);
@@ -171,7 +192,7 @@ Deno.serve(async (request) => {
 
     if (error) {
       console.error("Delete error:", error);
-      return jsonResponse(request, { ok: false, error: "Delete error" }, 500);
+      return jsonResponse(request, { ok: false, error: "Update error" }, 500);
     }
 
     return jsonResponse(request, { ok: true });
@@ -263,6 +284,125 @@ Deno.serve(async (request) => {
       topLocations,
       daily,
       kpi: { today, week, month, doneShare },
+    });
+  }
+
+  if (action === "visitsList") {
+    const filters = payload.filters ?? {};
+    const page = Math.max(0, Number(filters.page) || 0);
+    const fromIdx = page * PAGE_SIZE;
+    const toIdx = fromIdx + PAGE_SIZE - 1;
+
+    let query = supabase
+      .from("page_views")
+      .select("*", { count: "exact" })
+      .order("created_at", { ascending: false })
+      .range(fromIdx, toIdx);
+
+    query = applyVisitFilters(query, filters);
+
+    const { data, count, error } = await query;
+    if (error) {
+      console.error("Visits list error:", error);
+      return jsonResponse(request, { ok: false, error: "Query error" }, 500);
+    }
+
+    return jsonResponse(request, {
+      ok: true,
+      rows: data,
+      total: count ?? 0,
+      page,
+      pageSize: PAGE_SIZE,
+    });
+  }
+
+  if (action === "visitsStats") {
+    const filters = payload.filters ?? {};
+
+    let query = supabase
+      .from("page_views")
+      .select("created_at, path, visitor_id")
+      .order("created_at", { ascending: false })
+      .limit(STATS_LIMIT);
+
+    query = applyVisitFilters(query, filters);
+
+    const { data, error } = await query;
+    if (error) {
+      console.error("Visits stats error:", error);
+      return jsonResponse(request, { ok: false, error: "Query error" }, 500);
+    }
+
+    const rows = (data ?? []) as Array<{
+      created_at: string;
+      path: string;
+      visitor_id: string;
+    }>;
+
+    const now = Date.now();
+    const dayMs = 24 * 60 * 60 * 1000;
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+    const todayTs = startOfToday.getTime();
+    const weekTs = now - 7 * dayMs;
+    const monthTs = now - 30 * dayMs;
+
+    let viewsToday = 0;
+    let viewsWeek = 0;
+    let viewsMonth = 0;
+    const sessionsToday = new Set<string>();
+    const sessionsWeek = new Set<string>();
+    const sessionsMonth = new Set<string>();
+    const sessionsTotal = new Set<string>();
+    const byPath: Record<string, number> = {};
+    const daily: Record<string, number> = {};
+
+    for (const row of rows) {
+      const ts = new Date(row.created_at).getTime();
+      if (!Number.isNaN(ts)) {
+        if (ts >= todayTs) {
+          viewsToday += 1;
+          sessionsToday.add(row.visitor_id);
+        }
+        if (ts >= weekTs) {
+          viewsWeek += 1;
+          sessionsWeek.add(row.visitor_id);
+        }
+        if (ts >= monthTs) {
+          viewsMonth += 1;
+          sessionsMonth.add(row.visitor_id);
+        }
+        const dayKey = new Date(row.created_at).toISOString().slice(0, 10);
+        daily[dayKey] = (daily[dayKey] ?? 0) + 1;
+      }
+
+      sessionsTotal.add(row.visitor_id);
+      byPath[row.path] = (byPath[row.path] ?? 0) + 1;
+    }
+
+    const topPages = Object.entries(byPath)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([name, count]) => ({ name, count }));
+
+    const total = rows.length;
+
+    return jsonResponse(request, {
+      ok: true,
+      total,
+      capped: total >= STATS_LIMIT,
+      daily,
+      topPages,
+      kpi: {
+        viewsToday,
+        viewsWeek,
+        viewsMonth,
+        viewsTotal: total,
+        sessionsToday: sessionsToday.size,
+        sessionsWeek: sessionsWeek.size,
+        sessionsMonth: sessionsMonth.size,
+        sessionsTotal: sessionsTotal.size,
+      },
     });
   }
 

@@ -76,11 +76,12 @@ supabase secrets set \
 ```bash
 supabase functions deploy submit-lead --no-verify-jwt
 supabase functions deploy admin --no-verify-jwt
+supabase functions deploy track-visit --no-verify-jwt
 ```
 
-`--no-verify-jwt` обязателен: форма и админка вызывают функции без anon-ключа
+`--no-verify-jwt` обязателен: форма, админка и трекер вызывают функции без anon-ключа
 (в `supabase/config.toml` уже стоит `verify_jwt = false`). При деплое через
-дашборд выключите "Verify JWT" у обеих функций.
+дашборд выключите "Verify JWT" у всех трёх функций.
 
 ## 7. Прописать URL функций на сайте
 
@@ -90,6 +91,7 @@ supabase functions deploy admin --no-verify-jwt
 window.SiteConfig = {
   SUBMIT_LEAD_URL: "https://<ref>.supabase.co/functions/v1/submit-lead",
   ADMIN_URL: "https://<ref>.supabase.co/functions/v1/admin",
+  TRACK_VISIT_URL: "https://<ref>.supabase.co/functions/v1/track-visit",
 };
 ```
 
@@ -109,3 +111,32 @@ window.SiteConfig = {
 - Honeypot-поле `company` в форме отсекает простых ботов.
 - Для нескольких админов/большей надёжности позже можно заменить общий пароль
   на Supabase Auth.
+
+---
+
+## Аналитика посещений
+
+Код:
+- Миграция БД: `supabase/migrations/0002_page_views.sql`
+- Функция записи просмотра: `supabase/functions/track-visit/index.ts`
+- Трекер на сайте: `js/track.js` (подключён на публичных страницах)
+- Панель просмотра: `/adminintus-visits`, `js/admin-visits.js`
+
+### Шаги
+
+1. Примените миграцию `0002_page_views.sql` (SQL Editor или `supabase db push`).
+2. Задеплойте функции:
+   ```bash
+   supabase functions deploy track-visit --no-verify-jwt
+   supabase functions deploy admin --no-verify-jwt
+   ```
+   У `track-visit` и `admin` отключите Verify JWT в дашборде.
+3. В `js/config.js` добавьте URL (если ещё не прописан):
+   ```js
+   TRACK_VISIT_URL: "https://<ref>.supabase.co/functions/v1/track-visit",
+   ```
+4. Проверка: откройте любую публичную страницу → запись в таблице `page_views`
+   → `/adminintus-visits` с тем же `ADMIN_PASSWORD`.
+
+Геолокация определяется на сервере по IP через ip-api.com (country/city);
+IP в БД не сохраняется.
