@@ -294,8 +294,27 @@
     });
   }
 
+  function dateKeyLocal(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  }
+
+  // Server buckets by UTC calendar day; map to local dates for the chart.
+  function dailyToLocal(daily) {
+    const local = {};
+    Object.entries(daily || {}).forEach(([utcDay, count]) => {
+      const anchor = new Date(`${utcDay}T12:00:00Z`);
+      const key = dateKeyLocal(anchor);
+      local[key] = (local[key] || 0) + count;
+    });
+    return local;
+  }
+
   function buildDailySeries(daily) {
-    const keys = Object.keys(daily || {});
+    const localDaily = dailyToLocal(daily);
+    const keys = Object.keys(localDaily);
     let start;
     const end = new Date();
     end.setHours(0, 0, 0, 0);
@@ -303,18 +322,19 @@
       start = new Date(end);
       start.setDate(start.getDate() - periodDays + 1);
     } else if (keys.length) {
-      start = new Date(keys.sort()[0]);
+      const [y, m, d] = keys.sort()[0].split("-").map(Number);
+      start = new Date(y, m - 1, d);
     } else {
       start = new Date(end);
     }
     const labels = [];
     const values = [];
-    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-      const key = d.toISOString().slice(0, 10);
+    for (let cursor = new Date(start); cursor <= end; cursor.setDate(cursor.getDate() + 1)) {
+      const key = dateKeyLocal(cursor);
       labels.push(
-        d.toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit" }),
+        cursor.toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit" }),
       );
-      values.push(daily[key] || 0);
+      values.push(localDaily[key] || 0);
     }
     return { labels, values };
   }
