@@ -287,6 +287,88 @@ Deno.serve(async (request) => {
     });
   }
 
+  if (action === "visitsSessions") {
+    const filters = payload.filters ?? {};
+    const page = Math.max(0, Number(filters.page) || 0);
+
+    let query = supabase
+      .from("page_views")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(STATS_LIMIT);
+
+    query = applyVisitFilters(query, filters);
+
+    const { data, error } = await query;
+    if (error) {
+      console.error("Visits sessions error:", error);
+      return jsonResponse(request, { ok: false, error: "Query error" }, 500);
+    }
+
+    type ViewRow = {
+      id: string;
+      created_at: string;
+      path: string;
+      referrer: string | null;
+      visitor_id: string;
+      user_agent: string | null;
+      country: string | null;
+      city: string | null;
+    };
+
+    const bySession = new Map<string, ViewRow[]>();
+    for (const row of (data ?? []) as ViewRow[]) {
+      const list = bySession.get(row.visitor_id) ?? [];
+      list.push(row);
+      bySession.set(row.visitor_id, list);
+    }
+
+    const sessions = Array.from(bySession.entries()).map(([visitor_id, views]) => {
+      views.sort(
+        (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      );
+      const first = views[0];
+      const last = views[views.length - 1];
+      const paths = [...new Set(views.map((v) => v.path))];
+      return {
+        visitor_id,
+        started_at: first.created_at,
+        ended_at: last.created_at,
+        view_count: views.length,
+        country: first.country,
+        city: first.city,
+        user_agent: first.user_agent,
+        referrer: first.referrer,
+        paths,
+        views: views.map((v) => ({
+          id: v.id,
+          created_at: v.created_at,
+          path: v.path,
+          referrer: v.referrer,
+        })),
+      };
+    });
+
+    sessions.sort(
+      (a, b) => new Date(b.ended_at).getTime() - new Date(a.ended_at).getTime(),
+    );
+
+    const total = sessions.length;
+    const fromIdx = page * PAGE_SIZE;
+    const pageSessions = sessions.slice(fromIdx, fromIdx + PAGE_SIZE);
+    const rawCount = (data ?? []).length;
+
+    return jsonResponse(request, {
+      ok: true,
+      sessions: pageSessions,
+      total,
+      viewTotal: rawCount,
+      page,
+      pageSize: PAGE_SIZE,
+      capped: rawCount >= STATS_LIMIT,
+    });
+  }
+
   if (action === "visitsList") {
     const filters = payload.filters ?? {};
     const page = Math.max(0, Number(filters.page) || 0);

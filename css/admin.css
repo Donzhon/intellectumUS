@@ -354,6 +354,73 @@ body.is-drawer-open {
   background: var(--admin-surface-2);
 }
 
+.admin__col-toggle {
+  width: 36px;
+  padding-left: 10px;
+  padding-right: 0;
+}
+
+.session-toggle {
+  display: inline-block;
+  width: 1rem;
+  color: var(--admin-muted);
+  font-size: 0.72rem;
+}
+
+.admin__session.is-expandable {
+  cursor: pointer;
+}
+
+.admin__session.is-expandable:hover {
+  background: var(--admin-surface-2);
+}
+
+.admin__session.is-expanded {
+  background: rgba(79, 140, 255, 0.08);
+}
+
+.session-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.session-period {
+  color: var(--admin-muted);
+  font-size: 0.82rem;
+}
+
+.admin__session-details td {
+  padding: 0;
+  background: var(--admin-surface-2);
+}
+
+.session-details {
+  padding: 10px 12px 12px 42px;
+}
+
+.admin__subtable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.admin__subtable th,
+.admin__subtable td {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.admin__subtable th {
+  color: var(--admin-muted);
+  font-weight: 600;
+}
+
+.admin__subtable tr:last-child td {
+  border-bottom: none;
+}
+
 .admin__table td.cell-comment {
   max-width: 280px;
   white-space: nowrap;

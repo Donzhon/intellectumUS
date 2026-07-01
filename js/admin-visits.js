@@ -51,8 +51,11 @@
 
   let currentPage = 0;
   let totalRows = 0;
+  let viewTotal = 0;
   let pageSize = 50;
   let periodDays = 30;
+  let listCapped = false;
+  const expandedSessions = new Set();
   const charts = {};
 
   function getPassword() {
@@ -149,22 +152,98 @@
     return Object.assign(filters, extra || {});
   }
 
-  function renderRows(rows) {
-    el.rows.innerHTML = "";
-    el.empty.hidden = rows.length > 0;
+  function formatSessionPeriod(startedAt, endedAt) {
+    const start = formatDate(startedAt);
+    if (!endedAt || endedAt === startedAt) return start;
+    const end = formatDate(endedAt);
+    if (start.slice(0, 10) === end.slice(0, 10)) {
+      const endTime = new Date(endedAt).toLocaleTimeString("ru-RU", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      return `${start} — ${endTime}`;
+    }
+    return `${start} — ${end}`;
+  }
 
-    rows.forEach((row) => {
-      const tr = document.createElement("tr");
-      tr.className = "admin__row";
-      tr.innerHTML = [
-        `<td>${escapeHtml(formatDate(row.created_at))}</td>`,
-        `<td><code>${escapeHtml(row.path)}</code></td>`,
-        `<td title="${escapeHtml(row.referrer || "")}">${escapeHtml(formatReferrer(row.referrer))}</td>`,
-        `<td>${escapeHtml(formatLocation(row.country, row.city))}</td>`,
-        `<td title="${escapeHtml(row.user_agent || "")}">${escapeHtml(parseBrowser(row.user_agent))}</td>`,
-        `<td><code>${escapeHtml(sessionLabel(row.visitor_id))}</code></td>`,
+  function formatPathsSummary(paths) {
+    if (!paths || paths.length === 0) return "—";
+    if (paths.length <= 3) return paths.join(", ");
+    return `${paths.slice(0, 3).join(", ")} +${paths.length - 3}`;
+  }
+
+  function renderViewDetail(view) {
+    return [
+      "<tr>",
+      `<td>${escapeHtml(formatDate(view.created_at))}</td>`,
+      `<td><code>${escapeHtml(view.path)}</code></td>`,
+      `<td title="${escapeHtml(view.referrer || "")}">${escapeHtml(formatReferrer(view.referrer))}</td>`,
+      "</tr>",
+    ].join("");
+  }
+
+  function renderSessions(sessions) {
+    el.rows.innerHTML = "";
+    el.empty.hidden = sessions.length > 0;
+
+    sessions.forEach((session) => {
+      const sessionId = String(session.visitor_id);
+      const isExpanded = expandedSessions.has(sessionId);
+      const canExpand = (session.views || []).length > 0;
+
+      const head = document.createElement("tr");
+      head.className = "admin__session";
+      head.dataset.sessionId = sessionId;
+      if (isExpanded) head.classList.add("is-expanded");
+      if (canExpand) head.classList.add("is-expandable");
+
+      head.innerHTML = [
+        `<td class="admin__col-toggle" aria-hidden="true">${
+          canExpand
+            ? `<span class="session-toggle" aria-hidden="true">${isExpanded ? "▼" : "▶"}</span>`
+            : ""
+        }</td>`,
+        `<td><div class="session-main"><code>${escapeHtml(sessionLabel(session.visitor_id))}</code><span class="session-period">${escapeHtml(
+          formatSessionPeriod(session.started_at, session.ended_at),
+        )}</span></div></td>`,
+        `<td>${escapeHtml(String(session.view_count ?? 0))}</td>`,
+        `<td title="${escapeHtml((session.paths || []).join(", "))}">${escapeHtml(
+          formatPathsSummary(session.paths),
+        )}</td>`,
+        `<td title="${escapeHtml(session.referrer || "")}">${escapeHtml(formatReferrer(session.referrer))}</td>`,
+        `<td>${escapeHtml(formatLocation(session.country, session.city))}</td>`,
+        `<td title="${escapeHtml(session.user_agent || "")}">${escapeHtml(parseBrowser(session.user_agent))}</td>`,
       ].join("");
-      el.rows.appendChild(tr);
+
+      el.rows.appendChild(head);
+
+      if (!canExpand) return;
+
+      const details = document.createElement("tr");
+      details.className = "admin__session-details";
+      details.dataset.sessionId = sessionId;
+      details.hidden = !isExpanded;
+      details.innerHTML = [
+        '<td colspan="7">',
+        '<div class="session-details">',
+        '<table class="admin__subtable">',
+        "<thead><tr><th>Время</th><th>Страница</th><th>Referrer</th></tr></thead>",
+        `<tbody>${(session.views || []).map(renderViewDetail).join("")}</tbody>`,
+        "</table>",
+        "</div>",
+        "</td>",
+      ].join("");
+
+      el.rows.appendChild(details);
+
+      head.addEventListener("click", () => {
+        if (expandedSessions.has(sessionId)) {
+          expandedSessions.delete(sessionId);
+        } else {
+          expandedSessions.add(sessionId);
+        }
+        renderSessions(sessions);
+      });
     });
   }
 
@@ -173,19 +252,24 @@
     el.pageInfo.textContent = `${currentPage + 1} / ${totalPages}`;
     el.pagePrev.disabled = currentPage <= 0;
     el.pageNext.disabled = currentPage >= totalPages - 1;
-    el.meta.textContent = `Найдено просмотров: ${totalRows}`;
+    let meta = `Найдено сессий: ${totalRows}`;
+    if (viewTotal) meta += ` (${viewTotal} просмотров)`;
+    if (listCapped) meta += " · показаны последние 10000 просмотров";
+    el.meta.textContent = meta;
   }
 
   async function loadRows() {
     try {
       const data = await callAdmin({
-        action: "visitsList",
+        action: "visitsSessions",
         filters: buildFilters({ page: currentPage }),
       });
       totalRows = data.total || 0;
+      viewTotal = data.viewTotal || 0;
       pageSize = data.pageSize || pageSize;
       currentPage = data.page || 0;
-      renderRows(data.rows || []);
+      listCapped = Boolean(data.capped);
+      renderSessions(data.sessions || []);
       updatePager();
     } catch (error) {
       if (error.code === 401) return handleUnauthorized();
@@ -336,7 +420,7 @@
       if (error.code === 401) return handleUnauthorized();
       const message = `Статистика недоступна: ${error.message}`;
       el.updated.textContent = message;
-      if (!el.meta.textContent?.startsWith("Найдено просмотров:")) {
+      if (!el.meta.textContent?.startsWith("Найдено сессий:")) {
         el.meta.textContent = message;
       }
     }
@@ -379,7 +463,7 @@
     el.loginError.hidden = true;
     sessionStorage.setItem(STORAGE_KEY, el.password.value);
     try {
-      await callAdmin({ action: "visitsList", filters: { page: 0 } });
+      await callAdmin({ action: "visitsSessions", filters: { page: 0 } });
       el.password.value = "";
       showPanel();
       refreshAll();
@@ -408,12 +492,14 @@
       node.classList.toggle("is-active", node === chip);
     });
     currentPage = 0;
+    expandedSessions.clear();
     refreshAll();
   });
 
   el.filters.addEventListener("submit", (event) => {
     event.preventDefault();
     currentPage = 0;
+    expandedSessions.clear();
     refreshAll();
   });
 
@@ -423,18 +509,21 @@
     el.from.value = "";
     el.to.value = "";
     currentPage = 0;
+    expandedSessions.clear();
     refreshAll();
   });
 
   el.pagePrev.addEventListener("click", () => {
     if (currentPage > 0) {
       currentPage -= 1;
+      expandedSessions.clear();
       loadRows();
     }
   });
 
   el.pageNext.addEventListener("click", () => {
     currentPage += 1;
+    expandedSessions.clear();
     loadRows();
   });
 

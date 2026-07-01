@@ -102,7 +102,7 @@
 
         <section class="card card--table">
           <div class="card__head">
-            <h2 class="card__title">Список посещений</h2>
+            <h2 class="card__title">Сессии посещений</h2>
           </div>
 
           <form class="admin__filters" id="admin-filters">
@@ -128,17 +128,18 @@
             <table class="admin__table">
               <thead>
                 <tr>
-                  <th>Дата</th>
-                  <th>Страница</th>
+                  <th class="admin__col-toggle" aria-hidden="true"></th>
+                  <th>Сессия</th>
+                  <th>Просмотров</th>
+                  <th>Страницы</th>
                   <th>Referrer</th>
                   <th>Место</th>
                   <th>Браузер</th>
-                  <th>Сессия</th>
                 </tr>
               </thead>
               <tbody id="admin-rows"></tbody>
             </table>
-            <p class="admin__empty" id="admin-empty" hidden>Посещений не найдено.</p>
+            <p class="admin__empty" id="admin-empty" hidden>Сессий не найдено.</p>
           </div>
 
           <div class="admin__pager">
