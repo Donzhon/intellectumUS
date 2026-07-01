@@ -19,29 +19,21 @@
   }
 
   function sendVisit() {
+    const referrer = (document.referrer || "").trim().slice(0, 500);
     const payload = {
       path,
-      referrer: (document.referrer || "").slice(0, 500) || null,
+      referrer: referrer || null,
       visitor_id: getVisitorId(),
     };
-    const body = JSON.stringify(payload);
-
-    if (navigator.sendBeacon) {
-      const blob = new Blob([body], { type: "application/json" });
-      if (navigator.sendBeacon(TRACK_URL, blob)) return;
-    }
 
     fetch(TRACK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body,
+      body: JSON.stringify(payload),
       keepalive: true,
+      mode: "cors",
     }).catch(function () {});
   }
 
-  if (document.readyState === "complete") {
-    sendVisit();
-  } else {
-    window.addEventListener("load", sendVisit, { once: true });
-  }
+  sendVisit();
 })();
